@@ -3,6 +3,9 @@ uuid = "d7d3b36b-41b8-4d0d-a2bf-768c6151755e"
 authors = ["Kyle Daruwalla"]
 version = "0.1.0"
 
+[deps]
+Animations = "27a7e980-b3e6-11e9-2bcd-0b925532e340"
+
 [compat]
 julia = "1.1"
 
