@@ -5,7 +5,7 @@ using Base: @kwdef
 
 abstract type AbstractSchedule end
 
-export Step
+export NStep
 
 include("decay.jl")
 
