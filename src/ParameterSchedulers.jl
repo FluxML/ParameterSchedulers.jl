@@ -1,12 +1,10 @@
 module ParameterSchedulers
 
-using Animations
 using Base: @kwdef
 
-abstract type AbstractSchedule end
+export Step, Exp, Poly, Inv
 
-export NStep
-
+include("schedule.jl")
 include("decay.jl")
 
 end
