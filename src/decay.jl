@@ -7,18 +7,17 @@ Step(λ, γ, step_size::Integer) = Step(λ, γ, [step_size])
 Step(;λ, γ, step_sizes) = Step(λ, γ, step_sizes)
 
 basevalue(schedule::Step) = schedule.λ
-decay(schedule::Step, t) = schedule.γ^t
+function decay(schedule::Step, t)
+    i = findlast(x -> t > x, cumsum(schedule.step_sizes))
+    i = isnothing(i) ? 0 : i
+
+    return schedule.γ^i
+end
 
 Base.eltype(::Type{<:Step{T}}) where T = T
 Base.IteratorSize(::Type{<:Step}) = Base.IsInfinite()
 
 # override default behavior for decay schedules
-function Base.getindex(schedule::Step, t::Integer)
-    i = findlast(x -> t > x, cumsum(schedule.step_sizes))
-    i = isnothing(i) ? 0 : i
-    
-    return basevalue(schedule) * schedule.γ^i
-end
 function Base.iterate(schedule::Step, state = (1, 1, 1))
     t, i, t0 = state
     if (i <= length(schedule.step_sizes)) && (t >= t0 + schedule.step_sizes[i])
