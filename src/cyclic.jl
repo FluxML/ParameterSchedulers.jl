@@ -99,3 +99,22 @@ cycle(schedule::Cos, t) = (1 + cos(4 * π * t / schedule.period)) / 2
 
 Base.eltype(::Type{<:Cos{T}}) where T = T
 Base.IteratorSize(::Type{<:Cos}) = Base.IsInfinite()
+
+
+struct Loop{T, S<:Integer} <: CyclicSchedule
+    cycle_func::T
+    period::S
+end
+
+startvalue(schedule::Loop) = 0.0
+endvalue(schedule::Loop) = 1.0
+cycle(schedule::Loop, t) = schedule.cycle_func(mod(t, schedule.period))
+cycle(schedule::Loop{<:DecaySchedule}, t) = decay(schedule.cycle_func, mod(t, schedule.period))
+cycle(schedule::Loop{<:CyclicSchedule}, t) = cycle(schedule.cycle_func, mod(t, schedule.period))
+
+Base.eltype(::Type{<:Loop{T}}) where T<:Union{<:DecaySchedule, <:CyclicSchedule} = eltype(T)
+Base.IteratorSize(::Type{<:Loop}) = Base.IsInfinite()
+
+
+reverse(f, period) = t -> f(period - t)
+symmetric(f, period) = t -> (t < period / 2) ? f(t) : f(period - t)
