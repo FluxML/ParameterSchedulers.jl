@@ -41,9 +41,9 @@ function Base.getindex(schedule::Sequence{T}, t::Integer) where T<:AbstractSched
     i = isnothing(i) ? 1 : i + 1
     toffset = (i > 1) ? t - accum_steps[i - 1] : t
     
-    return (i > 1) ? schedule.schedules[i][toffset] : schedule.schedules[i][toffset]
+    return schedule.schedules[i][toffset]
 end
-function Base.iterate(schedule::Step, state = (1, 1, 1))
+function Base.iterate(schedule::Sequence{T}, state = (1, 1, 1)) where T<:AbstractSchedule
     t, i, t0 = state
     if (i <= length(schedule.step_sizes)) && (t >= t0 + schedule.step_sizes[i])
         # move onto next step range
@@ -52,4 +52,23 @@ function Base.iterate(schedule::Step, state = (1, 1, 1))
     end
 
     return schedule.schedules[i][t - t0 + 1], (t + 1, i, t0)
+end
+
+function Base.getindex(schedule::Sequence, t::Integer)
+    accum_steps = cumsum(schedule.step_sizes)
+    i = findlast(x -> t > x, accum_steps)
+    i = isnothing(i) ? 1 : i + 1
+    toffset = (i > 1) ? t - accum_steps[i - 1] : t
+    
+    return schedule.schedules[i](toffset)
+end
+function Base.iterate(schedule::Sequence{T}, state = (1, 1, 1))
+    t, i, t0 = state
+    if (i <= length(schedule.step_sizes)) && (t >= t0 + schedule.step_sizes[i])
+        # move onto next step range
+        i += 1
+        t0 = t
+    end
+
+    return schedule.schedules[i](t - t0 + 1), (t + 1, i, t0)
 end
