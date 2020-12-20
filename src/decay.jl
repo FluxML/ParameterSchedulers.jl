@@ -31,10 +31,11 @@ function Base.iterate(schedule::Step, state = (1, 1, 1))
 end
 
 
-@kwdef struct Exp{T<:Number} <: DecaySchedule
+struct Exp{T<:Number} <: DecaySchedule
     λ::T
     γ::T
 end
+Exp(;λ, γ) = Exp(λ, γ)
 
 basevalue(schedule::Exp) = schedule.λ
 decay(schedule::Exp, t) = schedule.γ^(t - 1)
