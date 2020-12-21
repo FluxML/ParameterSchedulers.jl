@@ -1,9 +1,9 @@
 module ParameterSchedulers
 
-export Step, Exp, Poly, Inv,
+export Lambda, Sequence, Loop,
+       Step, Exp, Poly, Inv,
        Tri, TriStep, TriExp,
-       Sin, SinStep, SinExp,
-       Sequence, Loop
+       Sin, SinStep, SinExp
 
 include("schedule.jl")
 include("decay.jl")
