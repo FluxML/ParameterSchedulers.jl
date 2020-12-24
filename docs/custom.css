@@ -7,10 +7,23 @@
 :root {
     --content-width: 90ch;
     --margin-width: 240px;
+    --nav-width: 160px;
+}
+
+div.content {
+    display: flex;
+    flex-direction: row;
+    flex: 1 1 auto;
+    margin-top: 50px;
 }
 
 main {
-    flex: 1 1 70%;
+    margin-top: auto;
+}
+
+main#page {
+    padding: 10px;
+    margin-left: calc(var(--nav-width) + 1em);
 }
 
 /* # Article container */
@@ -262,16 +275,11 @@ div.footnote > p.footnote-title {
 /* # Table of contents container */
 
 nav {
-    height: 100%;
-    /* width: 160px; */
-    flex: 0 1 30%;
+    width: var(--nav-width);
     position: fixed;
     z-index: 1;
     top: 0;
     left: 0;
-    margin-top: 50px;
-    max-width: var(--content-width);
-    overflow-x: hidden;
 }
 
 
@@ -313,6 +321,19 @@ footer {
         margin-left: 8px;
         margin-right: 8px;
         padding-right: 0px;
+    }
+    nav {
+        width: 100%;
+        display: none;
+        justify-content: center;
+        position: relative;
+        align-self: center;
+    }
+    main#page {
+        margin-left: auto;
+    }
+    div.content {
+        display: block;
     }
 }
 

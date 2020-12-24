@@ -17,6 +17,7 @@ title = "ParameterSchedulers.jl"
 
     [publish.html]
     css = "docs/custom.css"
+    default_js = "docs/custom.js"
     template = {file = "docs/custom.mustache"}
 
 [targets]
