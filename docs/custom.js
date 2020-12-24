@@ -88,7 +88,7 @@ window.addEventListener("searchIndexLoaded", function (_) {
     }
 });
 
-var mql = window.matchMedia('screen and (max-width:800px)');
+var mql = window.matchMedia('screen and (max-width:760px)');
 mql.addEventListener("change",
     function(mq) {
         if (mq.matches) {
