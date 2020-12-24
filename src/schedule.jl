@@ -1,5 +1,21 @@
 abstract type AbstractSchedule end
 
+mutable struct ScheduleIterator{T, S}
+    schedule::T
+    state::Union{S, Nothing}
+end
+function ScheduleIterator(schedule::T) where T<:AbstractSchedule
+    _, state = iterate(schedule)
+    
+    ScheduleIterator{T, typeof(state)}(schedule, nothing)
+end
+
+function next!(iter::ScheduleIterator)
+    val, iter.state = isnothing(iter.state) ? iterate(iter.schedule) : iterate(iter.schedule, iter.state)
+
+    return val
+end
+    
 
 abstract type DecaySchedule <: AbstractSchedule end
 
