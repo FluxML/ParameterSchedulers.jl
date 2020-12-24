@@ -13,18 +13,18 @@ Base.eltype(::Type{<:Tri{T}}) where T = T
 Base.IteratorSize(::Type{<:Tri}) = Base.IsInfinite()
 
 
-struct TriStep{T<:Tri} <: CyclicSchedule
+struct TriDecay2{T<:Tri} <: CyclicSchedule
     tri::T
 end
-TriStep(λ0, λ1, period) = TriStep(Tri(λ0, λ1, period))
-TriStep(;λ0, λ1, period) = TriStep(λ0, λ1, period)
+TriDecay2(λ0, λ1, period) = TriDecay2(Tri(λ0, λ1, period))
+TriDecay2(;λ0, λ1, period) = TriDecay2(λ0, λ1, period)
 
-startvalue(schedule::TriStep) = schedule.tri.λ0
-endvalue(schedule::TriStep) = schedule.tri.λ1
-cycle(schedule::TriStep, t) = cycle(schedule.tri, t) / (2^fld(t - 1, schedule.tri.period))
+startvalue(schedule::TriDecay2) = schedule.tri.λ0
+endvalue(schedule::TriDecay2) = schedule.tri.λ1
+cycle(schedule::TriDecay2, t) = cycle(schedule.tri, t) / (2^fld(t - 1, schedule.tri.period))
 
-Base.eltype(::Type{<:TriStep{Tri{T}}}) where T = T
-Base.IteratorSize(::Type{<:TriStep}) = Base.IsInfinite()
+Base.eltype(::Type{<:TriDecay2{Tri{T}}}) where T = T
+Base.IteratorSize(::Type{<:TriDecay2}) = Base.IsInfinite()
 
 
 struct TriExp{F<:Number, T<:Tri{F}, S<:Exp{F}} <: CyclicSchedule
@@ -57,18 +57,18 @@ Base.eltype(::Type{<:Sin{T}}) where T = T
 Base.IteratorSize(::Type{<:Sin}) = Base.IsInfinite()
 
 
-struct SinStep{T<:Sin} <: CyclicSchedule
+struct SinDecay2{T<:Sin} <: CyclicSchedule
     sine::T
 end
-SinStep(λ0, λ1, period) = SinStep(Sin(λ0, λ1, period))
-SinStep(;λ0, λ1, period) = SinStep(λ0, λ1, period)
+SinDecay2(λ0, λ1, period) = SinDecay2(Sin(λ0, λ1, period))
+SinDecay2(;λ0, λ1, period) = SinDecay2(λ0, λ1, period)
 
-startvalue(schedule::SinStep) = schedule.sine.λ0
-endvalue(schedule::SinStep) = schedule.sine.λ1
-cycle(schedule::SinStep, t) = cycle(schedule.sine, t) / (2^fld(t - 1, schedule.sine.period))
+startvalue(schedule::SinDecay2) = schedule.sine.λ0
+endvalue(schedule::SinDecay2) = schedule.sine.λ1
+cycle(schedule::SinDecay2, t) = cycle(schedule.sine, t) / (2^fld(t - 1, schedule.sine.period))
 
-Base.eltype(::Type{<:SinStep{Sin{T}}}) where T = T
-Base.IteratorSize(::Type{<:SinStep}) = Base.IsInfinite()
+Base.eltype(::Type{<:SinDecay2{Sin{T}}}) where T = T
+Base.IteratorSize(::Type{<:SinDecay2}) = Base.IsInfinite()
 
 
 struct SinExp{F<:Number, T<:Sin{F}, S<:Exp{F}} <: CyclicSchedule
