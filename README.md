@@ -12,7 +12,7 @@ opt = Exp(Momentum(); λ = 1e-2, γ = 0.8)
 
 ## Available Schedules
 
-This is a table of the common schedules implemented, but ParameterSchedulers provides utilities for creating more exotic schedules as well.
+This is a table of the common schedules implemented, but ParameterSchedulers provides utilities for creating more exotic schedules as well. You can read [this paper](https://arxiv.org/abs/1908.06477) for more information on the schedules below.
 
 <table>
 <tr>
@@ -172,6 +172,94 @@ lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels =
 using UnicodePlots, ParameterSchedulers
 t = 1:10 |> collect
 s = TriExp(λ0 = 0.0, λ1 = 1.0, period = 2, γ = 0.8)
+lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels = false)
+```
+</td></tr>
+
+<tr><td>
+
+[`Sin(;λ0, λ1, period)`](#)
+
+</td>
+<td>
+
+Sine function
+
+</td>
+<td> Cyclic </td>
+<td style="text-align:center">
+
+{:cell, display=false}
+```julia
+using UnicodePlots, ParameterSchedulers
+t = 1:10 |> collect
+s = Sin(λ0 = 0.0, λ1 = 1.0, period = 2)
+lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels = false)
+```
+</td></tr>
+
+<tr><td>
+
+[`SinDecay2(;λ0, λ1, period)`](#)
+
+</td>
+<td>
+
+Sine function with half the amplitude every `period`
+
+</td>
+<td> Cyclic </td>
+<td style="text-align:center">
+
+{:cell, display=false}
+```julia
+using UnicodePlots, ParameterSchedulers
+t = 1:10 |> collect
+s = SinDecay2(λ0 = 0.0, λ1 = 1.0, period = 2)
+lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels = false)
+```
+</td></tr>
+
+<tr><td>
+
+[`SinExp(;λ0, λ1, period)`](#)
+
+</td>
+<td>
+
+Sine function with exponential amplitude decay at rate `γ`
+
+</td>
+<td> Cyclic </td>
+<td style="text-align:center">
+
+{:cell, display=false}
+```julia
+using UnicodePlots, ParameterSchedulers
+t = 1:10 |> collect
+s = SinExp(λ0 = 0.0, λ1 = 1.0, period = 2, γ = 0.8)
+lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels = false)
+```
+</td></tr>
+
+<tr><td>
+
+[`Cos(;λ0, λ1, period)`](#)
+
+</td>
+<td>
+
+Cosine function
+
+</td>
+<td> Cyclic </td>
+<td style="text-align:center">
+
+{:cell, display=false}
+```julia
+using UnicodePlots, ParameterSchedulers
+t = 1:10 |> collect
+s = Cos(λ0 = 0.0, λ1 = 1.0, period = 2)
 lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels = false)
 ```
 </td></tr>

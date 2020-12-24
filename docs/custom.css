@@ -99,8 +99,6 @@ code {
     font-size: 15px;
     padding: 2px;
     border-radius: 2px;
-    background-color: #f8f8f8;
-    color: #222;
 }
 
 pre > code {
@@ -375,18 +373,4 @@ a:link::selection,
 a:link::-moz-selection {
     text-shadow: 0.03em 0 #b4d5fe, -0.03em 0 #b4d5fe, 0 0.03em #b4d5fe, 0 -0.03em #b4d5fe, 0.06em 0 #b4d5fe, -0.06em 0 #b4d5fe, 0.09em 0 #b4d5fe, -0.09em 0 #b4d5fe, 0.12em 0 #b4d5fe, -0.12em 0 #b4d5fe, 0.15em 0 #b4d5fe, -0.15em 0 #b4d5fe;
     background: #b4d5fe;
-}
-/* code styling
-
-From https://github.com/highlightjs/highlight.js/blob/master/src/styles/atom-one-light.css
-*/
-.hljs-comment,
-.hljs-quote {
-  color: #a0a1a7;
-  font-style: italic;
-}
-.hljs-doctag,
-.hljs-keyword,
-.hljs-formula {
-  color: #666;
 }
