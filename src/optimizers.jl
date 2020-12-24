@@ -16,7 +16,7 @@ end
 
 for Opt in (Descent, Momentum, Nesterov, RMSProp,
             ADAM, RADAM, AdaMax, OADAM, ADAGrad,
-            ADADelta, AMSGrad, NADAM, ADAMW, AdaBelief)
+            ADADelta, AMSGrad, NADAM, AdaBelief)
     @eval begin
         ScheduleOptim(schedule::AbstractSchedule, opt::$Opt; update_func = (o, s) -> (o.eta = s)) =
             ScheduledOptim(schedule, opt, update_func)

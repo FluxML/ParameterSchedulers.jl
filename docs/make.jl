@@ -1,21 +1,11 @@
+using Publish
 using ParameterSchedulers
-using Documenter
 
-makedocs(;
-    modules=[ParameterSchedulers],
-    authors="Kyle Daruwalla",
-    repo="https://github.com/darsnack/ParameterSchedulers.jl/blob/{commit}{path}#L{line}",
-    sitename="ParameterSchedulers.jl",
-    format=Documenter.HTML(;
-        prettyurls=get(ENV, "CI", "false") == "true",
-        canonical="https://darsnack.github.io/ParameterSchedulers.jl",
-        assets=String[],
-    ),
-    pages=[
-        "Home" => "index.md",
-    ],
-)
+p = Publish.Project(ParameterSchedulers)
 
-deploydocs(;
-    repo="github.com/darsnack/ParameterSchedulers.jl",
-)
+# needed to prevent error when overwriting
+rm("dev", recursive = true, force = true)
+rm(p.env["version"], recursive = true, force = true)
+
+# build documentation
+deploy(DataLoaders; root = "/ParameterSchedulers.jl", force = true, label = "dev")
