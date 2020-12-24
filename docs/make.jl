@@ -8,4 +8,4 @@ rm("dev", recursive = true, force = true)
 rm(p.env["version"], recursive = true, force = true)
 
 # build documentation
-deploy(DataLoaders; root = "/ParameterSchedulers.jl", force = true, label = "dev")
+deploy(ParameterSchedulers; root = "/ParameterSchedulers.jl", force = true, label = "dev")
