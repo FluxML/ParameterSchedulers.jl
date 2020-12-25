@@ -18,7 +18,7 @@ for Opt in (Descent, Momentum, Nesterov, RMSProp,
             ADAM, RADAM, AdaMax, OADAM, ADAGrad,
             ADADelta, AMSGrad, NADAM, AdaBelief)
     @eval begin
-        ScheduleOptim(schedule::AbstractSchedule, opt::$Opt; update_func = (o, s) -> (o.eta = s)) =
+        ScheduledOptim(schedule::AbstractSchedule, opt::$Opt; update_func = (o, s) -> (o.eta = s)) =
             ScheduledOptim(schedule, opt, update_func)
         (::Type{T})(opt::$Opt; update_func = (o, s) -> (o.eta = s), kwargs...) where T<:AbstractSchedule =
             ScheduledOptim(T(kwargs...), opt, update_func)

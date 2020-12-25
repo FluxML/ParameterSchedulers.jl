@@ -13,7 +13,7 @@ println("s[1]: $(s[1])")
 println("s[5]: $(s[5])")
 ```
 !!! info
-    The indices are unitless. So, if you index to a schedule every epoch, then the `s[i]` is parameter value at epoch `i`.
+    The indices are unitless. So, if you index a schedule every epoch, then the `s[i]` is parameter value at epoch `i`.
 
 We can also use the schedule in an iterable context like a `for`-loop:
 {cell=getting-started}
