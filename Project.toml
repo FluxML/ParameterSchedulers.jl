@@ -7,6 +7,7 @@ version = "0.1.0"
 Flux = "587475ba-b771-5e3f-ad9e-33799f191a9c"
 
 [compat]
+Flux = "0.11"
 julia = "1.1"
 
 [extras]
@@ -18,7 +19,9 @@ title = "ParameterSchedulers.jl"
     [publish.html]
     css = "docs/custom.css"
     default_js = "docs/custom.js"
-    template = {file = "docs/custom.mustache"}
+
+        [publish.html.template]
+        file = "docs/custom.mustache"
 
 [targets]
 test = ["Test"]
