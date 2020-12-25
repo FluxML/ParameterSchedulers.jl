@@ -29,9 +29,9 @@ As you can see above, [`Exp`](#) is a type of decay schedule. Below is a list of
 
 | Schedule    | Parameters             | Decay Function |
 |:------------|:-----------------------|:---------------|
-| [`Step`](#) | `λ`, `γ`, `step_sizes` | ``g(t) = \gamma^{i - 1}`` where ``\sum_{j = 1}^{i - 1} \text{step_sizes}_j < t \leq \sum_{j = 1}^i \text{step_sizes}_j`` |
+| [`Step`](#) | `λ`, `γ`, `step_sizes` | ``g(t) = \gamma^{i - 1}`` where ``\sum_{j = 1}^{i - 1} \text{step\_sizes}_j < t \leq \sum_{j = 1}^i \text{step\_sizes}_j`` |
 | [`Exp`](#)  | `λ`, `γ`               | ``g(t) = \gamma^{t - 1}`` |
-| [`Poly`](#) | `λ`, `p`, `max_iter`   | ``g(t) = \frac{1}{\left(1 + \lfloor (t - 1) / \text{max_iter} \rfloor\right)^p}`` |
+| [`Poly`](#) | `λ`, `p`, `max_iter`   | ``g(t) = \frac{1}{\left(1 + \lfloor (t - 1) / \text{max\_iter} \rfloor\right)^p}`` |
 | [`Inv`](#)  | `λ`, `γ`, `p`          | ``g(t) = \frac{1}{(1 + (t - 1) \gamma)^p}`` |
 
 ## Cyclic schedules
@@ -74,4 +74,4 @@ As with decay schedules, you won't use the interface above and rely on `getindex
 | [`Sin`](#)       | `λ0`, `λ1`, `period`      | ``g(t) = \left| \sin \left(\frac{\pi (t - 1)}{\text{period}} \right) \right|`` |
 | [`SinDecay2`](#) | `λ0`, `λ1`, `period`      | ``g(t) = \frac{1}{2^{\lfloor (t - 1) / \text{period} \rfloor}} g_{\mathrm{Sin}}(t)`` |
 | [`SinExp`](#)    | `λ0`, `λ1`, `period`, `γ` | ``g(t) = \gamma^{t - 1} g_{\mathrm{Tri}}(t)`` |
-| [`Cos`](#)       | `λ0`, `λ1`, `period`      | ``g(t) = \frac{1}{2} \left(1 + \cos \left(\frac{2 \pi (t - 1)}{\text{period}}\right) \rigth)`` |
+| [`Cos`](#)       | `λ0`, `λ1`, `period`      | ``g(t) = \frac{1}{2} \left(1 + \cos \left(\frac{2 \pi (t - 1)}{\text{period}}\right) \right)`` |

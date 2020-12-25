@@ -9,7 +9,7 @@ Since every schedule is a standard iterator, we can insert it into a training lo
 ```julia
 using Flux, ParameterSchedulers
 
-data = [(rand(4, 10), rand([-1, 1], 1, 10)) for _ in 1:5]
+data = [(rand(4, 10), rand([-1, 1], 1, 10)) for _ in 1:3]
 m = Dense(4, 1, tanh)
 p = params(m)
 opt = Descent()
@@ -26,8 +26,8 @@ end
 We can also adjust the learning on an epoch basis instead. All that is required is to change what we zip our schedule with.
 {cell=optimizers}
 ```julia
-nepochs = 10
-s = Step(λ = 1e-1, γ = 0.2, step_sizes = [5, 3, 2])
+nepochs = 6
+s = Step(λ = 1e-1, γ = 0.2, step_sizes = [3, 2, 1])
 for (η, epoch) in zip(s, 1:nepochs)
     opt.eta = η
     for (i, (x, y)) in enumerate(data)

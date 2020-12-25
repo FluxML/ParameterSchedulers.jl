@@ -15,13 +15,16 @@ opt = Exp(Momentum(); λ = 1e-2, γ = 0.8)
 This is a table of the common schedules implemented, but ParameterSchedulers provides utilities for creating more exotic schedules as well. You can read [this paper](https://arxiv.org/abs/1908.06477) for more information on the schedules below.
 
 <table>
+<thead>
 <tr>
-    <td> <em>Schedule</em> </td>
-    <td> <em>Description</em> </td>
-    <td> <em>Type</em> </td>
-    <td style="text-align:center"> <em>Example</em> </td>
+    <th>Schedule</th>
+    <th>Description</th>
+    <th>Type</th>
+    <th>Example</th>
 </tr>
+</thead>
 
+<tbody>
 <tr><td>
 
 [`Step(;λ, γ, step_sizes)`](#)
@@ -263,4 +266,5 @@ s = Cos(λ0 = 0.0, λ1 = 1.0, period = 2)
 lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels = false)
 ```
 </td></tr>
+</tbody>
 </table>
