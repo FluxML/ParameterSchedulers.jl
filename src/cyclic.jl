@@ -95,7 +95,7 @@ Cos(;λ0, λ1, period) = Cos(λ0, λ1, period)
 
 startvalue(schedule::Cos) = schedule.λ0
 endvalue(schedule::Cos) = schedule.λ1
-cycle(schedule::Cos, t) = (1 + cos(4 * π * (t - 1) / schedule.period)) / 2
+cycle(schedule::Cos, t) = (1 + cos(2 * π * (t - 1) / schedule.period)) / 2
 
 Base.eltype(::Type{<:Cos{T}}) where T = T
 Base.IteratorSize(::Type{<:Cos}) = Base.IsInfinite()
