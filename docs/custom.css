@@ -30,9 +30,6 @@ main#page {
 
 article {
     max-width: var(--content-width);
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 24px;
 }
 
 img {
@@ -136,6 +133,39 @@ pre {
     margin: 8px 0px;
 }
 
+/* Links */
+a:link, a:visited {
+    color: inherit;
+}
+
+.no-tufte-underline:link {
+    background: unset;
+    text-shadow: unset;
+}
+
+a:link, .tufte-underline, .hover-tufte-underline:hover {
+    text-decoration: none;
+    background: -webkit-linear-gradient(#fffff8, #fffff8), -webkit-linear-gradient(#fffff8, #fffff8), -webkit-linear-gradient(currentColor, currentColor);
+    background: linear-gradient(#fffff8, #fffff8), linear-gradient(#fffff8, #fffff8), linear-gradient(currentColor, currentColor);
+    -webkit-background-size: 0.05em 1px, 0.05em 1px, 1px 1px;
+    -moz-background-size: 0.05em 1px, 0.05em 1px, 1px 1px;
+    background-size: 0.05em 1px, 0.05em 1px, 1px 1px;
+    background-repeat: no-repeat, no-repeat, repeat-x;
+    text-shadow: 0.03em 0 #fffff8, -0.03em 0 #fffff8, 0 0.03em #fffff8, 0 -0.03em #fffff8, 0.06em 0 #fffff8, -0.06em 0 #fffff8, 0.09em 0 #fffff8, -0.09em 0 #fffff8, 0.12em 0 #fffff8, -0.12em 0 #fffff8, 0.15em 0 #fffff8, -0.15em 0 #fffff8;
+    background-position: 0% 93%, 100% 93%, 0% 93%;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+    a:link, .tufte-underline, .hover-tufte-underline:hover {
+        background-position-y: 87%, 87%, 87%;
+    }
+}
+
+a:link::selection, a:link::-moz-selection {
+    text-shadow: 0.03em 0 #b4d5fe, -0.03em 0 #b4d5fe, 0 0.03em #b4d5fe, 0 -0.03em #b4d5fe, 0.06em 0 #b4d5fe, -0.06em 0 #b4d5fe, 0.09em 0 #b4d5fe, -0.09em 0 #b4d5fe, 0.12em 0 #b4d5fe, -0.12em 0 #b4d5fe, 0.15em 0 #b4d5fe, -0.15em 0 #b4d5fe;
+    background: #b4d5fe;
+}
+
 /* Tables */
 
 table {
@@ -171,14 +201,16 @@ li > * {
     position: absolute;
 }
 
+.katex {
+    font-size: 1.1em;
+}
+
 /*
 Admonitions
 */
 
 .admonition {
     margin: 16px 16px;
-    border-top: 1px solid #aaa;
-    border-bottom: 1px solid #aaa;
 }
 
 .admonition-title {
@@ -190,15 +222,11 @@ Admonitions
     margin-right: 8px;
 }
 
-.admonition.info {
-    background-color: rgba(135, 206, 235, 0.1);
-    
-}
 /*
 Footnotes
 */
 
-a.footnote {
+/* a.footnote {
     vertical-align: super;
     font-size: 0.5em;
     margin-left: 2px;
@@ -217,24 +245,22 @@ div.footnote > p {
 
 div.footnote > p.footnote-title {
     display: inline;
+} */
+
+footer {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 32px;
+    margin-bottom: 16px;
+    width: 300px;
 }
 
 /* # Menu container */
 
-/* .menu {
-    max-width: 100%;
-    margin-left: auto;
-    margin-right: auto;
-    display: flex;
-    flex-direction: row;
-    align-items: left;
-    margin-top: 8px;
-    height: 40px;
-} */
-
 #menu-toggler {
     cursor: pointer;
 }
+
 #search-input {
     border: 1px solid #ddd;
     border-radius: 4px;
@@ -244,22 +270,11 @@ div.footnote > p.footnote-title {
     padding: 4px 8px;
 }
 
-#version-selector {
-    border: 1px solid #ddd;
-    padding: 4px;
-    border-radius: 4px;
-}
+/* Page navigation */
 
-#page-navigation {
-    max-width: var(--content-width);
-    margin-left: auto;
-    margin-top: 48px;
-    margin-right: auto;
-}
 #page-navigation > a {
-    color: #aaa;
-    padding: 0px 32px;
     text-decoration: none;
+    color: rgb(37, 37, 37);
     background: unset;
     text-shadow: unset;
 }
@@ -277,19 +292,8 @@ nav {
     left: 0;
 }
 
+/* Dynamic size */
 
-.katex {
-    font-size: 1.1em;
-}
-
-footer {
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 32px;
-    margin-bottom: 16px;
-    color: #aaa;
-    width: 300px;
-}
 @media (max-width: 1260px) {
     .marginnote {
         float: none;
@@ -330,47 +334,4 @@ footer {
     div.content {
         display: block;
     }
-}
-
-/* Links
-
-from https://github.com/edwardtufte/tufte-css/blob/gh-pages/tufte.css
-
-*/
-
-/* Links: replica
-
-/* Links: replicate underline that clears descenders */
-a:link,
-a:visited {
-    color: inherit;
-}
-
-.no-tufte-underline:link {
-    background: unset;
-    text-shadow: unset;
-}
-
-a:link, .tufte-underline, .hover-tufte-underline:hover {
-    text-decoration: none;
-    background: -webkit-linear-gradient(#fffff8, #fffff8), -webkit-linear-gradient(#fffff8, #fffff8), -webkit-linear-gradient(currentColor, currentColor);
-    background: linear-gradient(#fffff8, #fffff8), linear-gradient(#fffff8, #fffff8), linear-gradient(currentColor, currentColor);
-    -webkit-background-size: 0.05em 1px, 0.05em 1px, 1px 1px;
-    -moz-background-size: 0.05em 1px, 0.05em 1px, 1px 1px;
-    background-size: 0.05em 1px, 0.05em 1px, 1px 1px;
-    background-repeat: no-repeat, no-repeat, repeat-x;
-    text-shadow: 0.03em 0 #fffff8, -0.03em 0 #fffff8, 0 0.03em #fffff8, 0 -0.03em #fffff8, 0.06em 0 #fffff8, -0.06em 0 #fffff8, 0.09em 0 #fffff8, -0.09em 0 #fffff8, 0.12em 0 #fffff8, -0.12em 0 #fffff8, 0.15em 0 #fffff8, -0.15em 0 #fffff8;
-    background-position: 0% 93%, 100% 93%, 0% 93%;
-}
-
-@media screen and (-webkit-min-device-pixel-ratio: 0) {
-    a:link, .tufte-underline, .hover-tufte-underline:hover {
-        background-position-y: 87%, 87%, 87%;
-    }
-}
-
-a:link::selection,
-a:link::-moz-selection {
-    text-shadow: 0.03em 0 #b4d5fe, -0.03em 0 #b4d5fe, 0 0.03em #b4d5fe, 0 -0.03em #b4d5fe, 0.06em 0 #b4d5fe, -0.06em 0 #b4d5fe, 0.09em 0 #b4d5fe, -0.09em 0 #b4d5fe, 0.12em 0 #b4d5fe, -0.12em 0 #b4d5fe, 0.15em 0 #b4d5fe, -0.15em 0 #b4d5fe;
-    background: #b4d5fe;
 }
