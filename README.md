@@ -27,7 +27,7 @@ This is a table of the common schedules implemented, but ParameterSchedulers pro
 <tbody>
 <tr><td>
 
-[`Step(;λ, γ, step_sizes)`](#)
+[`Step(;λ, γ, step_sizes)`](# "`Step`")
 
 </td>
 <td>
@@ -49,7 +49,7 @@ lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels =
 
 <tr><td>
 
-[`Exp(;λ, γ)`](#)
+[`Exp(;λ, γ)`](# "`Exp`")
 
 </td>
 <td>
@@ -71,7 +71,7 @@ lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels =
 
 <tr><td>
 
-[`Poly(;λ, p, max_iter)`](#)
+[`Poly(;λ, p, max_iter)`](# "`Poly`")
 
 </td>
 <td>
@@ -93,7 +93,7 @@ lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels =
 
 <tr><td>
 
-[`Inv(;λ, γ, p)`](#)
+[`Inv(;λ, γ, p)`](# "`Inv`")
 
 </td>
 <td>
@@ -115,7 +115,7 @@ lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels =
 
 <tr><td>
 
-[`Tri(;λ0, λ1, period)`](#)
+[`Tri(;λ0, λ1, period)`](# "`Tri`")
 
 </td>
 <td>
@@ -137,7 +137,7 @@ lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels =
 
 <tr><td>
 
-[`TriDecay2(;λ0, λ1, period)`](#)
+[`TriDecay2(;λ0, λ1, period)`](# "`TriDecay2`")
 
 </td>
 <td>
@@ -159,7 +159,7 @@ lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels =
 
 <tr><td>
 
-[`TriExp(;λ0, λ1, period, γ)`](#)
+[`TriExp(;λ0, λ1, period, γ)`](# "`TriExp`")
 
 </td>
 <td>
@@ -181,7 +181,7 @@ lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels =
 
 <tr><td>
 
-[`Sin(;λ0, λ1, period)`](#)
+[`Sin(;λ0, λ1, period)`](# "`Sin`")
 
 </td>
 <td>
@@ -203,7 +203,7 @@ lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels =
 
 <tr><td>
 
-[`SinDecay2(;λ0, λ1, period)`](#)
+[`SinDecay2(;λ0, λ1, period)`](# "`SinDecay2`")
 
 </td>
 <td>
@@ -225,7 +225,7 @@ lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels =
 
 <tr><td>
 
-[`SinExp(;λ0, λ1, period)`](#)
+[`SinExp(;λ0, λ1, period)`](# "`SinExp`")
 
 </td>
 <td>
@@ -247,7 +247,7 @@ lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels =
 
 <tr><td>
 
-[`Cos(;λ0, λ1, period)`](#)
+[`Cos(;λ0, λ1, period)`](# "`Cos`")
 
 </td>
 <td>
