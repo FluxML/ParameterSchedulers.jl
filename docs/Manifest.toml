@@ -458,7 +458,9 @@ uuid = "9abbd945-dff8-562f-b5e8-e1ebf5ef1b79"
 
 [[Publish]]
 deps = ["Base64", "CommonMark", "DataStructures", "FilePathsBase", "FileTrees", "HTTP", "IOCapture", "IterTools", "JSON", "LiveServer", "Logging", "Mustache", "Pkg", "PrettyTables", "Requires", "Tectonic"]
-git-tree-sha1 = "350819a2a082a71d41bad44372cb40bb6b1ac34e"
+git-tree-sha1 = "583ec99bb44dabb49dd3825f8e80a4e29830c58f"
+repo-rev = "darsnack/template-hot-fix"
+repo-url = "https://github.com/darsnack/Publish.jl"
 uuid = "f065f642-d108-4f50-8aa5-6749150a895a"
 version = "0.6.0"
 
