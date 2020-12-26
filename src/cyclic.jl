@@ -1,3 +1,19 @@
+"""
+    Tri{T<:Number, S<:Integer} <: CyclicSchedule
+    Tri(;λ0, λ1, period)
+
+A [triangle wave](https://en.wikipedia.org/wiki/Triangle_wave) schedule
+with `period`.
+The output conforms to
+```
+abs(λ0 - λ1) * (2 / π) * abs(asin(sin(π * (t - 1) / period))) + min(λ0, λ1)
+```
+
+# Arguments
+- `λ0::Number`: the start value
+- `λ1::Number`: the end value
+- `period::Integer`: the period
+"""
 struct Tri{T<:Number, S<:Integer} <: CyclicSchedule
     λ0::T
     λ1::T
@@ -13,6 +29,24 @@ Base.eltype(::Type{<:Tri{T}}) where T = T
 Base.IteratorSize(::Type{<:Tri}) = Base.IsInfinite()
 
 
+"""
+    TriDecay2{T<:Tri} <: CyclicSchedule
+    TriDecay2(λ0, λ1, period)
+    TriDecay2(;λ0, λ1, period)
+
+A [triangle wave](https://en.wikipedia.org/wiki/Triangle_wave) schedule
+with `period` and half the amplitude each cycle.
+The output conforms to
+```
+abs(λ0 - λ1) * Tri(t) / (2^floor((t - 1) / period)) + min(λ0, λ1)
+```
+where `Tri(t)` is the [`cycle`](#) of [`Tri`](#).
+
+# Arguments
+- `λ0::Number`: the start value
+- `λ1::Number`: the end value
+- `period::Integer`: the period
+"""
 struct TriDecay2{T<:Tri} <: CyclicSchedule
     tri::T
 end
@@ -27,6 +61,25 @@ Base.eltype(::Type{<:TriDecay2{Tri{T}}}) where T = T
 Base.IteratorSize(::Type{<:TriDecay2}) = Base.IsInfinite()
 
 
+"""
+    TriExp{F<:Number, T<:Tri{F}, S<:Exp{F}} <: CyclicSchedule
+    TriExp(λ0, λ1, period, γ)
+    TriExp(;λ0, λ1, period, γ)
+
+A [triangle wave](https://en.wikipedia.org/wiki/Triangle_wave) schedule
+with `period` and an exponentially decaying amplitude.
+The output conforms to
+```
+abs(λ0 - λ1) * Tri(t) * γ^(t - 1) + min(λ0, λ1)
+```
+where `Tri(t)` is the [`cycle`](#) of [`Tri`](#).
+
+# Arguments
+- `λ0::Number`: the start value
+- `λ1::Number`: the end value
+- `period::Integer`: the period
+- `γ::Number`: the decay rate
+"""
 struct TriExp{F<:Number, T<:Tri{F}, S<:Exp{F}} <: CyclicSchedule
     tri::T
     exp::S
@@ -42,6 +95,21 @@ Base.eltype(::Type{<:TriExp{T}}) where T = T
 Base.IteratorSize(::Type{<:TriExp}) = Base.IsInfinite()
 
 
+"""
+    Sin{T<:Number, S<:Integer} <: CyclicSchedule
+    Sin(;λ0, λ1, period)
+
+A sine wave schedule with `period`.
+The output conforms to
+```
+abs(λ0 - λ1) * abs(sin(π * (t - 1) / period)) + min(λ0, λ1)
+```
+
+# Arguments
+- `λ0::Number`: the start value
+- `λ1::Number`: the end value
+- `period::Integer`: the period
+"""
 struct Sin{T<:Number, S<:Integer} <: CyclicSchedule
     λ0::T
     λ1::T
@@ -57,6 +125,23 @@ Base.eltype(::Type{<:Sin{T}}) where T = T
 Base.IteratorSize(::Type{<:Sin}) = Base.IsInfinite()
 
 
+"""
+    SinDecay2{T<:Sin} <: CyclicSchedule
+    SinDecay2(λ0, λ1, period)
+    SinDecay2(;λ0, λ1, period)
+
+A sine wave schedule with `period` and half the amplitude each cycle.
+The output conforms to
+```
+abs(λ0 - λ1) * Sin(t) / (2^floor((t - 1) / period)) + min(λ0, λ1)
+```
+where `Sin(t)` is the [`cycle`](#) of [`Sin`](#).
+
+# Arguments
+- `λ0::Number`: the start value
+- `λ1::Number`: the end value
+- `period::Integer`: the period
+"""
 struct SinDecay2{T<:Sin} <: CyclicSchedule
     sine::T
 end
@@ -71,6 +156,24 @@ Base.eltype(::Type{<:SinDecay2{Sin{T}}}) where T = T
 Base.IteratorSize(::Type{<:SinDecay2}) = Base.IsInfinite()
 
 
+"""
+    SinExp{F<:Number, T<:Sin{F}, S<:Exp{F}} <: CyclicSchedule
+    SinDecay2(λ0, λ1, period, γ)
+    SinDecay2(;λ0, λ1, period, γ)
+
+A sine wave schedule with `period` and an exponentially decaying amplitude.
+The output conforms to
+```
+abs(λ0 - λ1) * Sin(t) * γ^(t - 1) + min(λ0, λ1)
+```
+where `Sin(t)` is the [`cycle`](#) of [`Sin`](#).
+
+# Arguments
+- `λ0::Number`: the start value
+- `λ1::Number`: the end value
+- `period::Integer`: the period
+- `γ::Number`: the decay rate
+"""
 struct SinExp{F<:Number, T<:Sin{F}, S<:Exp{F}} <: CyclicSchedule
     sine::T
     exp::S
@@ -86,6 +189,21 @@ Base.eltype(::Type{<:SinExp{T}}) where T = T
 Base.IteratorSize(::Type{<:SinExp}) = Base.IsInfinite()
 
 
+"""
+    Cos{T<:Number, S<:Integer} <: CyclicSchedule
+    Cos(;λ0, λ1, period)
+
+A cosine wave schedule with `period`.
+The output conforms to
+```
+abs(λ0 - λ1) * (1 + cos(2 * π * (t - 1) / period)) / 2 + min(λ0, λ1)
+```
+
+# Arguments
+- `λ0::Number`: the start value
+- `λ1::Number`: the end value
+- `period::Integer`: the period
+"""
 struct Cos{T<:Number, S<:Integer} <: CyclicSchedule
     λ0::T
     λ1::T
@@ -99,16 +217,3 @@ cycle(schedule::Cos, t) = (1 + cos(2 * π * (t - 1) / schedule.period)) / 2
 
 Base.eltype(::Type{<:Cos{T}}) where T = T
 Base.IteratorSize(::Type{<:Cos}) = Base.IsInfinite()
-
-
-struct Loop{T<:AbstractSchedule, S<:Integer} <: CyclicSchedule
-    cycle_func::T
-    period::S
-end
-
-startvalue(schedule::Loop) = 0.0
-endvalue(schedule::Loop) = 1.0
-cycle(schedule::Loop, t) = schedule.cycle_func[mod(t, schedule.period)]
-
-Base.eltype(::Type{<:Loop{T}}) where T<:Union{<:DecaySchedule, <:CyclicSchedule} = eltype(T)
-Base.IteratorSize(::Type{<:Loop}) = Base.IsInfinite()

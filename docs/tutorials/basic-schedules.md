@@ -73,5 +73,5 @@ As with decay schedules, you won't use the interface above and rely on `getindex
 | [`TriExp`](#)    | `λ0`, `λ1`, `period`, `γ` | ``g(t) = \gamma^{t - 1} g_{\mathrm{Tri}}(t)`` |
 | [`Sin`](#)       | `λ0`, `λ1`, `period`      | ``g(t) = \left| \sin \left(\frac{\pi (t - 1)}{\text{period}} \right) \right|`` |
 | [`SinDecay2`](#) | `λ0`, `λ1`, `period`      | ``g(t) = \frac{1}{2^{\lfloor (t - 1) / \text{period} \rfloor}} g_{\mathrm{Sin}}(t)`` |
-| [`SinExp`](#)    | `λ0`, `λ1`, `period`, `γ` | ``g(t) = \gamma^{t - 1} g_{\mathrm{Tri}}(t)`` |
+| [`SinExp`](#)    | `λ0`, `λ1`, `period`, `γ` | ``g(t) = \gamma^{t - 1} g_{\mathrm{Sin}}(t)`` |
 | [`Cos`](#)       | `λ0`, `λ1`, `period`      | ``g(t) = \frac{1}{2} \left(1 + \cos \left(\frac{2 \pi (t - 1)}{\text{period}}\right) \right)`` |

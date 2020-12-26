@@ -129,7 +129,7 @@ struct Lambda{T} <: AbstractSchedule
 end
 Lambda(;f) = Lambda(f)
 
-Base.getindex(schedule::Lambda, t) = f(t)
+Base.getindex(schedule::Lambda, t) = schedule.f(t)
 
 Base.iterate(schedule::Lambda, t = 1) = (schedule[t], t + 1)
 
@@ -154,23 +154,29 @@ at(x::AbstractSchedule, t) = x[t]
 
 """
     Sequence{T<:AbstractVector, S<:Integer} <: AbstractSchedule
-    Sequence(schedules::AbstractVector, step_sizes::Vector{<:Integer})
+    Sequence(;schedules, step_sizes)
 
 A sequence of schedules.
 The output of this schedule is the concatenation of `schedules` where each
 schedule is evaluated for each step size in `step_sizes`.
 
 Note that `schedules` can also be a vector of numbers (not just schedules).
+
+# Arguments
+- `schedules::AbstractVector`: a vector of schedules or numbers
+- `step_sizes::Vector{<:Integer}`: a vector of iteration lengths for each schedule
 """
 struct Sequence{T<:AbstractVector, S<:Integer} <: AbstractSchedule
     schedules::T
     step_sizes::Vector{S}
 end
+Sequence(;schedules, step_sizes) = Sequence(schedules, step_sizes)
 
 function Base.getindex(schedule::Sequence, t::Integer)
     accum_steps = cumsum(schedule.step_sizes)
     i = findlast(x -> t > x, accum_steps)
-    i = isnothing(i) ? 1 : i + 1
+    i = isnothing(i) ? 1 :
+            (i >= length(schedule.schedules)) ? length(schedule.schedules) : i + 1
     toffset = (i > 1) ? t - accum_steps[i - 1] : t
     
     return at(schedule.schedules[i], toffset)
@@ -186,3 +192,34 @@ function Base.iterate(schedule::Sequence, state = (1, 1, 1))
     return at(schedule.schedules[i], t - t0 + 1), (t + 1, i, t0)
 end
 Base.IteratorSize(::Type{<:Sequence}) = Base.SizeUnknown()
+
+
+"""
+    Loop{T<:AbstractSchedule, S<:Integer} <: CyclicSchedule
+    Loop(;f, period)
+
+Create a schedule that loops `f` every `period` iterations.
+Note that `f` must be a subtype of [`AbstractSchedule`](#).
+To loop arbitrary functions, wrap them in [`Lambda`](#).
+
+# Arguments
+- `f::AbstractSchedule`: the schedule to loop
+- `period::Integer`: how often to loop
+"""
+struct Loop{T<:AbstractSchedule, S<:Integer} <: CyclicSchedule
+    cycle_func::T
+    period::S
+end
+Loop(;f, period) = Loop(f, period)
+
+startvalue(schedule::Loop) = 0.0
+endvalue(schedule::Loop) = 1.0
+function cycle(schedule::Loop, t)
+    tcycle = mod(t, schedule.period)
+    tcycle = (tcycle == 0) ? schedule.period : tcycle
+
+    return schedule.cycle_func[tcycle]
+end
+
+Base.eltype(::Type{<:Loop{T}}) where T<:Union{<:DecaySchedule, <:CyclicSchedule} = eltype(T)
+Base.IteratorSize(::Type{<:Loop}) = Base.IsInfinite()
