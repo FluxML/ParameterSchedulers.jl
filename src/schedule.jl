@@ -8,6 +8,8 @@ and implement [`Base.getindex`](https://docs.julialang.org/en/v1/manual/interfac
 """
 abstract type AbstractSchedule end
 
+Base.firstindex(schedule::AbstractSchedule) = 1
+
 """
     ScheduleIterator{T<:AbstractSchedule, S}
     ScheduleIterator(schedule::T)
@@ -67,7 +69,6 @@ Given `s`, `decay(s, t)` should return the value of the decay function at iterat
 function decay end
 
 Base.getindex(schedule::DecaySchedule, t::Integer) = basevalue(schedule) * decay(schedule, t)
-Base.firstindex(schedule::DecaySchedule) = 1
 
 Base.iterate(schedule::DecaySchedule, t = 1) = (schedule[t], t + 1)
 
@@ -113,7 +114,6 @@ function Base.getindex(schedule::CyclicSchedule, t::Integer)
     
     return abs(k0 - k1) * cycle(schedule, t) + min(k0, k1)
 end
-Base.firstindex(schedule::CyclicSchedule) = 1
 
 Base.iterate(schedule::CyclicSchedule, t = 1) = (schedule[t], t + 1)
 
@@ -132,6 +132,8 @@ Lambda(;f) = Lambda(f)
 Base.getindex(schedule::Lambda, t) = schedule.f(t)
 
 Base.iterate(schedule::Lambda, t = 1) = (schedule[t], t + 1)
+Base.IteratorEltype(::Type{<:Lambda}) = Base.EltypeUnknown()
+Base.IteratorSize(::Type{<:Lambda}) = Base.SizeUnkown()
 
 """
     reverse(f, period)
@@ -195,7 +197,7 @@ Base.IteratorSize(::Type{<:Sequence}) = Base.SizeUnknown()
 
 
 """
-    Loop{T<:AbstractSchedule, S<:Integer} <: CyclicSchedule
+    Loop{T<:AbstractSchedule, S<:Integer} <: AbstractSchedule
     Loop(;f, period)
 
 Create a schedule that loops `f` every `period` iterations.
@@ -206,20 +208,20 @@ To loop arbitrary functions, wrap them in [`Lambda`](#).
 - `f::AbstractSchedule`: the schedule to loop
 - `period::Integer`: how often to loop
 """
-struct Loop{T<:AbstractSchedule, S<:Integer} <: CyclicSchedule
+struct Loop{T<:AbstractSchedule, S<:Integer} <: AbstractSchedule
     cycle_func::T
     period::S
 end
 Loop(;f, period) = Loop(f, period)
 
-startvalue(schedule::Loop) = 0.0
-endvalue(schedule::Loop) = 1.0
-function cycle(schedule::Loop, t)
+function Base.getindex(schedule::Loop, t)
     tcycle = mod(t, schedule.period)
     tcycle = (tcycle == 0) ? schedule.period : tcycle
 
     return schedule.cycle_func[tcycle]
 end
+
+Base.iterate(schedule::Loop, t = 1) = (schedule[t], t + 1)
 
 Base.eltype(::Type{<:Loop{T}}) where T<:Union{<:DecaySchedule, <:CyclicSchedule} = eltype(T)
 Base.IteratorSize(::Type{<:Loop}) = Base.IsInfinite()
