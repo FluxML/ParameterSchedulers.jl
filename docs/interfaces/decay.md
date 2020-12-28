@@ -1,6 +1,6 @@
 # Decay interface
 
-Decay schedules conform the following definition:
+Decay schedules conform to the following definition:
 ```math
 s(t) = \lambda g(t)
 ```
