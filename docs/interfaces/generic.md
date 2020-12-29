@@ -12,7 +12,7 @@ struct FooSchedule{T} <: ParameterSchedulers.AbstractSchedule
 end
 ```
 
-Next we implement the necessart interfaces. The easiest implementation to define `Base.getindex`, then rely on that to define the iteration behavior.
+Next we implement the necessary interfaces. The easiest implementation to define `Base.getindex`, then rely on that to define the iteration behavior.
 {cell=generic-interface}
 ```julia
 Base.getindex(schedule::FooSchedule, t::Integer) = schedule.f(t)
