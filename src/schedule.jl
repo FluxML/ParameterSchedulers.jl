@@ -214,12 +214,7 @@ struct Loop{T<:AbstractSchedule, S<:Integer} <: AbstractSchedule
 end
 Loop(;f, period) = Loop(f, period)
 
-function Base.getindex(schedule::Loop, t)
-    tcycle = mod(t, schedule.period)
-    tcycle = (tcycle == 0) ? schedule.period : tcycle
-
-    return schedule.cycle_func[tcycle]
-end
+Base.getindex(schedule::Loop, t) = schedule.cycle_func[mod1(t, schedule.period)]
 
 Base.iterate(schedule::Loop, t = 1) = (schedule[t], t + 1)
 
