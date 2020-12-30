@@ -12,6 +12,6 @@ export Lambda, Sequence, Loop,
 include("schedule.jl")
 include("decay.jl")
 include("cyclic.jl")
-include("optimizers.jl")
+# include("optimizers.jl")
 
 end

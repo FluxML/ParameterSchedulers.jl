@@ -57,6 +57,9 @@ end
 
 ## Working with Flux optimizers
 
+!!! danger
+    Currently, we are porting `ScheduledOptim` to Flux.jl. Until that is complete, you will need to manually copy the code in `src/optimizers.jl`.
+
 While the approaches above can be helpful when dealing with fine-grained training loops, it is usually simpler to just use a [`ScheduledOptim`](#).
 {cell=optimizers}
 ```julia
