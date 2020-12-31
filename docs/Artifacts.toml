@@ -1,0 +1,7 @@
+[darsnack-theme]
+git-tree-sha1 = "6983dac312f9d75c372786e223ac985d170c03e6"
+lazy = true
+
+    [[darsnack-theme.download]]
+    sha256 = "a37073c8d09c3229859aa1a60efaa1877c186c5f09e07e557f09df141613d8e8"
+    url = "https://github.com/darsnack/publish-theme/releases/download/darsnack-theme-0.1.0/darsnack-theme-0.1.0.tar.gz"
