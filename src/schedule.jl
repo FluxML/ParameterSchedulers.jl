@@ -133,22 +133,7 @@ Base.getindex(schedule::Lambda, t) = schedule.f(t)
 
 Base.iterate(schedule::Lambda, t = 1) = (schedule[t], t + 1)
 Base.IteratorEltype(::Type{<:Lambda}) = Base.EltypeUnknown()
-Base.IteratorSize(::Type{<:Lambda}) = Base.SizeUnkown()
-
-"""
-    reverse(f, period)
-
-Return a reverse function such that `reverse(f, period)(t) == f(period - t)`.
-"""
-reverse(f, period) = t -> f(period - t)
-"""
-    symmetric(f, period)
-
-Return a symmetric function such that for `t ∈ [1, period / 2)`,
-the symmetric function evaluates to `f(t)`, and when `t ∈ [period / 2, period)`,
-the symmetric functions evaluates to `f(period - t)`.
-"""
-symmetric(f, period) = t -> (t < period / 2) ? f(t) : f(period - t)
+Base.IteratorSize(::Type{<:Lambda}) = Base.SizeUnknown()
 
 
 at(x::Number, t) = x
@@ -185,7 +170,7 @@ function Base.getindex(schedule::Sequence, t::Integer)
 end
 function Base.iterate(schedule::Sequence, state = (1, 1, 1))
     t, i, t0 = state
-    if (i <= length(schedule.step_sizes)) && (t >= t0 + schedule.step_sizes[i])
+    if (i < length(schedule.step_sizes)) && (t >= t0 + schedule.step_sizes[i])
         # move onto next step range
         i += 1
         t0 = t
@@ -193,6 +178,7 @@ function Base.iterate(schedule::Sequence, state = (1, 1, 1))
 
     return at(schedule.schedules[i], t - t0 + 1), (t + 1, i, t0)
 end
+Base.IteratorEltype(::Type{<:Sequence}) = Base.EltypeUnknown()
 Base.IteratorSize(::Type{<:Sequence}) = Base.SizeUnknown()
 
 
@@ -218,5 +204,21 @@ Base.getindex(schedule::Loop, t) = schedule.cycle_func[mod1(t, schedule.period)]
 
 Base.iterate(schedule::Loop, t = 1) = (schedule[t], t + 1)
 
-Base.eltype(::Type{<:Loop{T}}) where T<:Union{<:DecaySchedule, <:CyclicSchedule} = eltype(T)
+Base.IteratorEltype(::Type{<:Loop{T}}) where T = Base.IteratorEltype(T)
+Base.eltype(::Type{<:Loop{T}}) where T = eltype(T)
 Base.IteratorSize(::Type{<:Loop}) = Base.IsInfinite()
+
+"""
+    reverse(f, period)
+
+Return a reverse function such that `reverse(f, period)(t) == f(period - t)`.
+"""
+reverse(f, period) = t -> f(period - t)
+"""
+    symmetric(f, period)
+
+Return a symmetric function such that for `t ∈ [1, period / 2)`,
+the symmetric function evaluates to `f(t)`, and when `t ∈ [period / 2, period)`,
+the symmetric functions evaluates to `f(period - t)`.
+"""
+symmetric(f, period) = t -> (t < period / 2) ? f(t) : f(period - t)

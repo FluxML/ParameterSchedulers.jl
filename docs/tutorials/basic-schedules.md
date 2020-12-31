@@ -31,7 +31,7 @@ As you can see above, [`Exp`](#) is a type of decay schedule. Below is a list of
 |:------------|:-----------------------|:---------------|
 | [`Step`](#) | `λ`, `γ`, `step_sizes` | ``g(t) = \gamma^{i - 1}`` where ``\sum_{j = 1}^{i - 1} \text{step\_sizes}_j < t \leq \sum_{j = 1}^i \text{step\_sizes}_j`` |
 | [`Exp`](#)  | `λ`, `γ`               | ``g(t) = \gamma^{t - 1}`` |
-| [`Poly`](#) | `λ`, `p`, `max_iter`   | ``g(t) = \frac{1}{\left(1 + \lfloor (t - 1) / \text{max\_iter} \rfloor\right)^p}`` |
+| [`Poly`](#) | `λ`, `p`, `max_iter`   | ``g(t) = \frac{1}{\left(1 - (t - 1) / \text{max\_iter}\right)^p}`` |
 | [`Inv`](#)  | `λ`, `γ`, `p`          | ``g(t) = \frac{1}{(1 + (t - 1) \gamma)^p}`` |
 
 ## Cyclic schedules

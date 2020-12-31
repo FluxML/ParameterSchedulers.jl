@@ -1,6 +1,12 @@
 using ParameterSchedulers
 using Test
 
-@testset "ParameterSchedulers.jl" begin
-    # Write your tests here.
+@testset "Generic" begin
+    include("schedule.jl")
+end
+@testset "Decay" begin
+    include("decay.jl")
+end
+@testset "Cyclic" begin
+    include("cyclic.jl")
 end

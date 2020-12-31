@@ -57,7 +57,7 @@ startvalue(schedule::TriDecay2) = schedule.tri.λ0
 endvalue(schedule::TriDecay2) = schedule.tri.λ1
 cycle(schedule::TriDecay2, t) = cycle(schedule.tri, t) / (2^fld(t - 1, schedule.tri.period))
 
-Base.eltype(::Type{<:TriDecay2{Tri{T}}}) where T = T
+Base.eltype(::Type{<:TriDecay2{T}}) where T = eltype(T)
 Base.IteratorSize(::Type{<:TriDecay2}) = Base.IsInfinite()
 
 
@@ -152,7 +152,7 @@ startvalue(schedule::SinDecay2) = schedule.sine.λ0
 endvalue(schedule::SinDecay2) = schedule.sine.λ1
 cycle(schedule::SinDecay2, t) = cycle(schedule.sine, t) / (2^fld(t - 1, schedule.sine.period))
 
-Base.eltype(::Type{<:SinDecay2{Sin{T}}}) where T = T
+Base.eltype(::Type{<:SinDecay2{T}}) where T = eltype(T)
 Base.IteratorSize(::Type{<:SinDecay2}) = Base.IsInfinite()
 
 

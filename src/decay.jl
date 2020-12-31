@@ -39,7 +39,7 @@ Base.IteratorSize(::Type{<:Step}) = Base.IsInfinite()
 # override default behavior for decay schedules
 function Base.iterate(schedule::Step, state = (1, 1, 1))
     t, i, t0 = state
-    if (i <= length(schedule.step_sizes)) && (t >= t0 + schedule.step_sizes[i])
+    if (i < length(schedule.step_sizes)) && (t >= t0 + schedule.step_sizes[i])
         # move onto next step range
         i += 1
         t0 = t
@@ -83,7 +83,7 @@ Base.IteratorSize(::Type{<:Exp}) = Base.IsInfinite()
 A polynomial schedule decays with degree `p`.
 The output conforms to
 ```
-λ / (1 - floor((t - 1) / max_iter))^p
+λ / (1 - (t - 1) / max_iter)^p
 ```
 
 # Arguments
