@@ -1,7 +1,7 @@
-[darsnack-theme]
-git-tree-sha1 = "6983dac312f9d75c372786e223ac985d170c03e6"
+[flux-theme]
 lazy = true
+git-tree-sha1 = "7f89380008f6fda1115500d194ae883b77ca9052"
 
-    [[darsnack-theme.download]]
-    sha256 = "a37073c8d09c3229859aa1a60efaa1877c186c5f09e07e557f09df141613d8e8"
-    url = "https://github.com/darsnack/publish-theme/releases/download/v0.1.0/darsnack-theme-0.1.0.tar.gz"
+    [[flux-theme.download]]
+    sha256 = "5763c517039f09d2f04205230967ca7d06ce58059ea9279fbc25fcbe3b1cc7c5"
+    url = "https://github.com/darsnack/flux-theme/releases/download/v0.1.0/flux-theme-0.1.0.tar.gz"

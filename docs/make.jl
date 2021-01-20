@@ -3,7 +3,7 @@ using ParameterSchedulers
 using Pkg.Artifacts
 
 # override default theme
-Publish.Themes.default() = artifact"darsnack-theme"
+Publish.Themes.default() = artifact"flux-theme"
 
 p = Publish.Project(ParameterSchedulers)
 
