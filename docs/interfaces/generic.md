@@ -1,6 +1,6 @@
 # Generic interface
 
-All schedules must inherit from [`AbstractSchedule`](#). Any concrete subtype must implement the [iteration interface](https://docs.julialang.org/en/v1/manual/interfaces/#man-interface-iteration) and [`Base.getindex`](https://docs.julialang.org/en/v1/manual/interfaces/#Indexing). Below we reimplment [`Lambda`](#) to illustrate what is required for another generic custom schedule.
+All schedules must inherit from [`AbstractSchedule`](#). Any concrete subtype must implement the [iteration interface](https://docs.julialang.org/en/v1/manual/interfaces/#man-interface-iteration) and [`Base.getindex`](https://docs.julialang.org/en/v1/manual/interfaces/#Indexing). Below we reimplement [`Lambda`](#) to illustrate what is required for another generic custom schedule.
 
 To avoid a name conflict, we will call our custom schedule `FooSchedule`. Let's start with defining the struct.
 {cell=generic-interface}
