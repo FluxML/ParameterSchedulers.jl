@@ -1,7 +1,7 @@
 [flux-theme]
 lazy = true
-git-tree-sha1 = "fce316c11d4e3618c1eda504adbe891cfcf38580"
+git-tree-sha1 = "5c3eb80a248df37bad41ba938abac15250243db3"
 
     [[flux-theme.download]]
-    sha256 = "c4211486ae96016c439d6e789aed1451b52d671104772b75e8576f09c80d844b"
+    sha256 = "4a0fbcf2e58a64161e02aa98eebeb7836764158e96612f2b81c0b1b0ac52ad02"
     url = "https://github.com/darsnack/flux-theme/releases/download/v0.2.1/flux-theme-0.2.1.tar.gz"
