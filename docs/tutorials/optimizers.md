@@ -10,7 +10,7 @@ Since every schedule is a standard iterator, we can insert it into a training lo
 using Flux, ParameterSchedulers
 
 data = [(rand(4, 10), rand([-1, 1], 1, 10)) for _ in 1:3]
-m = Dense(4, 1, tanh)
+m = Chain(Dense(4, 4, tanh), Dense(4, 1, tanh))
 p = params(m)
 opt = Descent()
 s = Exp(λ = 1e-1, γ = 0.2)
@@ -57,8 +57,9 @@ end
 
 ## Working with Flux optimizers
 
-!!! danger
-    Currently, we are porting `ScheduledOptim` to Flux.jl. Until that is complete, you will need to manually copy the code in `src/optimizers.jl`.
+!!! warning
+    Currently, we are porting `ScheduledOptim` to Flux.jl.
+    It may be renamed once it is ported out of this package.
 
 While the approaches above can be helpful when dealing with fine-grained training loops, it is usually simpler to just use a [`ScheduledOptim`](#).
 {cell=optimizers}

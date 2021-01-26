@@ -10,9 +10,6 @@ using Flux, ParameterSchedulers
 opt = Exp(Momentum(); λ = 1e-2, γ = 0.8)
 ```
 
-!!! danger
-    Currently, we are porting `ScheduledOptim` to Flux.jl. Until that is complete, you will need to manually copy the code in `src/optimizers.jl`.
-
 ## Available Schedules
 
 This is a table of the common schedules implemented, but ParameterSchedulers provides utilities for creating more exotic schedules as well. You can read [this paper](https://arxiv.org/abs/1908.06477) for more information on the schedules below.
