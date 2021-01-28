@@ -55,7 +55,7 @@ for epoch in 1:nepochs
 end
 ```
 
-## Working with Flux optimizers
+<!-- ## Working with Flux optimizers
 
 !!! warning
     Currently, we are porting `ScheduledOptim` to Flux.jl.
@@ -75,4 +75,4 @@ for epoch in 1:nepochs
     end
 end
 ```
-The scheduled optimizer, `opt`, can be used anywhere a Flux optimizer can. For example, it can be passed to `Flux.train!`.
+The scheduled optimizer, `opt`, can be used anywhere a Flux optimizer can. For example, it can be passed to `Flux.train!`. -->

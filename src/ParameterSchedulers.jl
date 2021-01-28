@@ -7,11 +7,10 @@ export Lambda, Sequence, Loop,
        Tri, TriDecay2, TriExp,
        Sin, SinDecay2, SinExp,
        Cos,
-       ScheduleIterator, ScheduledOptim
+       ScheduleIterator, next!
 
 include("schedule.jl")
 include("decay.jl")
 include("cyclic.jl")
-include("optimizers.jl")
 
 end
