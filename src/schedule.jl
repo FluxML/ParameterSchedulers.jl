@@ -15,7 +15,7 @@ Base.firstindex(schedule::AbstractSchedule) = 1
     ScheduleIterator(schedule::T)
 
 Create a stateful iterator around `schedule`.
-See also [`next!`](#)
+See also [`next!`](#) and [`reset!`](#)
 """
 mutable struct ScheduleIterator{T<:AbstractSchedule, S}
     schedule::T
@@ -37,6 +37,18 @@ function next!(iter::ScheduleIterator)
     val, iter.state = isnothing(iter.state) ? iterate(iter.schedule) : iterate(iter.schedule, iter.state)
 
     return val
+end
+
+"""
+    reset!(iter::ScheduleIterator)
+
+Reset `iter` to its initial state.
+See also [`ScheduleIterator`](#)
+"""
+function reset!(iter::ScheduleIterator)
+    iter.state = nothing
+
+    return iter
 end
     
 """

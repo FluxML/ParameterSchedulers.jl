@@ -30,11 +30,11 @@ Notice that the value of `s[1]` and `s[5]` is unchanged even though we accessed 
 {cell=getting-started}
 ```julia
 stateful_s = ScheduleIterator(s)
-println("s: $(next!(stateful_s))")
-println("s: $(next!(stateful_s))")
+println("s: $(ParameterSchedulers.next!(stateful_s))")
+println("s: $(ParameterSchedulers.next!(stateful_s))")
 println(stateful_s)
 ```
-We used [`next!`](#) to advance the stateful iterator. Notice that `stateful_s` stores a reference to `s` and the current iteration state (which is `3` since we advanced the iterator twice). Also note that `ScheduleIterator` cannot be indexed (or iterated with `Base.iterate`):
+We used [`ParameterSchedulers.next!`](#) to advance the stateful iterator. Notice that `stateful_s` stores a reference to `s` and the current iteration state (which is `3` since we advanced the iterator twice). Also note that `ScheduleIterator` cannot be indexed (or iterated with `Base.iterate`):
 {cell=getting-started}
 ```julia
 try stateful_s[1]

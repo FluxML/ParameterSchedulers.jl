@@ -48,5 +48,7 @@ end
 @testset "ScheduleIterator" begin
     s = Lambda(f = log)
     stateful_s = ScheduleIterator(s)
-    @test all(next!(stateful_s) == s[i] for i in 1:100)
+    @test all(ParameterSchedulers.next!(stateful_s) == s[i] for i in 1:100)
+    ParameterSchedulers.reset!(stateful_s)
+    @test ParameterSchedulers.next!(stateful_s) == s[1]
 end
