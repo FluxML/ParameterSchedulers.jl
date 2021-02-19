@@ -1,14 +1,15 @@
 module ParameterSchedulers
 
-export Lambda, Sequence, Loop,
+using Base.Iterators
+
+export Sequence, Loop,
        Step, Exp, Poly, Inv,
        Tri, TriDecay2, TriExp,
        Sin, SinDecay2, SinExp,
-       Cos,
-       ScheduleIterator, next!
+       Cos
 
-include("schedule.jl")
 include("decay.jl")
 include("cyclic.jl")
+include("complex.jl")
 
 end

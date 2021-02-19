@@ -12,12 +12,9 @@
     s = Step(λ = λ, γ = γ, step_sizes = step_sizes)
     @test s == Step(λ, γ, step_sizes)
     @test Step(λ, γ, 1).step_sizes == [1]
-    @test ParameterSchedulers.basevalue(s) == λ
-    i = rand(1:sum(step_sizes))
-    @test ParameterSchedulers.decay(s, i) == γ^(_getbucket(i, step_sizes) - 1)
-    i = rand(UInt) + 1
-    @test s[i] == ParameterSchedulers.basevalue(s) * ParameterSchedulers.decay(s, i)
-    @test all(p == s[t] for (t, p) in zip(1:100, s))
+    @test all(λ == s(t) for t in 1:step_sizes[1])
+    @test all(λ * γ == s(t) for t in (step_sizes[1] + 1):(step_sizes[1] + step_sizes[2] + 1))
+    @test all(p == s(t) for (t, p) in zip(1:100, s))
     @test Base.IteratorEltype(typeof(s)) == Base.HasEltype()
     @test eltype(s) == eltype(λ)
     @test Base.IteratorSize(typeof(s)) == Base.IsInfinite()
@@ -28,11 +25,8 @@ end
     γ = rand()
     s = Exp(λ = λ, γ = γ)
     @test s == Exp(λ, γ)
-    @test ParameterSchedulers.basevalue(s) == λ
-    i = rand(UInt) + 1
-    @test ParameterSchedulers.decay(s, i) == γ^(i - 1)
-    @test s[i] == ParameterSchedulers.basevalue(s) * ParameterSchedulers.decay(s, i)
-    @test all(p == s[t] for (t, p) in zip(1:100, s))
+    @test all(λ * γ^(t - 1) == s(t) for t in 1:100)
+    @test all(p == s(t) for (t, p) in zip(1:100, s))
     @test Base.IteratorEltype(typeof(s)) == Base.HasEltype()
     @test eltype(s) == eltype(λ)
     @test Base.IteratorSize(typeof(s)) == Base.IsInfinite()
@@ -44,15 +38,13 @@ end
     max_iter = rand(1:100)
     s = Poly(λ = λ, p = p, max_iter = max_iter)
     @test s == Poly(λ, p, max_iter)
-    @test ParameterSchedulers.basevalue(s) == λ
-    i = rand(1:max_iter)
-    @test ParameterSchedulers.decay(s, i) == (1 - (i - 1) / max_iter)^p
-    @test s[i] == ParameterSchedulers.basevalue(s) * ParameterSchedulers.decay(s, i)
-    @test all(p == s[t] for (t, p) in zip(1:max_iter, s))
+    @test all(λ * (1 - (t - 1) / max_iter)^p == s(t) for t in 1:max_iter)
+    @test all(p == s(t) for (t, p) in zip(1:max_iter, s))
     @test Base.IteratorEltype(typeof(s)) == Base.HasEltype()
     @test eltype(s) == eltype(λ)
     @test Base.IteratorSize(typeof(s)) == Base.HasLength()
     @test length(s) == max_iter
+    @test_throws BoundsError s(max_iter + 1)
 end
 
 @testset "Inv" begin
@@ -61,11 +53,8 @@ end
     p = rand(1:20)
     s = Inv(λ = λ, p = p, γ = γ)
     @test s == Inv(λ, γ, p)
-    @test ParameterSchedulers.basevalue(s) == λ
-    i = rand(UInt) + 1
-    @test ParameterSchedulers.decay(s, i) == 1 / (1 + (i - 1) * γ)^p
-    @test s[i] == ParameterSchedulers.basevalue(s) * ParameterSchedulers.decay(s, i)
-    @test all(p == s[t] for (t, p) in zip(1:100, s))
+    @test all(λ / (1 + (t - 1) * γ)^p == s(t) for t in 1:100)
+    @test all(p == s(t) for (t, p) in zip(1:100, s))
     @test Base.IteratorEltype(typeof(s)) == Base.HasEltype()
     @test eltype(s) == eltype(λ)
     @test Base.IteratorSize(typeof(s)) == Base.IsInfinite()
