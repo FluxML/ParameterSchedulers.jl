@@ -19,7 +19,7 @@ for (η, (x, y)) in zip(s, data)
     opt.eta = η
     g = Flux.gradient(() -> Flux.mse(m(x), y), p)
     Flux.update!(opt, p, g)
-    println("η: $(opt.eta)")
+    println("η: ", opt.eta)
 end
 ```
 
@@ -40,14 +40,14 @@ end
 
 ## Stateful iteration with training
 
-Sometimes zipping up the schedule with an iterator isn't sufficient. For example, we might want to advance the schedule with every batch but not be forced to restart each epoch. In such a situation with nested loops, it becomes useful to use [`ScheduleIterator`](#) which maintains its own iteration state.
+Sometimes zipping up the schedule with an iterator isn't sufficient. For example, we might want to advance the schedule with every batch but not be forced to restart each epoch. In such a situation with nested loops, it becomes useful to use [`ParameterSchedulers.Stateful`](#) which maintains its own iteration state.
 {cell=optimizers}
 ```julia
 nepochs = 3
-s = ScheduleIterator(Inv(λ = 1e-1, γ = 0.2, p = 2))
+s = ParameterSchedulers.Stateful(Inv(λ = 1e-1, γ = 0.2, p = 2))
 for epoch in 1:nepochs
     for (i, (x, y)) in enumerate(data)
-        opt.eta = next!(s)
+        opt.eta = ParameterSchedulers.next!(s)
         g = Flux.gradient(() -> Flux.mse(m(x), y), p)
         Flux.update!(opt, p, g)
         println("epoch: $epoch, batch: $i, η: $(opt.eta)")

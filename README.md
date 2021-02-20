@@ -43,7 +43,7 @@ Exponential decay by `γ` every step in `step_sizes`
 using UnicodePlots, ParameterSchedulers
 t = 1:10 |> collect
 s = Step(λ = 1.0, γ = 0.8, step_sizes = [2, 3, 2])
-lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels = false)
+lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false)
 ```
 </td></tr>
 
@@ -65,7 +65,7 @@ Exponential decay by `γ` every iteration
 using UnicodePlots, ParameterSchedulers
 t = 1:10 |> collect
 s = Exp(λ = 1.0, γ = 0.5)
-lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels = false)
+lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false)
 ```
 </td></tr>
 
@@ -87,7 +87,7 @@ Polynomial decay at degree `p`
 using UnicodePlots, ParameterSchedulers
 t = 1:10 |> collect
 s = Poly(λ = 1.0, p = 2, max_iter = t[end])
-lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels = false)
+lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false)
 ```
 </td></tr>
 
@@ -109,7 +109,7 @@ Inverse decay at rate `(1 + tγ)^p`
 using UnicodePlots, ParameterSchedulers
 t = 1:10 |> collect
 s = Inv(λ = 1.0, p = 2, γ = 0.8)
-lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels = false)
+lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false)
 ```
 </td></tr>
 
@@ -131,7 +131,7 @@ lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels =
 using UnicodePlots, ParameterSchedulers
 t = 1:10 |> collect
 s = Tri(λ0 = 0.0, λ1 = 1.0, period = 2)
-lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels = false)
+lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false)
 ```
 </td></tr>
 
@@ -153,7 +153,7 @@ lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels =
 using UnicodePlots, ParameterSchedulers
 t = 1:10 |> collect
 s = TriDecay2(λ0 = 0.0, λ1 = 1.0, period = 2)
-lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels = false)
+lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false)
 ```
 </td></tr>
 
@@ -175,7 +175,7 @@ lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels =
 using UnicodePlots, ParameterSchedulers
 t = 1:10 |> collect
 s = TriExp(λ0 = 0.0, λ1 = 1.0, period = 2, γ = 0.8)
-lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels = false)
+lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false)
 ```
 </td></tr>
 
@@ -197,7 +197,7 @@ Sine function
 using UnicodePlots, ParameterSchedulers
 t = 1:10 |> collect
 s = Sin(λ0 = 0.0, λ1 = 1.0, period = 2)
-lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels = false)
+lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false)
 ```
 </td></tr>
 
@@ -219,7 +219,7 @@ Sine function with half the amplitude every `period`
 using UnicodePlots, ParameterSchedulers
 t = 1:10 |> collect
 s = SinDecay2(λ0 = 0.0, λ1 = 1.0, period = 2)
-lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels = false)
+lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false)
 ```
 </td></tr>
 
@@ -241,7 +241,7 @@ Sine function with exponential amplitude decay at rate `γ`
 using UnicodePlots, ParameterSchedulers
 t = 1:10 |> collect
 s = SinExp(λ0 = 0.0, λ1 = 1.0, period = 2, γ = 0.8)
-lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels = false)
+lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false)
 ```
 </td></tr>
 
@@ -263,7 +263,7 @@ Cosine function
 using UnicodePlots, ParameterSchedulers
 t = 1:10 |> collect
 s = Cos(λ0 = 0.0, λ1 = 1.0, period = 2)
-lineplot(t, map(t -> s[t], t); width = 15, height = 3, border = :ascii, labels = false)
+lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false)
 ```
 </td></tr>
 </tbody>
