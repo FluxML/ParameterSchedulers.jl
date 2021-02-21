@@ -39,64 +39,69 @@
 <li><a href="../../docs/tutorials/optimizers.html">Optimizers</a></li>
 <li><a href="../../docs/tutorials/complex-schedules.html">Complex schedules</a></li>
 </ul>
-<h1 id="interfaces"><a href="../../#interfaces" class="anchor"></a>Interfaces</h1>
-<ul>
-<li><a href="../../docs/interfaces/generic.html">Generic</a></li>
-<li><a href="../../docs/interfaces/decay.html">Decay</a></li>
-<li><a href="../../docs/interfaces/cyclic.html">Cyclic</a></li>
-</ul>
+<p><a href="../../docs/interfaces/generic.html">Interface</a></p>
 <hr />
 <p><a href="../../docstrings.html">API Reference</a></p>
 </div>
         <article id="content"><h1 id="getting-started"><a href="#getting-started" class="anchor"></a>Getting started</h1>
-<p>All schedules types in ParameterSchedulers.jl behave as indexable iterators. For example, we can index the simple exponential decay schedule (<a href="../../docstrings/ParameterSchedulers.Exp.html"><code>Exp</code></a>) below:</p>
+<p>All schedules types in ParameterSchedulers.jl behave as callable iterators. For example, we can call the simple exponential decay schedule (<a href="../../docstrings/ParameterSchedulers.Exp.html"><code>Exp</code></a>) below at a specific iteration:</p>
 <pre><code cell="getting-started" class="language-julia">s = Exp(λ = 0.1, γ = 0.8)
-println(&quot;s[1]: $(s[1])&quot;)
-println(&quot;s[5]: $(s[5])&quot;)
+println(&quot;s(1): &quot;, s(1))
+println(&quot;s(5): &quot;, s(5))
 </code></pre>
-<pre><code class="plaintext cell-output cell-stream">s[1]: 0.1
-s[5]: 0.04096000000000001
+<pre><code class="plaintext cell-output cell-stream">s(1): 0.1
+s(5): 0.04096000000000001
 </code></pre>
 <div class="admonition info"><p class="admonition-title">Info</p>
-<p>The indices are unitless. So, if you index a schedule every epoch, then the <code>s[i]</code> is parameter value at epoch <code>i</code>.</p>
+<p>The iterations are unitless. So, if you index a schedule every epoch, then the <code>s(i)</code> is parameter value at epoch <code>i</code>.</p>
 </div>
 <p>We can also use the schedule in an iterable context like a <code>for</code>-loop:</p>
 <pre><code cell="getting-started" class="language-julia">for (i, param) in enumerate(s)
     (i &gt; 10) &amp;&amp; break
-    println(&quot;s[$i]: $param&quot;)
+    println(&quot;s($i): &quot;, param)
 end
 </code></pre>
-<pre><code class="plaintext cell-output cell-stream">s[1]: 0.1
-s[2]: 0.08000000000000002
-s[3]: 0.06400000000000002
-s[4]: 0.051200000000000016
-s[5]: 0.04096000000000001
-s[6]: 0.03276800000000001
-s[7]: 0.026214400000000013
-s[8]: 0.020971520000000007
-s[9]: 0.016777216000000008
-s[10]: 0.013421772800000007
+<pre><code class="plaintext cell-output cell-stream">s(1): 0.1
+s(2): 0.08000000000000002
+s(3): 0.06400000000000002
+s(4): 0.051200000000000016
+s(5): 0.04096000000000001
+s(6): 0.03276800000000001
+s(7): 0.026214400000000013
+s(8): 0.020971520000000007
+s(9): 0.016777216000000008
+s(10): 0.013421772800000007
 </code></pre>
 <div class="admonition warning"><p class="admonition-title">Warning</p>
 <p>Many schedules such as <code>Exp</code> are infinite iterators, so iterating over them will result in an infinite loop. You can use <a href="https://docs.julialang.org/en/v1/base/collections/#Base.IteratorSize"><code>Base.IteratorSize</code></a> to check if a schedule has infinite length.</p>
 </div>
-<p>Notice that the value of <code>s[1]</code> and <code>s[5]</code> is unchanged even though we accessed the schedule once via <code>getindex</code> and again in the <code>for</code>-loop. This is because all schedules in ParameterSchedulers.jl are <em>immutable</em>. If you want a stateful schedule, then you can use <a href="../../docstrings/ParameterSchedulers.ScheduleIterator.html"><code>ScheduleIterator</code></a>:</p>
-<pre><code cell="getting-started" class="language-julia">stateful_s = ScheduleIterator(s)
-println(&quot;s: $(ParameterSchedulers.next!(stateful_s))&quot;)
-println(&quot;s: $(ParameterSchedulers.next!(stateful_s))&quot;)
+<p>Notice that the value of <code>s(1)</code> and <code>s(5)</code> is unchanged even though we accessed the schedule once by calling them and again in the <code>for</code>-loop. This is because all schedules in ParameterSchedulers.jl are <em>immutable</em>. If you want a stateful (mutable) schedule, then you can use <a href="../../docstrings/ParameterSchedulers.Stateful.html"><code>ParameterSchedulers.Stateful</code></a>:</p>
+<pre><code cell="getting-started" class="language-julia">using ParameterSchedulers: Stateful, next!
+
+stateful_s = Stateful(s)
+println(&quot;s: &quot;, next!(stateful_s))
+println(&quot;s: &quot;, next!(stateful_s))
 println(stateful_s)
 </code></pre>
 <pre><code class="plaintext cell-output cell-stream">s: 0.1
 s: 0.08000000000000002
-ScheduleIterator{Exp{Float64},Int64}(Exp{Float64}(0.1, 0.8), 3)
+ParameterSchedulers.Stateful{Exp{Float64},Int64}(Exp{Float64}(0.1, 0.8), 3)
 </code></pre>
-<p>We used <a href="../../docstrings/ParameterSchedulers.next!.html"><code>ParameterSchedulers.next!</code></a> to advance the stateful iterator. Notice that <code>stateful_s</code> stores a reference to <code>s</code> and the current iteration state (which is <code>3</code> since we advanced the iterator twice). Also note that <code>ScheduleIterator</code> cannot be indexed (or iterated with <code>Base.iterate</code>):</p>
-<pre><code cell="getting-started" class="language-julia">try stateful_s[1]
+<p>We used <a href="../../docstrings/ParameterSchedulers.next!.html"><code>ParameterSchedulers.next!</code></a> to advance the stateful iterator. Notice that <code>stateful_s</code> stores a reference to <code>s</code> and the current iteration state (which is <code>3</code> since we advanced the iterator twice). We can reset the mutable iteration state too:</p>
+<pre><code cell="getting-started" class="language-julia">using ParameterSchedulers: reset!
+
+reset!(stateful_s)
+println(&quot;s: &quot;, next!(stateful_s))
+</code></pre>
+<pre><code class="plaintext cell-output cell-stream">s: 0.1
+</code></pre>
+<p>Also note that <code>Stateful</code> cannot be called (or iterated with <code>Base.iterate</code>):</p>
+<pre><code cell="getting-started" class="language-julia">try stateful_s(1)
 catch e
     println(e)
 end
 </code></pre>
-<pre><code class="plaintext cell-output cell-stream">MethodError(getindex, (ScheduleIterator{Exp{Float64},Int64}(Exp{Float64}(0.1, 0.8), 3), 1), 0x000000000000788a)
+<pre><code class="plaintext cell-output cell-stream">MethodError(ParameterSchedulers.Stateful{Exp{Float64},Int64}(Exp{Float64}(0.1, 0.8), 2), (1,), 0x0000000000007196)
 </code></pre>
 </article>
         <div id="page-navigation">
