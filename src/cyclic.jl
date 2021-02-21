@@ -3,8 +3,8 @@ _sin(t, period) = abs(sin(π * (t - 1) / period))
 _cycle(λ0, λ1, g) = abs(λ0 - λ1) * g + min(λ0, λ1)
 
 """
-    Tri{T, S<:Integer}(range0, range1, period)
-    Tri(;λ0, λ1, period)
+    Triangle{T, S<:Integer}(range0, range1, period)
+    Triangle(;λ0, λ1, period)
 
 A [triangle wave](https://en.wikipedia.org/wiki/Triangle_wave) schedule
 with `period`.
@@ -18,64 +18,64 @@ abs(λ0 - λ1) * (2 / π) * abs(asin(sin(π * (t - 1) / period))) + min(λ0, λ1
 - `range1`/`λ1`: the second range endpoint
 - `period::Integer`: the period
 """
-struct Tri{T, S<:Integer}
+struct Triangle{T, S<:Integer}
     range0::T
     range1::T
     period::S
 end
-Tri(;λ0, λ1, period) = Tri(λ0, λ1, period)
+Triangle(;λ0, λ1, period) = Triangle(λ0, λ1, period)
 
-(schedule::Tri)(t) = _cycle(schedule.range0, schedule.range1, _tri(t, schedule.period))
+(schedule::Triangle)(t) = _cycle(schedule.range0, schedule.range1, _tri(t, schedule.period))
 
-Base.eltype(::Type{<:Tri{T}}) where T = T
-Base.IteratorSize(::Type{<:Tri}) = Base.IsInfinite()
+Base.eltype(::Type{<:Triangle{T}}) where T = T
+Base.IteratorSize(::Type{<:Triangle}) = Base.IsInfinite()
 
-Base.iterate(schedule::Tri, t = 1) = schedule(t), t + 1
+Base.iterate(schedule::Triangle, t = 1) = schedule(t), t + 1
 
 """
-    TriDecay2{T, S<:Integer}(range0, range1, period)
-    TriDecay2(;λ0, λ1, period)
+    TriangleDecay2{T, S<:Integer}(range0, range1, period)
+    TriangleDecay2(;λ0, λ1, period)
 
 A [triangle wave](https://en.wikipedia.org/wiki/Triangle_wave) schedule
 with `period` and half the amplitude each cycle.
 The output conforms to
 ```
-abs(λ0 - λ1) * Tri(t) / (2^floor((t - 1) / period)) + min(λ0, λ1)
+abs(λ0 - λ1) * Triangle(t) / (2^floor((t - 1) / period)) + min(λ0, λ1)
 ```
-where `Tri(t)` is `(2 / π) * abs(asin(sin(π * (t - 1) / schedule.period)))` (see [`Tri`](#)).
+where `Triangle(t)` is `(2 / π) * abs(asin(sin(π * (t - 1) / schedule.period)))` (see [`Triangle`](#)).
 
 # Arguments
 - `range0`/`λ0`: the first range endpoint
 - `range1`/`λ1`: the second range endpoint
 - `period::Integer`: the period
 """
-struct TriDecay2{T, S<:Integer}
+struct TriangleDecay2{T, S<:Integer}
     range0::T
     range1::T
     period::S
 end
-TriDecay2(;λ0, λ1, period) = TriDecay2(λ0, λ1, period)
+TriangleDecay2(;λ0, λ1, period) = TriangleDecay2(λ0, λ1, period)
 
-(schedule::TriDecay2)(t) = _cycle(schedule.range0, schedule.range1,
-                                  _tri(t, schedule.period) / (2^fld(t - 1, schedule.period)))
+(schedule::TriangleDecay2)(t) = _cycle(schedule.range0, schedule.range1,
+                                       _tri(t, schedule.period) / (2^fld(t - 1, schedule.period)))
 
-Base.eltype(::Type{<:TriDecay2{T}}) where T = T
-Base.IteratorSize(::Type{<:TriDecay2}) = Base.IsInfinite()
+Base.eltype(::Type{<:TriangleDecay2{T}}) where T = T
+Base.IteratorSize(::Type{<:TriangleDecay2}) = Base.IsInfinite()
 
-Base.iterate(schedule::TriDecay2, t = 1) = schedule(t), t + 1
+Base.iterate(schedule::TriangleDecay2, t = 1) = schedule(t), t + 1
 
 """
-    TriExp{T, S<:Integer}(range0, range1, period, decay)
-    TriExp(λ0, λ1, period, γ)
-    TriExp(;λ0, λ1, period, γ)
+    TriangleExp{T, S<:Integer}(range0, range1, period, decay)
+    TriangleExp(λ0, λ1, period, γ)
+    TriangleExp(;λ0, λ1, period, γ)
 
 A [triangle wave](https://en.wikipedia.org/wiki/Triangle_wave) schedule
 with `period` and an exponentially decaying amplitude.
 The output conforms to
 ```
-abs(λ0 - λ1) * Tri(t) * γ^(t - 1) + min(λ0, λ1)
+abs(λ0 - λ1) * Triangle(t) * γ^(t - 1) + min(λ0, λ1)
 ```
-where `Tri(t)` is `(2 / π) * abs(asin(sin(π * (t - 1) / schedule.period)))` (see [`Tri`](#)).
+where `Triangle(t)` is `(2 / π) * abs(asin(sin(π * (t - 1) / schedule.period)))` (see [`Triangle`](#)).
 
 # Arguments
 - `range0`/`λ0`: the first range endpoint
@@ -83,23 +83,23 @@ where `Tri(t)` is `(2 / π) * abs(asin(sin(π * (t - 1) / schedule.period)))` (s
 - `period::Integer`: the period
 - `decay`/`γ`: the decay rate
 """
-struct TriExp{T, S<:Integer}
+struct TriangleExp{T, S<:Integer}
     range0::T
     range1::T
     period::S
     decay::T
 end
-TriExp(;λ0, λ1, period, γ) = TriExp(λ0, λ1, period, γ)
+TriangleExp(;λ0, λ1, period, γ) = TriangleExp(λ0, λ1, period, γ)
 
-startvalue(schedule::TriExp) = schedule.tri.λ0
-endvalue(schedule::TriExp) = schedule.tri.λ1
-(schedule::TriExp)(t) = _cycle(schedule.range0, schedule.range1,
-                               _tri(t, schedule.period) * schedule.decay^(t - 1))
+startvalue(schedule::TriangleExp) = schedule.tri.λ0
+endvalue(schedule::TriangleExp) = schedule.tri.λ1
+(schedule::TriangleExp)(t) = _cycle(schedule.range0, schedule.range1,
+                                    _tri(t, schedule.period) * schedule.decay^(t - 1))
 
-Base.eltype(::Type{<:TriExp{T}}) where T = T
-Base.IteratorSize(::Type{<:TriExp}) = Base.IsInfinite()
+Base.eltype(::Type{<:TriangleExp{T}}) where T = T
+Base.IteratorSize(::Type{<:TriangleExp}) = Base.IsInfinite()
 
-Base.iterate(schedule::TriExp, t = 1) = schedule(t), t + 1
+Base.iterate(schedule::TriangleExp, t = 1) = schedule(t), t + 1
 
 """
     Sin{T, S<:Integer}(range0, range1, period)
