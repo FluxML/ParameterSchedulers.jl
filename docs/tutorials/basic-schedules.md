@@ -1,6 +1,6 @@
 # Basic schedules
 
-While ParameterSchedulers.jl has some complex scheduling capability, its core is made of two types of basic schedules: *[decay schedules](#)* and *[cyclic schedules](#)*. Each type of schedule conforms to an interface and formula which is relevant for understanding the schedules behavior, but more importantly, for creating your own custom schedules. Still, both types of schedules can be indexed and iterated like we saw in the [getting started](#) tutorial.
+While ParameterSchedulers.jl has some complex scheduling capability, its core is made of two kinds of basic schedules: *[decay schedules](#)* and *[cyclic schedules](#)*. Each kind of schedule conforms to a formula which is relevant for understanding the schedules behavior. Still, both types of schedules can be called and iterated like we saw in the [getting started](#) tutorial.
 
 ## Decay schedules
 
@@ -15,15 +15,14 @@ s(t) = \lambda g(t)
 ```
 where ``s(t)`` is the schedule output, ``\lambda`` is the base (initial) value, and ``g(t)`` is the decay function. Typically, the decay function is expected to be bounded between ``[0, 1]``, but this requirement is only suggested and not enforced.
 
-We can access the base value and evaluate the decay function through a provided interface:
+For example, here is an exponential decay schedule:
 {cell=decay-schedules}
 ```julia
+expdecay(γ, t) = γ^(t - 1)
 s = Exp(λ = 0.1, γ = 0.8)
-println("λ: $(ParameterSchedulers.basevalue(s))")
-println("g(1): $(ParameterSchedulers.decay(s, 1))")
-println("λ g(1) == s[1]: $(ParameterSchedulers.basevalue(s) * ParameterSchedulers.decay(s, 1) == s[1])")
+println("λ g(1) == s(1): ",
+        0.1 * expdecay(0.8, 1) == s(1))
 ```
-In most situations, you won't use the interface above and rely on `getindex` or `iterate` instead.
 
 As you can see above, [`Exp`](#) is a type of decay schedule. Below is a list of all the decay schedules implemented, and the parameters and decay functions for each one.
 
@@ -45,24 +44,16 @@ A cyclic schedule exhibits periodic behavior, and it is described by the followi
 ```math
 s(t) = |\lambda_0 - \lambda_1| g(t) + \min (\lambda_0, \lambda_1)
 ```
-where ``s(t)`` is the schedule output, ``\lambda_0`` and ``\lambda_1`` are the start and end values, and ``g(t)`` is the cycle function. Similar to the decay function, the cycle function is expected to be bounded between ``[0, 1]``, but this requirement is only suggested and not enforced.
+where ``s(t)`` is the schedule output, ``\lambda_0`` and ``\lambda_1`` are the range endpoints, and ``g(t)`` is the cycle function. Similar to the decay function, the cycle function is expected to be bounded between ``[0, 1]``, but this requirement is only suggested and not enforced.
 
-We can access the start value, end value, and evaluate the cycle function through a provided interface:
+For example, here is triangular wave schedule:
 {cell=cyclic-schedules}
 ```julia
+tricycle(period, t) = (2 / π) * abs(asin(sin(π * (t - 1) / period)))
 s = Tri(λ0 = 0.1, λ1 = 0.4, period = 2)
-function f(t)
-    λ0 = ParameterSchedulers.startvalue(s)
-    λ1 = ParameterSchedulers.endvalue(s)
-    
-    return abs(λ0 - λ1) * ParameterSchedulers.cycle(s, 1) + min(λ0, λ1)
-end
-println("λ0: $(ParameterSchedulers.startvalue(s))")
-println("λ1: $(ParameterSchedulers.endvalue(s))")
-println("g(1): $(ParameterSchedulers.cycle(s, 1))")
-println("abs(λ0 - λ1) g(1) + min(λ0, λ1) == s[1]: $(f(1) == s[1])")
+println("abs(λ0 - λ1) g(1) + min(λ0, λ1) == s(1): ",
+        abs(0.1 - 0.4) * tricycle(2, 1) + min(0.1, 0.4) == s(1))
 ```
-As with decay schedules, you won't use the interface above and rely on `getindex` and `iterate` for most use-cases.
 
 [`Tri`](#) (used in the above example) is a type of cyclic schedule. Below is a list of all the cyclic schedules implemented, and the parameters and cycle functions for each one.
 
