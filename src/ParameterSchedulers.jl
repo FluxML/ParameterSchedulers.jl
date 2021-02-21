@@ -5,7 +5,7 @@ using Flux
 
 export Sequence, Loop,
        Step, Exp, Poly, Inv,
-       Tri, TriDecay2, TriExp,
+       Triangle, TriangleDecay2, TriangleExp,
        Sin, SinDecay2, SinExp,
        Cos
 

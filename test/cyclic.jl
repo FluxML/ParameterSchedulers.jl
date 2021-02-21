@@ -3,12 +3,12 @@ _tri(t, period) = (2 / π) * abs(asin(sin(π * (t - 1) / period)))
 _sin(t, period) = abs(sin(π * (t - 1) / period))
 _cos(t, period) = (1 + cos(2 * π * (t - 1) / period)) / 2
 
-@testset "Tri" begin
+@testset "Triangle" begin
     λ0 = rand()
     λ1 = rand()
     period = rand(1:10)
-    s = Tri(λ0 = λ0, λ1 = λ1, period = period)
-    @test s == Tri(λ0, λ1, period)
+    s = Triangle(λ0 = λ0, λ1 = λ1, period = period)
+    @test s == Triangle(λ0, λ1, period)
     @test all(_cycle(λ0, λ1, _tri(t, period)) == s(t) for t in 1:100)
     @test all(p == s(t) for (t, p) in zip(1:100, s))
     @test Base.IteratorEltype(typeof(s)) == Base.HasEltype()
@@ -16,12 +16,12 @@ _cos(t, period) = (1 + cos(2 * π * (t - 1) / period)) / 2
     @test Base.IteratorSize(typeof(s)) == Base.IsInfinite()
 end
 
-@testset "TriDecay2" begin
+@testset "TriangleDecay2" begin
     λ0 = rand()
     λ1 = rand()
     period = rand(1:10)
-    s = TriDecay2(λ0 = λ0, λ1 = λ1, period = period)
-    @test s == TriDecay2(λ0, λ1, period)
+    s = TriangleDecay2(λ0 = λ0, λ1 = λ1, period = period)
+    @test s == TriangleDecay2(λ0, λ1, period)
     @test all(_cycle(λ0, λ1, _tri(t, period) / (2^fld(t - 1, period))) == s(t) for t in 1:100)
     @test all(p == s(t) for (t, p) in zip(1:100, s))
     @test Base.IteratorEltype(typeof(s)) == Base.HasEltype()
@@ -29,13 +29,13 @@ end
     @test Base.IteratorSize(typeof(s)) == Base.IsInfinite()
 end
 
-@testset "TriExp" begin
+@testset "TriangleExp" begin
     λ0 = rand()
     λ1 = rand()
     γ = rand()
     period = rand(1:10)
-    s = TriExp(λ0 = λ0, λ1 = λ1, period = period, γ = γ)
-    @test s == TriExp(λ0, λ1, period, γ)
+    s = TriangleExp(λ0 = λ0, λ1 = λ1, period = period, γ = γ)
+    @test s == TriangleExp(λ0, λ1, period, γ)
     @test all(_cycle(λ0, λ1, _tri(t, period) * γ^(t - 1)) == s(t) for t in 1:100)
     @test all(p == s(t) for (t, p) in zip(1:100, s))
     @test Base.IteratorEltype(typeof(s)) == Base.HasEltype()

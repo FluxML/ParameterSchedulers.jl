@@ -153,8 +153,6 @@ struct SinDecay2{T, S<:Integer}
 end
 SinDecay2(;λ0, λ1, period) = SinDecay2(λ0, λ1, period)
 
-startvalue(schedule::SinDecay2) = schedule.sine.λ0
-endvalue(schedule::SinDecay2) = schedule.sine.λ1
 (schedule::SinDecay2)(t) = _cycle(schedule.range0, schedule.range1,
                                   _sin(t, schedule.period) / (2^fld(t - 1, schedule.period)))
 
@@ -188,8 +186,6 @@ struct SinExp{T, S<:Integer}
 end
 SinExp(;λ0, λ1, period, γ) = SinExp(λ0, λ1, period, γ)
 
-startvalue(schedule::SinExp) = schedule.sine.λ0
-endvalue(schedule::SinExp) = schedule.sine.λ1
 (schedule::SinExp)(t) = _cycle(schedule.range0, schedule.range1,
                                _sin(t, schedule.period) * schedule.decay^(t - 1))
 
@@ -222,8 +218,6 @@ struct Cos{T, S<:Integer}
 end
 Cos(;λ0, λ1, period) = Cos(λ0, λ1, period)
 
-startvalue(schedule::Cos) = schedule.λ0
-endvalue(schedule::Cos) = schedule.λ1
 (schedule::Cos)(t) = _cycle(schedule.range0, schedule.range1,
                             (1 + cos(2 * π * (t - 1) / schedule.period)) / 2)
 
