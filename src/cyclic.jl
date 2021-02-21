@@ -9,7 +9,7 @@ _cycle(λ0, λ1, g) = abs(λ0 - λ1) * g + min(λ0, λ1)
 A [triangle wave](https://en.wikipedia.org/wiki/Triangle_wave) schedule
 with `period`.
 The output conforms to
-```
+```text
 abs(λ0 - λ1) * (2 / π) * abs(asin(sin(π * (t - 1) / period))) + min(λ0, λ1)
 ```
 
@@ -39,7 +39,7 @@ Base.iterate(schedule::Triangle, t = 1) = schedule(t), t + 1
 A [triangle wave](https://en.wikipedia.org/wiki/Triangle_wave) schedule
 with `period` and half the amplitude each cycle.
 The output conforms to
-```
+```text
 abs(λ0 - λ1) * Triangle(t) / (2^floor((t - 1) / period)) + min(λ0, λ1)
 ```
 where `Triangle(t)` is `(2 / π) * abs(asin(sin(π * (t - 1) / schedule.period)))` (see [`Triangle`](#)).
@@ -72,7 +72,7 @@ Base.iterate(schedule::TriangleDecay2, t = 1) = schedule(t), t + 1
 A [triangle wave](https://en.wikipedia.org/wiki/Triangle_wave) schedule
 with `period` and an exponentially decaying amplitude.
 The output conforms to
-```
+```text
 abs(λ0 - λ1) * Triangle(t) * γ^(t - 1) + min(λ0, λ1)
 ```
 where `Triangle(t)` is `(2 / π) * abs(asin(sin(π * (t - 1) / schedule.period)))` (see [`Triangle`](#)).
@@ -107,7 +107,7 @@ Base.iterate(schedule::TriangleExp, t = 1) = schedule(t), t + 1
 
 A sine wave schedule with `period`.
 The output conforms to
-```
+```text
 abs(λ0 - λ1) * abs(sin(π * (t - 1) / period)) + min(λ0, λ1)
 ```
 
@@ -136,7 +136,7 @@ Base.iterate(schedule::Sin, t = 1) = schedule(t), t + 1
 
 A sine wave schedule with `period` and half the amplitude each cycle.
 The output conforms to
-```
+```text
 abs(λ0 - λ1) * Sin(t) / (2^floor((t - 1) / period)) + min(λ0, λ1)
 ```
 where `Sin(t)` is `abs(sin(π * (t - 1) / period))` (see [`Sin`](#)).
@@ -169,7 +169,7 @@ Base.iterate(schedule::SinDecay2, t = 1) = schedule(t), t + 1
 
 A sine wave schedule with `period` and an exponentially decaying amplitude.
 The output conforms to
-```
+```text
 abs(λ0 - λ1) * Sin(t) * γ^(t - 1) + min(λ0, λ1)
 ```
 where `Sin(t)` is `abs(sin(π * (t - 1) / period))` (see [`Sin`](#)).
@@ -204,7 +204,7 @@ Base.iterate(schedule::SinExp, t = 1) = schedule(t), t + 1
 
 A cosine wave schedule with `period`.
 The output conforms to
-```
+```text
 abs(λ0 - λ1) * (1 + cos(2 * π * (t - 1) / period)) / 2 + min(λ0, λ1)
 ```
 This schedule is also referred to as "cosine annealing" or

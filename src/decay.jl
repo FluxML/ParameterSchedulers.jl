@@ -5,7 +5,7 @@
 A step schedule decays exponentially by `γ` every step
 in `step_sizes`.
 The output conforms to
-```
+```text
 λ * γ^{i - 1}
 ```
 where `sum(step_sizes[1:(i - 1)]) < t <= sum(step_sizes[1:i])`
@@ -52,7 +52,7 @@ end
 
 A exponential decay schedule at rate `γ`.
 The output conforms to
-```
+```text
 λ * γ^{t - 1}
 ```
 
@@ -79,7 +79,7 @@ Base.iterate(schedule::Exp, t = 1) = schedule(t), t + 1
 
 A polynomial schedule decays with degree `p`.
 The output conforms to
-```
+```text
 λ / (1 - (t - 1) / max_iter)^p
 ```
 
@@ -113,7 +113,7 @@ Base.iterate(schedule::Poly, t = 1) = schedule(t), t + 1
 
 A decay schedule that inversely decays with rate `γ`.
 The output conforms to
-```
+```text
 λ / (1 + (t - 1) * γ)^p
 ```
 
