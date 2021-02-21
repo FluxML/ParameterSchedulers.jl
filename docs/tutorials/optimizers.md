@@ -55,18 +55,21 @@ for epoch in 1:nepochs
 end
 ```
 
-<!-- ## Working with Flux optimizers
+## Working with Flux optimizers
 
 !!! warning
-    Currently, we are porting `ScheduledOptim` to Flux.jl.
+    Currently, we are porting `Scheduler` to Flux.jl.
     It may be renamed once it is ported out of this package.
+    The API will also undergo minor changes.
 
-While the approaches above can be helpful when dealing with fine-grained training loops, it is usually simpler to just use a [`ScheduledOptim`](#).
+While the approaches above can be helpful when dealing with fine-grained training loops, it is usually simpler to just use a [`ParameterSchedulers.Scheduler`](#).
 {cell=optimizers}
 ```julia
+using ParameterSchedulers: Scheduler
+
 nepochs = 3
 s = Inv(λ = 1e-1, p = 2, γ = 0.2)
-opt = ScheduledOptim(s, Descent())
+opt = Scheduler(s, Descent())
 for epoch in 1:nepochs
     for (i, (x, y)) in enumerate(data)
         g = Flux.gradient(() -> Flux.mse(m(x), y), p)
@@ -75,4 +78,11 @@ for epoch in 1:nepochs
     end
 end
 ```
-The scheduled optimizer, `opt`, can be used anywhere a Flux optimizer can. For example, it can be passed to `Flux.train!`. -->
+The scheduler, `opt`, can be used anywhere a Flux optimizer can. For example, it can be passed to `Flux.train!`:
+{cell=optimizers}
+```julia
+s = Inv(λ = 1e-1, p = 2, γ = 0.2)
+opt = Scheduler(s, Descent())
+loss(x, y, m) = Flux.mse(m(x), y)
+Flux.@epochs nepochs Flux.train!((x, y) -> loss(x, y, m), params(m), data, opt)
+```
