@@ -6,8 +6,9 @@
 ParameterSchedulers.jl provides common machine learning (ML) schedulers for hyper-parameters. Though this package is framework agnostic, a convenient interface for pairing schedules with [Flux.jl](https://github.com/FluxML/Flux.jl) optimizers is available. Using this package with Flux is as simple as:
 ```julia
 using Flux, ParameterSchedulers
+using ParameterSchedulers: Scheduler
 
-opt = Exp(Momentum(); λ = 1e-2, γ = 0.8)
+opt = Scheduler(Exp(λ = 1e-2, γ = 0.8), Momentum())
 ```
 
 ## Available Schedules
