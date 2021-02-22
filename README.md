@@ -116,7 +116,7 @@ lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false)
 
 <tr><td>
 
-[`Tri(;λ0, λ1, period)`](# "`Tri`")
+[`Triangle(;λ0, λ1, period)`](# "`Triangle`")
 
 </td>
 <td>
@@ -131,14 +131,14 @@ lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false)
 ```julia
 using UnicodePlots, ParameterSchedulers
 t = 1:10 |> collect
-s = Tri(λ0 = 0.0, λ1 = 1.0, period = 2)
+s = Triangle(λ0 = 0.0, λ1 = 1.0, period = 2)
 lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false)
 ```
 </td></tr>
 
 <tr><td>
 
-[`TriDecay2(;λ0, λ1, period)`](# "`TriDecay2`")
+[`TriangleDecay2(;λ0, λ1, period)`](# "`TriangleDecay2`")
 
 </td>
 <td>
@@ -153,14 +153,14 @@ lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false)
 ```julia
 using UnicodePlots, ParameterSchedulers
 t = 1:10 |> collect
-s = TriDecay2(λ0 = 0.0, λ1 = 1.0, period = 2)
+s = TriangleDecay2(λ0 = 0.0, λ1 = 1.0, period = 2)
 lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false)
 ```
 </td></tr>
 
 <tr><td>
 
-[`TriExp(;λ0, λ1, period, γ)`](# "`TriExp`")
+[`TriangleExp(;λ0, λ1, period, γ)`](# "`TriangleExp`")
 
 </td>
 <td>
@@ -175,7 +175,7 @@ lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false)
 ```julia
 using UnicodePlots, ParameterSchedulers
 t = 1:10 |> collect
-s = TriExp(λ0 = 0.0, λ1 = 1.0, period = 2, γ = 0.8)
+s = TriangleExp(λ0 = 0.0, λ1 = 1.0, period = 2, γ = 0.8)
 lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false)
 ```
 </td></tr>
