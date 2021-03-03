@@ -15,6 +15,11 @@ opt = Scheduler(Exp(λ = 1e-2, γ = 0.8), Momentum())
 
 This is a table of the common schedules implemented, but ParameterSchedulers provides utilities for creating more exotic schedules as well. You can read [this paper](https://arxiv.org/abs/1908.06477) for more information on the schedules below.
 
+{cell=table, display=false, output=false, results=false}
+```julia
+using UnicodePlots, ParameterSchedulers
+```
+
 <table>
 <thead>
 <tr>
@@ -39,7 +44,7 @@ Exponential decay by `γ` every step in `step_sizes`
 <td> Decay </td>
 <td style="text-align:center">
 
-{:cell, display=false}
+{cell=table, display=false}
 ```julia
 using UnicodePlots, ParameterSchedulers
 t = 1:10 |> collect
@@ -61,7 +66,7 @@ Exponential decay by `γ` every iteration
 <td> Decay </td>
 <td style="text-align:center">
 
-{:cell, display=false}
+{cell=table, display=false}
 ```julia
 using UnicodePlots, ParameterSchedulers
 t = 1:10 |> collect
@@ -83,7 +88,7 @@ Polynomial decay at degree `p`
 <td> Decay </td>
 <td style="text-align:center">
 
-{:cell, display=false}
+{cell=table, display=false}
 ```julia
 using UnicodePlots, ParameterSchedulers
 t = 1:10 |> collect
@@ -105,7 +110,7 @@ Inverse decay at rate `(1 + tγ)^p`
 <td> Decay </td>
 <td style="text-align:center">
 
-{:cell, display=false}
+{cell=table, display=false}
 ```julia
 using UnicodePlots, ParameterSchedulers
 t = 1:10 |> collect
@@ -127,7 +132,7 @@ lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false)
 <td> Cyclic </td>
 <td style="text-align:center">
 
-{:cell, display=false}
+{cell=table, display=false}
 ```julia
 using UnicodePlots, ParameterSchedulers
 t = 1:10 |> collect
@@ -149,7 +154,7 @@ lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false)
 <td> Cyclic </td>
 <td style="text-align:center">
 
-{:cell, display=false}
+{cell=table, display=false}
 ```julia
 using UnicodePlots, ParameterSchedulers
 t = 1:10 |> collect
@@ -171,7 +176,7 @@ lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false)
 <td> Cyclic </td>
 <td style="text-align:center">
 
-{:cell, display=false}
+{cell=table, display=false}
 ```julia
 using UnicodePlots, ParameterSchedulers
 t = 1:10 |> collect
@@ -193,7 +198,7 @@ Sine function
 <td> Cyclic </td>
 <td style="text-align:center">
 
-{:cell, display=false}
+{cell=table, display=false}
 ```julia
 using UnicodePlots, ParameterSchedulers
 t = 1:10 |> collect
@@ -215,7 +220,7 @@ Sine function with half the amplitude every `period`
 <td> Cyclic </td>
 <td style="text-align:center">
 
-{:cell, display=false}
+{cell=table, display=false}
 ```julia
 using UnicodePlots, ParameterSchedulers
 t = 1:10 |> collect
@@ -237,7 +242,7 @@ Sine function with exponential amplitude decay at rate `γ`
 <td> Cyclic </td>
 <td style="text-align:center">
 
-{:cell, display=false}
+{cell=table, display=false}
 ```julia
 using UnicodePlots, ParameterSchedulers
 t = 1:10 |> collect
@@ -253,17 +258,17 @@ lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false)
 </td>
 <td>
 
-Cosine function
+<a href="https://arxiv.org/abs/1608.03983v5">Cosine annealing</a>
 
 </td>
 <td> Cyclic </td>
 <td style="text-align:center">
 
-{:cell, display=false}
+{cell=table, display=false}
 ```julia
 using UnicodePlots, ParameterSchedulers
 t = 1:10 |> collect
-s = Cos(λ0 = 0.0, λ1 = 1.0, period = 2)
+s = Cos(λ0 = 0.0, λ1 = 1.0, period = 4)
 lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false)
 ```
 </td></tr>

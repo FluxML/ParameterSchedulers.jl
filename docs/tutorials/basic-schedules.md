@@ -50,19 +50,19 @@ For example, here is triangular wave schedule:
 {cell=cyclic-schedules}
 ```julia
 tricycle(period, t) = (2 / π) * abs(asin(sin(π * (t - 1) / period)))
-s = Tri(λ0 = 0.1, λ1 = 0.4, period = 2)
+s = Triangle(λ0 = 0.1, λ1 = 0.4, period = 2)
 println("abs(λ0 - λ1) g(1) + min(λ0, λ1) == s(1): ",
         abs(0.1 - 0.4) * tricycle(2, 1) + min(0.1, 0.4) == s(1))
 ```
 
-[`Tri`](#) (used in the above example) is a type of cyclic schedule. Below is a list of all the cyclic schedules implemented, and the parameters and cycle functions for each one.
+[`Triangle`](#) (used in the above example) is a type of cyclic schedule. Below is a list of all the cyclic schedules implemented, and the parameters and cycle functions for each one.
 
 | Schedule         | Parameters                | Cycle Function |
 |:-----------------|:--------------------------|:---------------|
-| [`Tri`](#)       | `λ0`, `λ1`, `period`      | ``g(t) = \frac{2}{\pi} \left| \arcsin \left( \sin \left(\frac{\pi (t - 1)}{\text{period}} \right) \right) \right|`` |
-| [`TriDecay2`](#) | `λ0`, `λ1`, `period`      | ``g(t) = \frac{1}{2^{\lfloor (t - 1) / \text{period} \rfloor}} g_{\mathrm{Tri}}(t)`` |
-| [`TriExp`](#)    | `λ0`, `λ1`, `period`, `γ` | ``g(t) = \gamma^{t - 1} g_{\mathrm{Tri}}(t)`` |
+| [`Triangle`](#)       | `λ0`, `λ1`, `period`      | ``g(t) = \frac{2}{\pi} \left| \arcsin \left( \sin \left(\frac{\pi (t - 1)}{\text{period}} \right) \right) \right|`` |
+| [`TriangleDecay2`](#) | `λ0`, `λ1`, `period`      | ``g(t) = \frac{1}{2^{\lfloor (t - 1) / \text{period} \rfloor}} g_{\mathrm{Triangle}}(t)`` |
+| [`TriangleExp`](#)    | `λ0`, `λ1`, `period`, `γ` | ``g(t) = \gamma^{t - 1} g_{\mathrm{Triangle}}(t)`` |
 | [`Sin`](#)       | `λ0`, `λ1`, `period`      | ``g(t) = \left| \sin \left(\frac{\pi (t - 1)}{\text{period}} \right) \right|`` |
 | [`SinDecay2`](#) | `λ0`, `λ1`, `period`      | ``g(t) = \frac{1}{2^{\lfloor (t - 1) / \text{period} \rfloor}} g_{\mathrm{Sin}}(t)`` |
 | [`SinExp`](#)    | `λ0`, `λ1`, `period`, `γ` | ``g(t) = \gamma^{t - 1} g_{\mathrm{Sin}}(t)`` |
-| [`Cos`](#)       | `λ0`, `λ1`, `period`      | ``g(t) = \frac{1}{2} \left(1 + \cos \left(\frac{2 \pi (t - 1)}{\text{period}}\right) \right)`` |
+| [`Cos`](#)       | `λ0`, `λ1`, `period`      | ``g(t) = \frac{1}{2} \left(1 + \cos \left(\frac{\pi \: \mathrm{mod}(t - 1, \text{period})}{\text{period}}\right) \right)`` |
