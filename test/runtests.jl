@@ -1,7 +1,7 @@
 using ParameterSchedulers
 using Test
 
-using InfiniteArrays: OneToInf()
+using InfiniteArrays: OneToInf
 
 @testset "Decay" begin
     include("decay.jl")
