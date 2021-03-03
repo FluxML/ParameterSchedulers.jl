@@ -45,6 +45,8 @@ function Base.iterate(schedule::Step, state = (1, 1, 1))
     return schedule.start * schedule.decay^(i - 1), (t + 1, i, t0)
 end
 
+Base.axes(::Step) = (OneToInf(),)
+
 
 """
     Exp{T}(start, decay)
@@ -72,6 +74,8 @@ Base.eltype(::Type{<:Exp{T}}) where T = T
 Base.IteratorSize(::Type{<:Exp}) = Base.IsInfinite()
 
 Base.iterate(schedule::Exp, t = 1) = schedule(t), t + 1
+
+Base.axes(::Exp) = (OneToInf(),)
 
 """
     Poly{T, S<:Integer}(start, degree, max_iter)
@@ -106,6 +110,8 @@ Base.length(schedule::Poly) = schedule.max_iter
 
 Base.iterate(schedule::Poly, t = 1) = schedule(t), t + 1
 
+Base.axes(schedule::Poly) = 1:length(schedule)
+
 
 """
     Inv{T, S<:Integer}(start, decay, degree)
@@ -135,3 +141,5 @@ Base.eltype(::Type{<:Inv{T}}) where T = T
 Base.IteratorSize(::Type{<:Inv}) = Base.IsInfinite()
 
 Base.iterate(schedule::Inv, t = 1) = schedule(t), t + 1
+
+Base.axes(::Inv) = (OneToInf(),)

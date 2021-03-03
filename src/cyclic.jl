@@ -32,6 +32,8 @@ Base.IteratorSize(::Type{<:Triangle}) = Base.IsInfinite()
 
 Base.iterate(schedule::Triangle, t = 1) = schedule(t), t + 1
 
+Base.axes(::Triangle) = (OneToInf(),)
+
 """
     TriangleDecay2{T, S<:Integer}(range0, range1, period)
     TriangleDecay2(;λ0, λ1, period)
@@ -63,6 +65,8 @@ Base.eltype(::Type{<:TriangleDecay2{T}}) where T = T
 Base.IteratorSize(::Type{<:TriangleDecay2}) = Base.IsInfinite()
 
 Base.iterate(schedule::TriangleDecay2, t = 1) = schedule(t), t + 1
+
+Base.axes(::TriangleDecay2) = (OneToInf(),)
 
 """
     TriangleExp{T, S<:Integer}(range0, range1, period, decay)
@@ -101,6 +105,8 @@ Base.IteratorSize(::Type{<:TriangleExp}) = Base.IsInfinite()
 
 Base.iterate(schedule::TriangleExp, t = 1) = schedule(t), t + 1
 
+Base.axes(::TriangleExp) = (OneToInf(),)
+
 """
     Sin{T, S<:Integer}(range0, range1, period)
     Sin(;λ0, λ1, period)
@@ -129,6 +135,8 @@ Base.eltype(::Type{<:Sin{T}}) where T = T
 Base.IteratorSize(::Type{<:Sin}) = Base.IsInfinite()
 
 Base.iterate(schedule::Sin, t = 1) = schedule(t), t + 1
+
+Base.axes(::Sin) = (OneToInf(),)
 
 """
     SinDecay2{T, S<:Integer}(range0, range1, period)
@@ -160,6 +168,8 @@ Base.eltype(::Type{<:SinDecay2{T}}) where T = T
 Base.IteratorSize(::Type{<:SinDecay2}) = Base.IsInfinite()
 
 Base.iterate(schedule::SinDecay2, t = 1) = schedule(t), t + 1
+
+Base.axes(::SinDecay2) = (OneToInf(),)
 
 """
     SinExp{T, S<:Integer}(range0, range1, period, decay)
@@ -194,6 +204,8 @@ Base.IteratorSize(::Type{<:SinExp}) = Base.IsInfinite()
 
 Base.iterate(schedule::SinExp, t = 1) = schedule(t), t + 1
 
+Base.axes(::SinExp) = (OneToInf(),)
+
 """
     Cos{T, S<:Integer}(range0, range1, period)
     Cos(;λ0, λ1, period)
@@ -226,3 +238,5 @@ Base.eltype(::Type{<:Cos{T}}) where T = T
 Base.IteratorSize(::Type{<:Cos}) = Base.IsInfinite()
 
 Base.iterate(schedule::Cos, t = 1) = schedule(t), t + 1
+
+Base.axes(::Cos) = (OneToInf(),)

@@ -18,6 +18,7 @@
     @test Base.IteratorEltype(typeof(s)) == Base.HasEltype()
     @test eltype(s) == eltype(λ)
     @test Base.IteratorSize(typeof(s)) == Base.IsInfinite()
+    @test axes(s) == (OneToInf(),)
 end
 
 @testset "Exp" begin
@@ -30,6 +31,7 @@ end
     @test Base.IteratorEltype(typeof(s)) == Base.HasEltype()
     @test eltype(s) == eltype(λ)
     @test Base.IteratorSize(typeof(s)) == Base.IsInfinite()
+    @test axes(s) == (OneToInf(),)
 end
 
 @testset "Poly" begin
@@ -45,6 +47,7 @@ end
     @test Base.IteratorSize(typeof(s)) == Base.HasLength()
     @test length(s) == max_iter
     @test_throws BoundsError s(max_iter + 1)
+    @test axes(s) == 1:length(s)
 end
 
 @testset "Inv" begin
@@ -58,4 +61,5 @@ end
     @test Base.IteratorEltype(typeof(s)) == Base.HasEltype()
     @test eltype(s) == eltype(λ)
     @test Base.IteratorSize(typeof(s)) == Base.IsInfinite()
+    @test axes(s) == (OneToInf(),)
 end

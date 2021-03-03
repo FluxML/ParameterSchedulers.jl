@@ -14,6 +14,7 @@ _cos(t, period) = (1 + cos(π * mod(t - 1, period) / period)) / 2
     @test Base.IteratorEltype(typeof(s)) == Base.HasEltype()
     @test eltype(s) == eltype(λ0)
     @test Base.IteratorSize(typeof(s)) == Base.IsInfinite()
+    @test axes(s) == (OneToInf(),)
 end
 
 @testset "TriangleDecay2" begin
@@ -27,6 +28,7 @@ end
     @test Base.IteratorEltype(typeof(s)) == Base.HasEltype()
     @test eltype(s) == eltype(λ0)
     @test Base.IteratorSize(typeof(s)) == Base.IsInfinite()
+    @test axes(s) == (OneToInf(),)
 end
 
 @testset "TriangleExp" begin
@@ -54,6 +56,7 @@ end
     @test Base.IteratorEltype(typeof(s)) == Base.HasEltype()
     @test eltype(s) == eltype(λ0)
     @test Base.IteratorSize(typeof(s)) == Base.IsInfinite()
+    @test axes(s) == (OneToInf(),)
 end
 
 @testset "SinDecay2" begin
@@ -67,6 +70,7 @@ end
     @test Base.IteratorEltype(typeof(s)) == Base.HasEltype()
     @test eltype(s) == eltype(λ0)
     @test Base.IteratorSize(typeof(s)) == Base.IsInfinite()
+    @test axes(s) == (OneToInf(),)
 end
 
 @testset "SinExp" begin
@@ -81,6 +85,7 @@ end
     @test Base.IteratorEltype(typeof(s)) == Base.HasEltype()
     @test eltype(s) == eltype(λ0)
     @test Base.IteratorSize(typeof(s)) == Base.IsInfinite()
+    @test axes(s) == (OneToInf(),)
 end
 
 @testset "Cos" begin
@@ -94,4 +99,5 @@ end
     @test Base.IteratorEltype(typeof(s)) == Base.HasEltype()
     @test eltype(s) == eltype(λ0)
     @test Base.IteratorSize(typeof(s)) == Base.IsInfinite()
+    @test axes(s) == (OneToInf(),)
 end
