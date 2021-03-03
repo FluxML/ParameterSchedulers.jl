@@ -198,13 +198,14 @@ Base.iterate(schedule::SinExp, t = 1) = schedule(t), t + 1
     Cos{T, S<:Integer}(range0, range1, period)
     Cos(;λ0, λ1, period)
 
-A cosine wave schedule with `period`.
+A cosine annealing schedule
+(see ["SGDR: Stochastic Gradient Descent with Warm Restarts"](https://arxiv.org/abs/1608.03983v5))
 The output conforms to
 ```text
-abs(λ0 - λ1) * (1 + cos(2 * π * (t - 1) / period)) / 2 + min(λ0, λ1)
+abs(λ0 - λ1) * (1 + cos(π * mod(t - 1, period) / period)) / 2 + min(λ0, λ1)
 ```
-This schedule is also referred to as "cosine annealing" or
-"cosine annealing with warm restarts" in machine learning literature.
+This schedule is also referred to as "cosine annealing with warm restarts"
+in machine learning literature.
 
 # Arguments
 - `range0`/`λ0`: the first range endpoint
@@ -219,7 +220,7 @@ end
 Cos(;λ0, λ1, period) = Cos(λ0, λ1, period)
 
 (schedule::Cos)(t) = _cycle(schedule.range0, schedule.range1,
-                            (1 + cos(2 * π * (t - 1) / schedule.period)) / 2)
+                            (1 + cos(π * mod(t - 1, schedule.period) / schedule.period)) / 2)
 
 Base.eltype(::Type{<:Cos{T}}) where T = T
 Base.IteratorSize(::Type{<:Cos}) = Base.IsInfinite()

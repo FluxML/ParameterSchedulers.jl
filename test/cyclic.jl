@@ -1,7 +1,7 @@
 _cycle(λ0, λ1, x) = abs(λ0 - λ1) * x + min(λ0, λ1)
 _tri(t, period) = (2 / π) * abs(asin(sin(π * (t - 1) / period)))
 _sin(t, period) = abs(sin(π * (t - 1) / period))
-_cos(t, period) = (1 + cos(2 * π * (t - 1) / period)) / 2
+_cos(t, period) = (1 + cos(π * mod(t - 1, period) / period)) / 2
 
 @testset "Triangle" begin
     λ0 = rand()
