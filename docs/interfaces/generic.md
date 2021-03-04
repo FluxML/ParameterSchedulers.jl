@@ -37,7 +37,7 @@ lineplot(t, s.(t); border = :none)
 
 # More examples
 
-Below, we implement two more custom schedules that conform to the decay and cyclic defitions. The interface is no different than `Lambda` above.
+Below, we implement two more custom schedules that conform to the decay and cyclic definitions. The interface is no different than `Lambda` above.
 
 ## Decay by half
 

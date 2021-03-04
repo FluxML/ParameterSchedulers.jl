@@ -84,5 +84,6 @@ The scheduler, `opt`, can be used anywhere a Flux optimizer can. For example, it
 s = Inv(λ = 1e-1, p = 2, γ = 0.2)
 opt = Scheduler(s, Descent())
 loss(x, y, m) = Flux.mse(m(x), y)
-Flux.@epochs nepochs Flux.train!((x, y) -> loss(x, y, m), params(m), data, opt)
+cb = () -> @show(opt.optim.eta)
+Flux.@epochs nepochs Flux.train!((x, y) -> loss(x, y, m), params(m), data, opt, cb = cb)
 ```
