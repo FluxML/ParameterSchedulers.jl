@@ -87,7 +87,7 @@ lineplot(t, s.(t); border = :none)
  
      1                                       10</code></pre>
 <h1 id="more-examples"><a href="#more-examples" class="anchor"></a>More examples</h1>
-<p>Below, we implement two more custom schedules that conform to the decay and cyclic defitions. The interface is no different than <code>Lambda</code> above.</p>
+<p>Below, we implement two more custom schedules that conform to the decay and cyclic definitions. The interface is no different than <code>Lambda</code> above.</p>
 <h2 id="decay-by-half"><a href="#decay-by-half" class="anchor"></a>Decay by half</h2>
 <p>We will implement a <code>Decay2</code> schedule that halves the parameter value every iteration. First, we define the struct.</p>
 <pre><code cell="decay-interface" class="language-julia">using ParameterSchedulers

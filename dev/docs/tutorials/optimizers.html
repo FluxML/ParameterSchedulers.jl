@@ -154,11 +154,21 @@ epoch: 3, batch: 3, η: 0.014792899408284023
 <pre><code cell="optimizers" class="language-julia">s = Inv(λ = 1e-1, p = 2, γ = 0.2)
 opt = Scheduler(s, Descent())
 loss(x, y, m) = Flux.mse(m(x), y)
-Flux.@epochs nepochs Flux.train!((x, y) -&gt; loss(x, y, m), params(m), data, opt)
+cb = () -&gt; @show(opt.optim.eta)
+Flux.@epochs nepochs Flux.train!((x, y) -&gt; loss(x, y, m), params(m), data, opt, cb = cb)
 </code></pre>
 <pre><code class="plaintext cell-output cell-stream">[ Info: Epoch 1
+opt.optim.eta = 0.1
+opt.optim.eta = 0.06944444444444445
+opt.optim.eta = 0.051020408163265314
 [ Info: Epoch 2
+opt.optim.eta = 0.03906249999999999
+opt.optim.eta = 0.030864197530864196
+opt.optim.eta = 0.025
 [ Info: Epoch 3
+opt.optim.eta = 0.020661157024793386
+opt.optim.eta = 0.01736111111111111
+opt.optim.eta = 0.014792899408284023
 </code></pre>
 </article>
         <div id="page-navigation">
