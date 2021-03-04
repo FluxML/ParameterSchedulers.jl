@@ -25,7 +25,7 @@ end
     @test all(p == log(mod1(t, period)) for (t, p) in zip(1:100, s))
     @test Base.IteratorEltype(typeof(s)) == Base.IteratorEltype(typeof(log))
     @test Base.IteratorSize(typeof(s)) == Base.IsInfinite()
-    @test axes(s) == OneToInf()
+    @test axes(s) == (OneToInf(),)
 
     @testset "utilities" begin
         reverse_f = ParameterSchedulers.reverse(log, period)
