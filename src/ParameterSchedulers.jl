@@ -2,6 +2,7 @@ module ParameterSchedulers
 
 using Base.Iterators
 using Flux
+using InfiniteArrays: OneToInf
 
 export Sequence, Loop,
        Step, Exp, Poly, Inv,

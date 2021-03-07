@@ -109,6 +109,8 @@ Base.IteratorSize(::Type{<:Loop}) = Base.IsInfinite()
 
 Base.iterate(schedule::Loop, t = 1) = schedule(t), t + 1
 
+Base.axes(::Loop) = (OneToInf(),)
+
 """
     reverse(f, period)
 
