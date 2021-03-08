@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="generator" content="Publish.jl" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="" />
+    <title>ParameterSchedulers.jl</title>
+    <link rel="stylesheet" href="..&#x2F;..&#x2F;normalize.css" />
+    <link rel="stylesheet" href="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;katex@0.12.0&#x2F;dist&#x2F;katex.min.css" />
+    <link rel="stylesheet" href="..&#x2F;..&#x2F;tabulator_simple.min.css" />
+    <link rel="stylesheet" href="..&#x2F;..&#x2F;publish.css" />
+    <link rel="stylesheet" href="..&#x2F;..&#x2F;default.min.css" />
+    <link rel="stylesheet" href="..&#x2F;..&#x2F;custom.css" />
+    <script src="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;katex@0.12.0&#x2F;dist&#x2F;katex.min.js"></script>
+    <script src="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;katex@0.12.0&#x2F;dist&#x2F;contrib&#x2F;auto-render.min.js"></script>
+    <script src="..&#x2F;..&#x2F;versions.js"></script>
+    <script src="..&#x2F;..&#x2F;lunr.js"></script>
+    <script src="..&#x2F;..&#x2F;highlight.min.js"></script>
+    <script src="..&#x2F;..&#x2F;tabulator.min.js"></script>
+    <script src="..&#x2F;..&#x2F;julia.min.js"></script>
+    <script src="..&#x2F;..&#x2F;julia-repl.min.js"></script>
+    <script src="..&#x2F;..&#x2F;publish.js"></script>
+    
+</head>
+<body>
+    <main id="page">
+        <div class="menu">
+            <div id="projectname">ParameterSchedulers.jl</div>
+            <input id="search-input" placeholder="Search">
+            <select id="version-selector"></select>
+            <svg id="menu-toggler" title="Contents" onclick="toggleIndexPage();" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 6C2 5.44772 2.44772 5 3 5H21C21.5523 5 22 5.44772 22 6C22 6.55228 21.5523 7 21 7H3C2.44772 7 2 6.55228 2 6Z" fill="currentColor" /><path d="M2 12.0322C2 11.4799 2.44772 11.0322 3 11.0322H21C21.5523 11.0322 22 11.4799 22 12.0322C22 12.5845 21.5523 13.0322 21 13.0322H3C2.44772 13.0322 2 12.5845 2 12.0322Z" fill="currentColor" /><path d="M3 17.0645C2.44772 17.0645 2 17.5122 2 18.0645C2 18.6167 2.44772 19.0645 3 19.0645H21C21.5523 19.0645 22 18.6167 22 18.0645C22 17.5122 21.5523 17.0645 21 17.0645H3Z" fill="currentColor" /></svg>
+        </div>
+        <div id="toc"><p><a href="../../README.html">Introduction</a></p>
+<h1 id="tutorials"><a href="../../#tutorials" class="anchor"></a>Tutorials</h1>
+<ul>
+<li><a href="../../docs/tutorials/getting-started.html">Getting started</a></li>
+<li><a href="../../docs/tutorials/basic-schedules.html">Basic schedules</a></li>
+<li><a href="../../docs/tutorials/optimizers.html">Optimizers</a></li>
+<li><a href="../../docs/tutorials/complex-schedules.html">Complex schedules</a></li>
+</ul>
+<h1 id="interfaces"><a href="../../#interfaces" class="anchor"></a>Interfaces</h1>
+<ul>
+<li><a href="../../docs/interfaces/generic.html">Generic</a></li>
+<li><a href="../../docs/interfaces/decay.html">Decay</a></li>
+<li><a href="../../docs/interfaces/cyclic.html">Cyclic</a></li>
+</ul>
+<hr />
+<p><a href="../../docstrings.html">API Reference</a></p>
+</div>
+        <article id="content"><h1 id="scheduling-optimizers"><a href="#scheduling-optimizers" class="anchor"></a>Scheduling optimizers</h1>
+<p>A schedule by itself is not helpful; we need to use the schedules to adjust parameters. In this tutorial, we will examine three ways to do just that — iterating the schedule, using a stateful iterator, and using an scheduled optimizer.</p>
+<h2 id="iterating-during-training"><a href="#iterating-during-training" class="anchor"></a>Iterating during training</h2>
+<p>Since every schedule is a standard iterator, we can insert it into a training loop by simply zipping up with another iterator. For example, the following code adjusts the learning rate of the optimizer before each batch of training.</p>
+<pre><code cell="optimizers" class="language-julia">using Flux, ParameterSchedulers
+
+data = [(rand(4, 10), rand([-1, 1], 1, 10)) for _ in 1:3]
+m = Chain(Dense(4, 4, tanh), Dense(4, 1, tanh))
+p = params(m)
+opt = Descent()
+s = Exp(λ = 1e-1, γ = 0.2)
+
+for (η, (x, y)) in zip(s, data)
+    opt.eta = η
+    g = Flux.gradient(() -&gt; Flux.mse(m(x), y), p)
+    Flux.update!(opt, p, g)
+    println(&quot;η: $(opt.eta)&quot;)
+end
+</code></pre>
+<pre><code class="plaintext cell-output cell-stream">η: 0.1
+η: 0.020000000000000004
+η: 0.004000000000000001
+</code></pre>
+<p>We can also adjust the learning on an epoch basis instead. All that is required is to change what we zip our schedule with.</p>
+<pre><code cell="optimizers" class="language-julia">nepochs = 6
+s = Step(λ = 1e-1, γ = 0.2, step_sizes = [3, 2, 1])
+for (η, epoch) in zip(s, 1:nepochs)
+    opt.eta = η
+    for (i, (x, y)) in enumerate(data)
+        g = Flux.gradient(() -&gt; Flux.mse(m(x), y), p)
+        Flux.update!(opt, p, g)
+        println(&quot;epoch: $epoch, batch: $i, η: $(opt.eta)&quot;)
+    end
+end
+</code></pre>
+<pre><code class="plaintext cell-output cell-stream">epoch: 1, batch: 1, η: 0.1
+epoch: 1, batch: 2, η: 0.1
+epoch: 1, batch: 3, η: 0.1
+epoch: 2, batch: 1, η: 0.1
+epoch: 2, batch: 2, η: 0.1
+epoch: 2, batch: 3, η: 0.1
+epoch: 3, batch: 1, η: 0.1
+epoch: 3, batch: 2, η: 0.1
+epoch: 3, batch: 3, η: 0.1
+epoch: 4, batch: 1, η: 0.020000000000000004
+epoch: 4, batch: 2, η: 0.020000000000000004
+epoch: 4, batch: 3, η: 0.020000000000000004
+epoch: 5, batch: 1, η: 0.020000000000000004
+epoch: 5, batch: 2, η: 0.020000000000000004
+epoch: 5, batch: 3, η: 0.020000000000000004
+epoch: 6, batch: 1, η: 0.004000000000000001
+epoch: 6, batch: 2, η: 0.004000000000000001
+epoch: 6, batch: 3, η: 0.004000000000000001
+</code></pre>
+<h2 id="stateful-iteration-with-training"><a href="#stateful-iteration-with-training" class="anchor"></a>Stateful iteration with training</h2>
+<p>Sometimes zipping up the schedule with an iterator isn’t sufficient. For example, we might want to advance the schedule with every batch but not be forced to restart each epoch. In such a situation with nested loops, it becomes useful to use <a href="../../docstrings/ParameterSchedulers.ScheduleIterator.html"><code>ScheduleIterator</code></a> which maintains its own iteration state.</p>
+<pre><code cell="optimizers" class="language-julia">nepochs = 3
+s = ScheduleIterator(Inv(λ = 1e-1, γ = 0.2, p = 2))
+for epoch in 1:nepochs
+    for (i, (x, y)) in enumerate(data)
+        opt.eta = next!(s)
+        g = Flux.gradient(() -&gt; Flux.mse(m(x), y), p)
+        Flux.update!(opt, p, g)
+        println(&quot;epoch: $epoch, batch: $i, η: $(opt.eta)&quot;)
+    end
+end
+</code></pre>
+<pre><code class="plaintext cell-output cell-stream">epoch: 1, batch: 1, η: 0.1
+epoch: 1, batch: 2, η: 0.06944444444444445
+epoch: 1, batch: 3, η: 0.05102040816326532
+epoch: 2, batch: 1, η: 0.0390625
+epoch: 2, batch: 2, η: 0.030864197530864196
+epoch: 2, batch: 3, η: 0.025
+epoch: 3, batch: 1, η: 0.02066115702479339
+epoch: 3, batch: 2, η: 0.01736111111111111
+epoch: 3, batch: 3, η: 0.014792899408284023
+</code></pre>
+<h2 id="working-with-flux-optimizers"><a href="#working-with-flux-optimizers" class="anchor"></a>Working with Flux optimizers</h2>
+<div class="admonition warning"><p class="admonition-title">Warning</p>
+<p>Currently, we are porting <code>ScheduledOptim</code> to Flux.jl.
+It may be renamed once it is ported out of this package.</p>
+</div>
+<p>While the approaches above can be helpful when dealing with fine-grained training loops, it is usually simpler to just use a <a href="../../docstrings/ParameterSchedulers.ScheduledOptim.html"><code>ScheduledOptim</code></a>.</p>
+<pre><code cell="optimizers" class="language-julia">nepochs = 3
+s = Inv(λ = 1e-1, p = 2, γ = 0.2)
+opt = ScheduledOptim(s, Descent())
+for epoch in 1:nepochs
+    for (i, (x, y)) in enumerate(data)
+        g = Flux.gradient(() -&gt; Flux.mse(m(x), y), p)
+        Flux.update!(opt, p, g)
+        println(&quot;epoch: $epoch, batch: $i, η: $(opt.optim.eta)&quot;)
+    end
+end
+</code></pre>
+<pre><code class="plaintext cell-output cell-stream">epoch: 1, batch: 1, η: 0.1
+epoch: 1, batch: 2, η: 0.06944444444444445
+epoch: 1, batch: 3, η: 0.05102040816326532
+epoch: 2, batch: 1, η: 0.0390625
+epoch: 2, batch: 2, η: 0.030864197530864196
+epoch: 2, batch: 3, η: 0.025
+epoch: 3, batch: 1, η: 0.02066115702479339
+epoch: 3, batch: 2, η: 0.01736111111111111
+epoch: 3, batch: 3, η: 0.014792899408284023
+</code></pre>
+<p>The scheduled optimizer, <code>opt</code>, can be used anywhere a Flux optimizer can. For example, it can be passed to <code>Flux.train!</code>.</p>
+</article>
+        <div id="page-navigation">
+            <a id="previous-page" title="Previous" href="basic-schedules.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.2426 6.34317L14.8284 4.92896L7.75739 12L14.8285 19.0711L16.2427 17.6569L10.5858 12L16.2426 6.34317Z" fill="currentColor" /></svg></a>
+            <a id="next-page" title="Next" href="complex-schedules.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.5858 6.34317L12 4.92896L19.0711 12L12 19.0711L10.5858 17.6569L16.2427 12L10.5858 6.34317Z" fill="currentColor" /></svg></a>
+        </div>
+        <footer>
+            Built with <a target="_blank" href="https://github.com/MichaelHatherly/Publish.jl">Publish.jl</a> and the <a target="_blank" href="https://julialang.org">Julia Language</a>.
+        </footer>
+    </main>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "$", right: "$", display: false},
+                    {left: "\\(", right: "\\)", display: false},
+                    {left: "\\[", right: "\\]", display: true}
+                ]
+            });
+        });
+    </script>
+</body>
+</html>
