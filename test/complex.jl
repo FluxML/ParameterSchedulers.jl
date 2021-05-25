@@ -40,4 +40,7 @@ end
     @test all(next!(stateful_s) == log(i) for i in 1:100)
     reset!(stateful_s)
     @test log(1) == next!(stateful_s)
+    stateful_s = Stateful(log; advance = s -> s == 1)
+    @test log(1) == next!(stateful_s)
+    @test log(1) == next!(stateful_s)
 end
