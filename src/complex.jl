@@ -1,25 +1,30 @@
 """
     Stateful{T, S}
-    Stateful(schedule::T)
+    Stateful(schedule::T; advance = state -> true)
 
 Create a stateful iterator around `schedule`.
+Pass in a predicate, `advance(state)`, to conditionally control iteration.
 See also [`ParameterSchedulers.next!`](#) and [`ParameterSchedulers.reset!`](#).
 """
-mutable struct Stateful{T, S<:Integer}
+mutable struct Stateful{T, S<:Integer, R}
     schedule::T
     state::S
+    advance::R
 end
-Stateful(schedule) = Stateful(schedule, 1)
+Stateful(schedule; advance = state -> true) = Stateful(schedule, 1, advance)
 
 """
     next!(iter::Stateful)
 
-Advance `iter` by one iteration and return the next value.
+Advance `iter` by one iteration
+(if `iter.advance(state) == true`) and return the next value.
 See also [`ParameterSchedulers.Stateful`](#).
 """
 function next!(iter::Stateful)
     val = iter.schedule(iter.state)
-    iter.state += 1
+    if iter.advance(iter.state)
+        iter.state += 1
+    end
 
     return val
 end
