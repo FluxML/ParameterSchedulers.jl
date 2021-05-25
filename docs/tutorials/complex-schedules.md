@@ -36,7 +36,7 @@ Finally, we might concatenate sequences of schedules, applying each one for a gi
 {cell=complex-schedules}
 ```julia
 nepochs = 50
-s = Sequence([Tri(λ0 = 0.0, λ1 = 0.5, period = 5), Exp(λ = 0.5, γ = 0.5)],
+s = Sequence([Triangle(λ0 = 0.0, λ1 = 0.5, period = 5), Exp(λ = 0.5, γ = 0.5)],
              [nepochs ÷ 2, nepochs ÷ 2])
              
 t = 1:nepochs |> collect
