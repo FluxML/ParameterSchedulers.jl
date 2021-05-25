@@ -50,7 +50,7 @@ println(&quot;s(1): &quot;, s(1))
 println(&quot;s(5): &quot;, s(5))
 </code></pre>
 <pre><code class="plaintext cell-output cell-stream">s(1): 0.1
-s(5): 0.04096000000000001
+s(5): 0.040960000000000024
 </code></pre>
 <div class="admonition info"><p class="admonition-title">Info</p>
 <p>The iterations are unitless. So, if you index a schedule every epoch, then the <code>s(i)</code> is parameter value at epoch <code>i</code>.</p>
@@ -65,7 +65,7 @@ end
 s(2): 0.08000000000000002
 s(3): 0.06400000000000002
 s(4): 0.051200000000000016
-s(5): 0.04096000000000001
+s(5): 0.040960000000000024
 s(6): 0.03276800000000001
 s(7): 0.026214400000000013
 s(8): 0.020971520000000007
@@ -85,7 +85,7 @@ println(stateful_s)
 </code></pre>
 <pre><code class="plaintext cell-output cell-stream">s: 0.1
 s: 0.08000000000000002
-ParameterSchedulers.Stateful{Exp{Float64},Int64}(Exp{Float64}(0.1, 0.8), 3)
+ParameterSchedulers.Stateful{Exp{Float64}, Int64, ParameterSchedulers.var&quot;#15#17&quot;}(Exp{Float64}(0.1, 0.8), 3, ParameterSchedulers.var&quot;#15#17&quot;())
 </code></pre>
 <p>We used <a href="../../docstrings/ParameterSchedulers.next!.html"><code>ParameterSchedulers.next!</code></a> to advance the stateful iterator. Notice that <code>stateful_s</code> stores a reference to <code>s</code> and the current iteration state (which is <code>3</code> since we advanced the iterator twice). We can reset the mutable iteration state too:</p>
 <pre><code cell="getting-started" class="language-julia">using ParameterSchedulers: reset!
@@ -101,7 +101,7 @@ catch e
     println(e)
 end
 </code></pre>
-<pre><code class="plaintext cell-output cell-stream">MethodError(ParameterSchedulers.Stateful{Exp{Float64},Int64}(Exp{Float64}(0.1, 0.8), 2), (1,), 0x0000000000007174)
+<pre><code class="plaintext cell-output cell-stream">MethodError(ParameterSchedulers.Stateful{Exp{Float64}, Int64, ParameterSchedulers.var&quot;#15#17&quot;}(Exp{Float64}(0.1, 0.8), 2, ParameterSchedulers.var&quot;#15#17&quot;()), (1,), 0x00000000000078f7)
 </code></pre>
 </article>
         <div id="page-navigation">
