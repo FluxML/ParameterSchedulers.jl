@@ -1,6 +1,6 @@
 using Publish
 using ParameterSchedulers
-using Artifacts
+using Artifacts, LazyArtifacts
 
 # override default theme
 Publish.Themes.default() = artifact"flux-theme"
