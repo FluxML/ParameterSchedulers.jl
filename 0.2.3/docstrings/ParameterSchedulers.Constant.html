@@ -43,31 +43,19 @@
 <hr />
 <p><a href="../docstrings.html">API Reference</a></p>
 </div>
-        <article id="content"><div class='docs' id='Cos'>
-<p><code>public</code> <code>Cos</code> — <code>parametric type</code></p>
+        <article id="content"><div class='docs' id='Constant'>
+<p><code>private</code> <code>Constant</code> — <code>parametric type</code></p>
 <div class='doc' id='1'>
-<pre><code>Cos{T, S&lt;:Integer}(range0, range1, period)
-Cos(;λ0, λ1, period)
+<pre><code>Constant{T}
+Constant(value)
 </code></pre>
-<p>A cosine annealing schedule
-(see <a href="https://arxiv.org/abs/1608.03983v5">“SGDR: Stochastic Gradient Descent with Warm Restarts”</a>)
-The output conforms to</p>
-<pre><code class="language-text">abs(λ0 - λ1) * (1 + cos(π * mod(t - 1, period) / period)) / 2 + min(λ0, λ1)
-</code></pre>
-<p>This schedule is also referred to as “cosine annealing with warm restarts”
-in machine learning literature.</p>
-<h1 id="arguments"><a href="#arguments" class="anchor"></a>Arguments</h1>
-<ul>
-<li><code>range0</code>/<code>λ0</code>: the first range endpoint</li>
-<li><code>range1</code>/<code>λ1</code>: the second range endpoint</li>
-<li><code>period::Integer</code>: the period</li>
-</ul>
+<p>A constant schedule that is always <code>value</code>.</p>
 </div>
 </div>
 </article>
         <div id="page-navigation">
-            <a id="previous-page" title="Previous" href="ParameterSchedulers.Constant.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.2426 6.34317L14.8284 4.92896L7.75739 12L14.8285 19.0711L16.2427 17.6569L10.5858 12L16.2426 6.34317Z" fill="currentColor" /></svg></a>
-            <a id="next-page" title="Next" href="ParameterSchedulers.Exp.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.5858 6.34317L12 4.92896L19.0711 12L12 19.0711L10.5858 17.6569L16.2427 12L10.5858 6.34317Z" fill="currentColor" /></svg></a>
+            <a id="previous-page" title="Previous" href="..&#x2F;docstrings.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.2426 6.34317L14.8284 4.92896L7.75739 12L14.8285 19.0711L16.2427 17.6569L10.5858 12L16.2426 6.34317Z" fill="currentColor" /></svg></a>
+            <a id="next-page" title="Next" href="ParameterSchedulers.Cos.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.5858 6.34317L12 4.92896L19.0711 12L12 19.0711L10.5858 17.6569L16.2427 12L10.5858 6.34317Z" fill="currentColor" /></svg></a>
         </div>
         <footer>
             Built with <a target="_blank" href="https://github.com/MichaelHatherly/Publish.jl">Publish.jl</a> and the <a target="_blank" href="https://julialang.org">Julia Language</a>.
