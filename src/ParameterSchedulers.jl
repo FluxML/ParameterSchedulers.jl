@@ -66,7 +66,7 @@ function Flux.Optimise.apply!(opt::Scheduler, x, Δ)
     # get iteration
     t = get!(opt.state, x, 1)
     opt.state[x] = t + 1
-    
+
     # set param
     opt.update_func(opt.optim, opt.schedule(t))
 

@@ -41,8 +41,22 @@ function reset!(iter::Stateful)
     return iter
 end
 
-at(x::Number, t) = x
-at(f, t) = f(t)
+"""
+    Constant{T}
+    Constant(value)
+
+A constant schedule that is always `value`.
+"""
+struct Constant{T}
+    value::T
+end
+
+(schedule::Constant)(t) = schedule.value
+
+Base.eltype(::Type{<:Constant{T}}) where T = T
+Base.IteratorSize(::Type{<:Constant}) = Base.IsInfinite()
+
+Base.iterate(schedule::Constant, t = 1) = schedule(t), t + 1
 
 """
     Sequence{T, S}
@@ -62,6 +76,12 @@ Note that `schedules` can also be a vector of numbers (not just schedules).
 struct Sequence{T, S}
     schedules::T
     step_sizes::S
+
+    function Sequence(schedules, step_sizes)
+        _schedules = map(s -> s isa Number ? Constant(s) : s, schedules)
+
+        new{typeof(_schedules), typeof(step_sizes)}(_schedules, step_sizes)
+    end
 end
 Sequence(stages::Pair...) = Sequence(first.(stages), last.(stages))
 
@@ -71,8 +91,8 @@ function (schedule::Sequence)(t)
     i = isnothing(i) ? 1 :
             (i >= length(schedule.schedules)) ? length(schedule.schedules) : i + 1
     toffset = (i > 1) ? t - accum_steps[i - 1] : t
-    
-    return at(schedule.schedules[i], toffset)
+
+    return schedule.schedules[i](toffset)
 end
 
 Base.IteratorEltype(::Type{<:Sequence}) = Base.EltypeUnknown()
@@ -86,7 +106,7 @@ function Base.iterate(schedule::Sequence, state = (1, 1, 1))
         t0 = t
     end
 
-    return at(schedule.schedules[i], t - t0 + 1), (t + 1, i, t0)
+    return schedule.schedules[i](t - t0 + 1), (t + 1, i, t0)
 end
 
 """
