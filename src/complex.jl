@@ -137,6 +137,32 @@ Base.iterate(schedule::Loop, t = 1) = schedule(t), t + 1
 Base.axes(::Loop) = (OneToInf(),)
 
 """
+    Interpolator{T, S}
+    Interpolator(schedule, rate)
+
+A schedule whose output is `schedule(t / rate)` (i.e. it interpolates `schedule(t)`).
+
+This can be useful when your code iterates over real numbers at a fixed rate
+(e.g. in a fixed time step differential solver),
+but you want to use a schedule that iterates discretely over integers.
+
+It could also be used to specify `schedule` in units of epochs,
+while iterating it in units of mini-batches.
+"""
+struct Interpolator{T, S}
+    schedule::T
+    rate::S
+end
+
+(interpolator::Interpolator)(t) = interpolator.schedule(t / interpolator.rate)
+
+Base.eltype(::Type{<:Interpolator{T}}) where T = eltype(T)
+Base.IteratorEltype(::Type{<:Interpolator{T}}) where T = Base.IteratorEltype(T)
+Base.IteratorSize(::Type{<:Interpolator{T}}) where T = Base.IteratorSize(T)
+
+Base.iterate(interpolator::Interpolator, t = 1) = interpolator(t), t + 1
+
+"""
     reverse(f, period)
 
 Return a reverse function such that `reverse(f, period)(t) == f(period - t)`.
