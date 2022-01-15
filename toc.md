@@ -1,5 +1,7 @@
 [Introduction](README.md)
 
+[Schedule cheatsheet](docs/cheatsheet.md)
+
 # Tutorials
 
 * [Getting started](docs/tutorials/getting-started.md)
