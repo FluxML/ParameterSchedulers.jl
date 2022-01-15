@@ -38,7 +38,7 @@ Finally, we might concatenate sequences of schedules, applying each one for a gi
 nepochs = 50
 s = Sequence([Triangle(λ0 = 0.0, λ1 = 0.5, period = 5), Exp(λ = 0.5, γ = 0.5)],
              [nepochs ÷ 2, nepochs ÷ 2])
-             
+
 t = 1:nepochs |> collect
 lineplot(t, s.(t); border = :none)
 ```
@@ -49,4 +49,43 @@ Alternatively, we might simply wish to manually set the parameter every interval
 s = Sequence(1e-1 => 5, 5e-2 => 4, 3.4e-3 => 10)
 t = 1:20 |> collect
 lineplot(t, s.(t); border = :none)
+```
+
+## Interpolating schedules
+
+Sometimes, we want to specify a schedule in different units than our iteration state. Below, we'll see two common examples where this might be the case, and how [`Interpolator`](#) can make our lives a bit easier.
+
+In our first example, we'll consider a situation where our iteration state is continuous. This is typical in differential equation solvers where we iterate over time (i.e. over `dt, 2dt, 3dt, ...` where `dt` is the solver time step). Conceptually, each step over time should move our schedule forward "by one" (i.e. over iteration states `1, 2, 3, ...`). To move from one iteration scheme to the other, we want to _interpolate_ our time range at a rate of `dt`.
+{cell=complex-schedules}
+```julia
+dt = 1e-3 # simulation time step in seconds
+T = 2 # simulate 2 seconds
+# our parameter is 1e-2 for the first half of the simulation
+# then it drops to 1e-3 for the second half of the simulation
+# we interpolate at a rate of dt
+s = Interpolator(Sequence(1e-2 => cld(T, dt) / 2, 1e-3 => cld(T, dt) / 2), dt)
+
+# the time range of the simulation in seconds
+trange = dt:dt:T |> collect
+lineplot(trange, s.(trange))
+```
+Notice that our schedule changes around 1 second (half way through the simulation).
+
+For the second example, we'll look at a machine learning use-case. We want to write our schedule in terms of epochs, but our training loop iterates the scheduler every mini-batch.
+{cell=complex-schedules}
+```julia
+using ParameterSchedulers: Scheduler
+
+nepochs = 3
+data = [(rand(4, 10), rand([-1, 1], 1, 10)) for _ in 1:3]
+m = Chain(Dense(4, 4, tanh), Dense(4, 1, tanh))
+s = Interpolator(Sequence(1e-2 => 1, Exp(1e-2, 2) => 2), length(data))
+opt = Scheduler(s, Descent())
+for epoch in 1:nepochs
+    for (i, (x, y)) in enumerate(data)
+        g = Flux.gradient(() -> Flux.mse(m(x), y), p)
+        Flux.update!(opt, p, g)
+        println("epoch: $epoch, batch: $i, η: $(opt.optim.eta)")
+    end
+end
 ```

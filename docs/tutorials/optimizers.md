@@ -87,3 +87,5 @@ loss(x, y, m) = Flux.mse(m(x), y)
 cb = () -> @show(opt.optim.eta)
 Flux.@epochs nepochs Flux.train!((x, y) -> loss(x, y, m), params(m), data, opt, cb = cb)
 ```
+
+Finally, you might be interested in reading [Interpolating schedules](#) to see how to specify a schedule in terms of epochs but iterate it at the granularity of batches.

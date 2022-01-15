@@ -4,15 +4,16 @@ using Base.Iterators
 using Flux
 using InfiniteArrays: OneToInf
 
-export Sequence, Loop,
-       Step, Exp, Poly, Inv,
-       Triangle, TriangleDecay2, TriangleExp,
+include("decay.jl")
+export Step, Exp, Poly, Inv
+
+include("cyclic.jl")
+export Triangle, TriangleDecay2, TriangleExp,
        Sin, SinDecay2, SinExp,
        Cos
 
-include("decay.jl")
-include("cyclic.jl")
 include("complex.jl")
+export Sequence, Loop, Interpolator
 
 # TODO
 # Remove this once Optimisers.jl has support

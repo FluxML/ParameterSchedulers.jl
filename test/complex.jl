@@ -35,6 +35,19 @@ end
     end
 end
 
+@testset "Interpolator" begin
+    dt = 1e-3
+    s = Interpolator(sin, dt)
+    @test [s(t) for t in dt:dt:(100 * dt)] ≈ sin.(1:100)
+
+    values = [1, 2, 3]
+    epochs = [10, 10, 30]
+    nbatches = 5
+    s = Interpolator(Sequence([1, 2, 3], epochs), nbatches)
+    correct_seq = vcat([fill(v, nbatches * nepochs) for (v, nepochs) in zip(values, epochs)]...)
+    @test [s(t) for t in 1:(sum(epochs) * nbatches)] == correct_seq
+end
+
 @testset "Stateful" begin
     stateful_s = Stateful(log)
     @test all(next!(stateful_s) == log(i) for i in 1:100)
