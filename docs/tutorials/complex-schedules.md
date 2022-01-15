@@ -67,13 +67,14 @@ s = Interpolator(Sequence(1e-2 => cld(T, dt) / 2, 1e-3 => cld(T, dt) / 2), dt)
 
 # the time range of the simulation in seconds
 trange = dt:dt:T |> collect
-lineplot(trange, s.(trange))
+lineplot(trange, s.(trange); border = :none)
 ```
 Notice that our schedule changes around 1 second (half way through the simulation).
 
 For the second example, we'll look at a machine learning use-case. We want to write our schedule in terms of epochs, but our training loop iterates the scheduler every mini-batch.
 {cell=complex-schedules}
 ```julia
+using Flux
 using ParameterSchedulers: Scheduler
 
 nepochs = 3
