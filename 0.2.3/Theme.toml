@@ -1,18 +1,14 @@
-theme = "flux-theme"
-version = "0.2.1"
+theme = "default"
+version = "0.2.2"
 
 [html]
 default_css = [
     "normalize.css",
-    "https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css",
     "tabulator_simple.min.css",
     "publish.css",
     "default.min.css",
-    "custom.css",
 ]
 default_js = [
-    "https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js",
-    "https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js",
     "versions.js",
     "lunr.js",
     "highlight.min.js",
