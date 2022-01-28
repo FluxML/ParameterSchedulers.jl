@@ -1,6 +1,6 @@
 using Pkg
 
-Pkg.develop("..")
+Pkg.develop(path = "..")
 
 using Publish
 using ParameterSchedulers
