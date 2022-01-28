@@ -207,36 +207,46 @@ Base.iterate(schedule::SinExp, t = 1) = schedule(t), t + 1
 Base.axes(::SinExp) = (OneToInf(),)
 
 """
-    Cos{T, S<:Integer}(range0, range1, period)
-    Cos(;λ0, λ1, period)
+    CosAnneal{T, S<:Integer}(range0, range1, period, restart)
+    CosAnneal(;λ0, λ1, period, restart = true)
 
 A cosine annealing schedule
 (see ["SGDR: Stochastic Gradient Descent with Warm Restarts"](https://arxiv.org/abs/1608.03983v5))
 The output conforms to
 ```text
-abs(λ0 - λ1) * (1 + cos(π * mod(t - 1, period) / period)) / 2 + min(λ0, λ1)
+t̂ = restart ? (t - 1) : mod(t - 1, period)
+abs(λ0 - λ1) * (1 + cos(π * t̂ / period)) / 2 + min(λ0, λ1)
 ```
-This schedule is also referred to as "cosine annealing with warm restarts"
+This schedule is also referred to as "cosine annealing (with warm restarts)"
 in machine learning literature.
 
 # Arguments
 - `range0`/`λ0`: the first range endpoint
 - `range1`/`λ1`: the second range endpoint
 - `period::Integer`: the period
+- `restart::Bool`: use warm-restarts
 """
-struct Cos{T, S<:Integer}
+struct CosAnneal{T, S<:Integer}
     range0::T
     range1::T
     period::S
+    restart::Bool
 end
-Cos(;λ0, λ1, period) = Cos(λ0, λ1, period)
+CosAnneal(;λ0, λ1, period, restart = true) = CosAnneal(λ0, λ1, period, restart)
 
-(schedule::Cos)(t) = _cycle(schedule.range0, schedule.range1,
-                            (1 + cos(π * mod(t - 1, schedule.period) / schedule.period)) / 2)
+function (schedule::CosAnneal)(t)
+    t̂ = schedule.restart ? mod(t - 1, schedule.period) : (t - 1)
 
-Base.eltype(::Type{<:Cos{T}}) where T = T
-Base.IteratorSize(::Type{<:Cos}) = Base.IsInfinite()
+    return _cycle(schedule.range0, schedule.range1,
+                  (1 + cos(π * t̂ / schedule.period)) / 2)
+end
 
-Base.iterate(schedule::Cos, t = 1) = schedule(t), t + 1
+Base.eltype(::Type{<:CosAnneal{T}}) where T = T
+Base.IteratorSize(::Type{<:CosAnneal}) = Base.IsInfinite()
 
-Base.axes(::Cos) = (OneToInf(),)
+Base.iterate(schedule::CosAnneal, t = 1) = schedule(t), t + 1
+
+Base.axes(::CosAnneal) = (OneToInf(),)
+
+Base.@deprecate Cos(range0, range1, period) CosAnneal(range0, range1, period, true)
+Base.@deprecate Cos(;λ0, λ1, period) CosAnneal(λ0 = λ0, λ1 = λ1, period = period)

@@ -1,7 +1,8 @@
 _cycle(λ0, λ1, x) = abs(λ0 - λ1) * x + min(λ0, λ1)
 _tri(t, period) = (2 / π) * abs(asin(sin(π * (t - 1) / period)))
 _sin(t, period) = abs(sin(π * (t - 1) / period))
-_cos(t, period) = (1 + cos(π * mod(t - 1, period) / period)) / 2
+_cos(t, period) = (1 + cos(π * (t - 1) / period)) / 2
+_cosrestart(t, period) = (1 + cos(π * mod(t - 1, period) / period)) / 2
 
 @testset "Triangle" begin
     λ0 = rand()
@@ -88,16 +89,18 @@ end
     @test axes(s) == (OneToInf(),)
 end
 
-@testset "Cos" begin
+@testset "CosAnneal" begin
     λ0 = rand()
     λ1 = rand()
     period = rand(1:10)
-    s = Cos(λ0 = λ0, λ1 = λ1, period = period)
-    @test s == Cos(λ0, λ1, period)
-    @test all(_cycle(λ0, λ1, _cos(t, period)) == s(t) for t in 1:100)
-    @test all(p == s(t) for (t, p) in zip(1:100, s))
-    @test Base.IteratorEltype(typeof(s)) == Base.HasEltype()
-    @test eltype(s) == eltype(λ0)
-    @test Base.IteratorSize(typeof(s)) == Base.IsInfinite()
-    @test axes(s) == (OneToInf(),)
+    @testset for (restart, f) in ((true, _cosrestart), (false, _cos))
+        s = CosAnneal(λ0 = λ0, λ1 = λ1, period = period, restart = restart)
+        @test s == CosAnneal(λ0, λ1, period, restart)
+        @test all(_cycle(λ0, λ1, f(t, period)) == s(t) for t in 1:100)
+        @test all(p == s(t) for (t, p) in zip(1:100, s))
+        @test Base.IteratorEltype(typeof(s)) == Base.HasEltype()
+        @test eltype(s) == eltype(λ0)
+        @test Base.IteratorSize(typeof(s)) == Base.IsInfinite()
+        @test axes(s) == (OneToInf(),)
+    end
 end

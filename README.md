@@ -253,7 +253,7 @@ lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false)
 
 <tr><td>
 
-[`Cos(;λ0, λ1, period)`](# "`Cos`")
+[`CosAnneal(;λ0, λ1, period)`](# "`CosAnneal`")
 
 </td>
 <td>
@@ -268,7 +268,7 @@ lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false)
 ```julia
 using UnicodePlots, ParameterSchedulers
 t = 1:10 |> collect
-s = Cos(λ0 = 0.0, λ1 = 1.0, period = 4)
+s = CosAnneal(λ0 = 0.0, λ1 = 1.0, period = 4)
 lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false)
 ```
 </td></tr>
