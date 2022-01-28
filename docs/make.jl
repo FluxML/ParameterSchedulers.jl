@@ -1,3 +1,7 @@
+using Pkg
+
+Pkg.develop("..")
+
 using Publish
 using ParameterSchedulers
 using Artifacts, LazyArtifacts
