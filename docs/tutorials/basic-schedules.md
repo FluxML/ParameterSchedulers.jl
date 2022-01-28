@@ -66,4 +66,4 @@ println("abs(λ0 - λ1) g(1) + min(λ0, λ1) == s(1): ",
 | [`SinDecay2`](#)      | `λ0`, `λ1`, `period`                     | ``g(t) = \frac{1}{2^{\lfloor (t - 1) / \text{period} \rfloor}} g_{\mathrm{Sin}}(t)`` |
 | [`SinExp`](#)         | `λ0`, `λ1`, `period`, `γ`                | ``g(t) = \gamma^{t - 1} g_{\mathrm{Sin}}(t)`` |
 | [`CosAnneal`](#)      | `λ0`, `λ1`, `period`, `restart == true`  | ``g(t) = \frac{1}{2} \left(1 + \cos \left(\frac{\pi \: \mathrm{mod}(t - 1, \text{period})}{\text{period}}\right) \right)`` |
-| [`CosAnneal`](#)      | `λ0`, `λ1`, `period`, `restart == false` | ``g(t) = \frac{1}{2} \left(1 + \cos \left(\frac{\pi \: (t - 1) / \text{period}}{\text{period}}\right) \right)`` |
+| [`CosAnneal`](#)      | `λ0`, `λ1`, `period`, `restart == false` | ``g(t) = \frac{1}{2} \left(1 + \cos \left(\frac{\pi \: (t - 1)}{\text{period}}\right) \right)`` |

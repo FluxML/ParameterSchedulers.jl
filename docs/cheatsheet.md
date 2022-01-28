@@ -21,9 +21,9 @@ If you are coming from PyTorch or Tensorflow, the following table should help yo
 | N/A                                                                            | `CosineDecayRestarts(lr, first_decay_steps, t_mul, m_mul, alpha)` | N/A                                                   |
 | `SequentialLR(_, schedulers, milestones)`                                      | N/A                                                               | `Sequence(schedulers, milestones)`                    |
 | `ReduceLROnPlateau(_, mode, factor, patience, threshold, 'abs', 0)`            | N/A                                                               | See [below](# "`ReduceLROnPlateau` style schedules")  |
-| `CyclicLR(_, base_lr, max_lr, step_size, step_size, 'triangular', _, None)`    | N/A                                                               | `Triangule(base_lr, max_lr, step_size)`               |
-| `CyclicLR(_, base_lr, max_lr, step_size, step_size, 'triangular2', _, None)`   | N/A                                                               | `TrianguleDecay2(base_lr, max_lr, step_size)`         |
-| `CyclicLR(_, base_lr, max_lr, step_size, step_size, 'exp_range', gamma, None)` | N/A                                                               | `TrianguleExp(base_lr, max_lr, step_size, gamma)`     |
+| `CyclicLR(_, base_lr, max_lr, step_size, step_size, 'triangular', _, None)`    | N/A                                                               | `Triangle(base_lr, max_lr, step_size)`               |
+| `CyclicLR(_, base_lr, max_lr, step_size, step_size, 'triangular2', _, None)`   | N/A                                                               | `TriangleDecay2(base_lr, max_lr, step_size)`         |
+| `CyclicLR(_, base_lr, max_lr, step_size, step_size, 'exp_range', gamma, None)` | N/A                                                               | `TriangleExp(base_lr, max_lr, step_size, gamma)`     |
 | `CyclicLR(_, base_lr, max_lr, step_size, step_size, _, _, scale_fn)`           | N/A                                                               | See [Arbitrary looping schedules](#)                  |
 | N/A                                                                            | `InverseTimeDecay(lr, 1, decay_rate, False)`                      | `Inv(lr, decay_rate, 1)`                              |
 | N/A                                                                            | `InverseTimeDecay(lr, decay_step, decay_rate, False)`             | `Interpolator(Inv(lr, decay_rate, 1), decay_step)`    |
