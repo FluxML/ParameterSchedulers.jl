@@ -10,7 +10,7 @@ export Step, Exp, Poly, Inv
 include("cyclic.jl")
 export Triangle, TriangleDecay2, TriangleExp,
        Sin, SinDecay2, SinExp,
-       Cos
+       CosAnneal
 
 include("complex.jl")
 export Sequence, Loop, Interpolator
@@ -41,14 +41,14 @@ If `opt` does not have a field `eta`, then there is no default behavior
 # Examples
 ```julia
 # cosine annealing schedule for Descent
-julia> s = Cos(λ0 = 0.1, λ1 = 0.8, period = 10);
+julia> s = CosAnneal(λ0 = 0.1, λ1 = 0.8, period = 10);
 
 julia> opt = Scheduler(s, Descent())
-Scheduler(Cos{Float64,Int64}(0.1, 0.8, 10), Descent(0.1))
+Scheduler(CosAnneal{Float64,Int64}(0.1, 0.8, 10), Descent(0.1))
 
 # schedule the momentum term of Momentum
 julia> opt = Scheduler(s, Momentum(); update_func = (o, s) -> o.rho = s)
-Scheduler(Cos{Float64,Int64}(0.1, 0.8, 10), Momentum(0.01, 0.9, IdDict{Any,Any}()))
+Scheduler(CosAnneal{Float64,Int64}(0.1, 0.8, 10), Momentum(0.01, 0.9, IdDict{Any,Any}()))
 ```
 """
 mutable struct Scheduler{T, O, F}

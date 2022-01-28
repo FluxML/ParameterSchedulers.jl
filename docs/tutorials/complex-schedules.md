@@ -80,7 +80,8 @@ using ParameterSchedulers: Scheduler
 nepochs = 3
 data = [(rand(4, 10), rand([-1, 1], 1, 10)) for _ in 1:3]
 m = Chain(Dense(4, 4, tanh), Dense(4, 1, tanh))
-s = Interpolator(Sequence(1e-2 => 1, Exp(1e-2, 2) => 2), length(data))
+p = Flux.params(m)
+s = Interpolator(Sequence(1e-2 => 1, Exp(1e-2, 2.0) => 2), length(data))
 opt = Scheduler(s, Descent())
 for epoch in 1:nepochs
     for (i, (x, y)) in enumerate(data)

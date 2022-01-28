@@ -57,12 +57,13 @@ println("abs(λ0 - λ1) g(1) + min(λ0, λ1) == s(1): ",
 
 [`Triangle`](#) (used in the above example) is a type of cyclic schedule. Below is a list of all the cyclic schedules implemented, and the parameters and cycle functions for each one.
 
-| Schedule         | Parameters                | Cycle Function |
-|:-----------------|:--------------------------|:---------------|
-| [`Triangle`](#)       | `λ0`, `λ1`, `period`      | ``g(t) = \frac{2}{\pi} \left| \arcsin \left( \sin \left(\frac{\pi (t - 1)}{\text{period}} \right) \right) \right|`` |
-| [`TriangleDecay2`](#) | `λ0`, `λ1`, `period`      | ``g(t) = \frac{1}{2^{\lfloor (t - 1) / \text{period} \rfloor}} g_{\mathrm{Triangle}}(t)`` |
-| [`TriangleExp`](#)    | `λ0`, `λ1`, `period`, `γ` | ``g(t) = \gamma^{t - 1} g_{\mathrm{Triangle}}(t)`` |
-| [`Sin`](#)       | `λ0`, `λ1`, `period`      | ``g(t) = \left| \sin \left(\frac{\pi (t - 1)}{\text{period}} \right) \right|`` |
-| [`SinDecay2`](#) | `λ0`, `λ1`, `period`      | ``g(t) = \frac{1}{2^{\lfloor (t - 1) / \text{period} \rfloor}} g_{\mathrm{Sin}}(t)`` |
-| [`SinExp`](#)    | `λ0`, `λ1`, `period`, `γ` | ``g(t) = \gamma^{t - 1} g_{\mathrm{Sin}}(t)`` |
-| [`Cos`](#)       | `λ0`, `λ1`, `period`      | ``g(t) = \frac{1}{2} \left(1 + \cos \left(\frac{\pi \: \mathrm{mod}(t - 1, \text{period})}{\text{period}}\right) \right)`` |
+| Schedule              | Parameters                               | Cycle Function |
+|:----------------------|:-----------------------------------------|:---------------|
+| [`Triangle`](#)       | `λ0`, `λ1`, `period`                     | ``g(t) = \frac{2}{\pi} \left| \arcsin \left( \sin \left(\frac{\pi (t - 1)}{\text{period}} \right) \right) \right|`` |
+| [`TriangleDecay2`](#) | `λ0`, `λ1`, `period`                     | ``g(t) = \frac{1}{2^{\lfloor (t - 1) / \text{period} \rfloor}} g_{\mathrm{Triangle}}(t)`` |
+| [`TriangleExp`](#)    | `λ0`, `λ1`, `period`, `γ`                | ``g(t) = \gamma^{t - 1} g_{\mathrm{Triangle}}(t)`` |
+| [`Sin`](#)            | `λ0`, `λ1`, `period`                     | ``g(t) = \left| \sin \left(\frac{\pi (t - 1)}{\text{period}} \right) \right|`` |
+| [`SinDecay2`](#)      | `λ0`, `λ1`, `period`                     | ``g(t) = \frac{1}{2^{\lfloor (t - 1) / \text{period} \rfloor}} g_{\mathrm{Sin}}(t)`` |
+| [`SinExp`](#)         | `λ0`, `λ1`, `period`, `γ`                | ``g(t) = \gamma^{t - 1} g_{\mathrm{Sin}}(t)`` |
+| [`CosAnneal`](#)      | `λ0`, `λ1`, `period`, `restart == true`  | ``g(t) = \frac{1}{2} \left(1 + \cos \left(\frac{\pi \: \mathrm{mod}(t - 1, \text{period})}{\text{period}}\right) \right)`` |
+| [`CosAnneal`](#)      | `λ0`, `λ1`, `period`, `restart == false` | ``g(t) = \frac{1}{2} \left(1 + \cos \left(\frac{\pi \: (t - 1) / \text{period}}{\text{period}}\right) \right)`` |
