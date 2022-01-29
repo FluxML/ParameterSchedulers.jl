@@ -4,6 +4,8 @@ using Base.Iterators
 using Flux
 using InfiniteArrays: OneToInf
 
+include("interface.jl")
+
 include("decay.jl")
 export Step, Exp, Poly, Inv
 
@@ -14,6 +16,8 @@ export Triangle, TriangleDecay2, TriangleExp,
 
 include("complex.jl")
 export Sequence, Loop, Interpolator
+
+include("utils.jl")
 
 # TODO
 # Remove this once Optimisers.jl has support

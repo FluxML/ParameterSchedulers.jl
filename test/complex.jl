@@ -6,7 +6,7 @@
     i = rand(UInt) + 1
     @test s(i) == ((i > step_sizes[1]) ? sqrt(i - step_sizes[1]) : log(i))
     @test all(p == ((t > step_sizes[1]) ? sqrt(t - step_sizes[1]) : log(t))
-              for (t, p) in zip(1:(sum(step_sizes) + 10), s))
+              for (t, p) in zip(1:50, s))
     @test Base.IteratorEltype(typeof(s)) == Base.EltypeUnknown()
     @test Base.IteratorSize(typeof(s)) == Base.SizeUnknown()
 
@@ -14,7 +14,7 @@
     s = Sequence(params, step_sizes)
     @test s(i) == ((i > step_sizes[1]) ? params[2] : params[1])
     @test all(p == ((t > step_sizes[1]) ? params[2] : params[1])
-              for (t, p) in zip(1:(sum(step_sizes) + 10), s))
+              for (t, p) in zip(1:50, s))
 end
 
 @testset "Loop" begin

@@ -15,38 +15,43 @@ where `sum(step_sizes[1:(i - 1)]) < t <= sum(step_sizes[1:i])`
 - `decay`/`γ`: the decay rate
 - `step_sizes::Union{<:Integer, <:Vector}`: the step sizes
 """
-struct Step{T, S<:Integer}
+struct Step{T, S} <: AbstractSchedule{false}
     start::T
     decay::T
-    step_sizes::Vector{S}
+    step_sizes::S
+
+    function Step(λ::T, γ::T, step_sizes::S) where {T, S}
+        _step_sizes = (S <: Integer) ? Iterators.repeated(step_sizes) : step_sizes
+
+        return new{T, typeof(_step_sizes)}(λ, γ, _step_sizes)
+    end
 end
-Step(λ, γ, step_size::Integer) = Step(λ, γ, [step_size])
 Step(;λ, γ, step_sizes) = Step(λ, γ, step_sizes)
 
+Base.eltype(::Type{<:Step{T}}) where T = T
+
 function (schedule::Step)(t)
-    i = findlast(x -> t > x, cumsum(schedule.step_sizes))
-    i = isnothing(i) ? 0 :
-            (i >= length(schedule.step_sizes)) ? length(schedule.step_sizes) - 1 : i
+    acc = 0
+    itr = Iterators.takewhile(enumerate(schedule.step_sizes)) do (i, step)
+        acc += step
+        return t > acc
+    end |> collect
+    i = isempty(itr) ? 0 : first(last(itr))
 
     return schedule.start * schedule.decay^i
 end
 
-Base.eltype(::Type{<:Step{T}}) where T = T
-Base.IteratorSize(::Type{<:Step}) = Base.IsInfinite()
-
-function Base.iterate(schedule::Step, state = (1, 1, 1))
-    t, i, t0 = state
-    if (i < length(schedule.step_sizes)) && (t >= t0 + schedule.step_sizes[i])
-        # move onto next step range
+function Base.iterate(schedule::Step, state = (1, 0, 0, schedule.step_sizes))
+    t, i, t0, itr = state
+    _itr = Iterators.peel(itr)
+    if !isnothing(_itr) && (t > t0 + _itr[1]) # move onto next step range
         i += 1
-        t0 = t
+        t0 += _itr[1]
+        itr = _itr[2]
     end
 
-    return schedule.start * schedule.decay^(i - 1), (t + 1, i, t0)
+    return schedule.start * schedule.decay^i, (t + 1, i, t0, itr)
 end
-
-Base.axes(::Step) = (OneToInf(),)
-
 
 """
     Exp{T}(start, decay)
@@ -62,20 +67,15 @@ The output conforms to
 - `start`/`λ`: the base value
 - `decay`/`γ`: the decay rate
 """
-struct Exp{T}
+struct Exp{T} <: AbstractSchedule{false}
     start::T
     decay::T
 end
 Exp(;λ, γ) = Exp(λ, γ)
 
-(schedule::Exp)(t) = schedule.start * schedule.decay^(t - 1)
-
 Base.eltype(::Type{<:Exp{T}}) where T = T
-Base.IteratorSize(::Type{<:Exp}) = Base.IsInfinite()
 
-Base.iterate(schedule::Exp, t = 1) = schedule(t), t + 1
-
-Base.axes(::Exp) = (OneToInf(),)
+(schedule::Exp)(t) = schedule.start * schedule.decay^(t - 1)
 
 """
     Poly{T, S<:Integer}(start, degree, max_iter)
@@ -92,26 +92,20 @@ The output conforms to
 - `degree`/`p::Integer`: the degree of the polynomial
 - `max_iter::Integer`: the total number of iterations
 """
-struct Poly{T, S<:Integer}
+struct Poly{T, S<:Integer} <: AbstractSchedule{true}
     start::T
     degree::S
     max_iter::S
 end
 Poly(;λ, p, max_iter) = Poly(λ, p, max_iter)
 
+Base.eltype(::Type{<:Poly{T}}) where T = T
+Base.length(schedule::Poly) = schedule.max_iter
+
 function (schedule::Poly)(t)
     (t <= length(schedule)) || throw(BoundsError("Cannot index Poly for t > max_iter"))
     return schedule.start * (1 - (t - 1) / schedule.max_iter)^schedule.degree
 end
-
-Base.eltype(::Type{<:Poly{T}}) where T = T
-Base.IteratorSize(::Type{<:Poly}) = Base.HasLength()
-Base.length(schedule::Poly) = schedule.max_iter
-
-Base.iterate(schedule::Poly, t = 1) = schedule(t), t + 1
-
-Base.axes(schedule::Poly) = 1:length(schedule)
-
 
 """
     Inv{T, S<:Integer}(start, decay, degree)
@@ -128,18 +122,13 @@ The output conforms to
 - `decay`/`γ`: the decay rate
 - `degree`/`p::Integer`: the degree of decay
 """
-struct Inv{T<:Number, S<:Integer}
+struct Inv{T, S<:Integer} <: AbstractSchedule{false}
     start::T
     decay::T
     degree::S
 end
 Inv(;λ, γ, p) = Inv(λ, γ, p)
 
-(schedule::Inv)(t) = schedule.start / (1 + (t - 1) * schedule.decay)^schedule.degree
-
 Base.eltype(::Type{<:Inv{T}}) where T = T
-Base.IteratorSize(::Type{<:Inv}) = Base.IsInfinite()
 
-Base.iterate(schedule::Inv, t = 1) = schedule(t), t + 1
-
-Base.axes(::Inv) = (OneToInf(),)
+(schedule::Inv)(t) = schedule.start / (1 + (t - 1) * schedule.decay)^schedule.degree

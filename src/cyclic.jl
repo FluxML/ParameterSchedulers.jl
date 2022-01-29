@@ -18,21 +18,16 @@ abs(λ0 - λ1) * (2 / π) * abs(asin(sin(π * (t - 1) / period))) + min(λ0, λ1
 - `range1`/`λ1`: the second range endpoint
 - `period::Integer`: the period
 """
-struct Triangle{T, S<:Integer}
+struct Triangle{T, S<:Integer} <: AbstractSchedule{false}
     range0::T
     range1::T
     period::S
 end
 Triangle(;λ0, λ1, period) = Triangle(λ0, λ1, period)
 
-(schedule::Triangle)(t) = _cycle(schedule.range0, schedule.range1, _tri(t, schedule.period))
-
 Base.eltype(::Type{<:Triangle{T}}) where T = T
-Base.IteratorSize(::Type{<:Triangle}) = Base.IsInfinite()
 
-Base.iterate(schedule::Triangle, t = 1) = schedule(t), t + 1
-
-Base.axes(::Triangle) = (OneToInf(),)
+(schedule::Triangle)(t) = _cycle(schedule.range0, schedule.range1, _tri(t, schedule.period))
 
 """
     TriangleDecay2{T, S<:Integer}(range0, range1, period)
@@ -51,22 +46,17 @@ where `Triangle(t)` is `(2 / π) * abs(asin(sin(π * (t - 1) / schedule.period))
 - `range1`/`λ1`: the second range endpoint
 - `period::Integer`: the period
 """
-struct TriangleDecay2{T, S<:Integer}
+struct TriangleDecay2{T, S<:Integer} <: AbstractSchedule{false}
     range0::T
     range1::T
     period::S
 end
 TriangleDecay2(;λ0, λ1, period) = TriangleDecay2(λ0, λ1, period)
 
+Base.eltype(::Type{<:TriangleDecay2{T}}) where T = T
+
 (schedule::TriangleDecay2)(t) = _cycle(schedule.range0, schedule.range1,
                                        _tri(t, schedule.period) / (2^fld(t - 1, schedule.period)))
-
-Base.eltype(::Type{<:TriangleDecay2{T}}) where T = T
-Base.IteratorSize(::Type{<:TriangleDecay2}) = Base.IsInfinite()
-
-Base.iterate(schedule::TriangleDecay2, t = 1) = schedule(t), t + 1
-
-Base.axes(::TriangleDecay2) = (OneToInf(),)
 
 """
     TriangleExp{T, S<:Integer}(range0, range1, period, decay)
@@ -87,7 +77,7 @@ where `Triangle(t)` is `(2 / π) * abs(asin(sin(π * (t - 1) / schedule.period))
 - `period::Integer`: the period
 - `decay`/`γ`: the decay rate
 """
-struct TriangleExp{T, S<:Integer}
+struct TriangleExp{T, S<:Integer} <: AbstractSchedule{false}
     range0::T
     range1::T
     period::S
@@ -95,17 +85,10 @@ struct TriangleExp{T, S<:Integer}
 end
 TriangleExp(;λ0, λ1, period, γ) = TriangleExp(λ0, λ1, period, γ)
 
-startvalue(schedule::TriangleExp) = schedule.tri.λ0
-endvalue(schedule::TriangleExp) = schedule.tri.λ1
+Base.eltype(::Type{<:TriangleExp{T}}) where T = T
+
 (schedule::TriangleExp)(t) = _cycle(schedule.range0, schedule.range1,
                                     _tri(t, schedule.period) * schedule.decay^(t - 1))
-
-Base.eltype(::Type{<:TriangleExp{T}}) where T = T
-Base.IteratorSize(::Type{<:TriangleExp}) = Base.IsInfinite()
-
-Base.iterate(schedule::TriangleExp, t = 1) = schedule(t), t + 1
-
-Base.axes(::TriangleExp) = (OneToInf(),)
 
 """
     Sin{T, S<:Integer}(range0, range1, period)
@@ -122,21 +105,16 @@ abs(λ0 - λ1) * abs(sin(π * (t - 1) / period)) + min(λ0, λ1)
 - `range1`/`λ1`: the second range endpoint
 - `period::Integer`: the period
 """
-struct Sin{T, S<:Integer}
+struct Sin{T, S<:Integer} <: AbstractSchedule{false}
     range0::T
     range1::T
     period::S
 end
 Sin(;λ0, λ1, period) = Sin(λ0, λ1, period)
 
-(schedule::Sin)(t) = _cycle(schedule.range0, schedule.range1, _sin(t, schedule.period))
-
 Base.eltype(::Type{<:Sin{T}}) where T = T
-Base.IteratorSize(::Type{<:Sin}) = Base.IsInfinite()
 
-Base.iterate(schedule::Sin, t = 1) = schedule(t), t + 1
-
-Base.axes(::Sin) = (OneToInf(),)
+(schedule::Sin)(t) = _cycle(schedule.range0, schedule.range1, _sin(t, schedule.period))
 
 """
     SinDecay2{T, S<:Integer}(range0, range1, period)
@@ -154,22 +132,17 @@ where `Sin(t)` is `abs(sin(π * (t - 1) / period))` (see [`Sin`](#)).
 - `range1`/`λ1`: the second range endpoint
 - `period::Integer`: the period
 """
-struct SinDecay2{T, S<:Integer}
+struct SinDecay2{T, S<:Integer} <: AbstractSchedule{false}
     range0::T
     range1::T
     period::S
 end
 SinDecay2(;λ0, λ1, period) = SinDecay2(λ0, λ1, period)
 
+Base.eltype(::Type{<:SinDecay2{T}}) where T = T
+
 (schedule::SinDecay2)(t) = _cycle(schedule.range0, schedule.range1,
                                   _sin(t, schedule.period) / (2^fld(t - 1, schedule.period)))
-
-Base.eltype(::Type{<:SinDecay2{T}}) where T = T
-Base.IteratorSize(::Type{<:SinDecay2}) = Base.IsInfinite()
-
-Base.iterate(schedule::SinDecay2, t = 1) = schedule(t), t + 1
-
-Base.axes(::SinDecay2) = (OneToInf(),)
 
 """
     SinExp{T, S<:Integer}(range0, range1, period, decay)
@@ -188,7 +161,7 @@ where `Sin(t)` is `abs(sin(π * (t - 1) / period))` (see [`Sin`](#)).
 - `period::Integer`: the period
 - `decay`/`γ`: the decay rate
 """
-struct SinExp{T, S<:Integer}
+struct SinExp{T, S<:Integer} <: AbstractSchedule{false}
     range0::T
     range1::T
     period::S
@@ -196,15 +169,10 @@ struct SinExp{T, S<:Integer}
 end
 SinExp(;λ0, λ1, period, γ) = SinExp(λ0, λ1, period, γ)
 
+Base.eltype(::Type{<:SinExp{T}}) where T = T
+
 (schedule::SinExp)(t) = _cycle(schedule.range0, schedule.range1,
                                _sin(t, schedule.period) * schedule.decay^(t - 1))
-
-Base.eltype(::Type{<:SinExp{T}}) where T = T
-Base.IteratorSize(::Type{<:SinExp}) = Base.IsInfinite()
-
-Base.iterate(schedule::SinExp, t = 1) = schedule(t), t + 1
-
-Base.axes(::SinExp) = (OneToInf(),)
 
 """
     CosAnneal{T, S<:Integer}(range0, range1, period, restart)
@@ -226,7 +194,7 @@ in machine learning literature.
 - `period::Integer`: the period
 - `restart::Bool`: use warm-restarts
 """
-struct CosAnneal{T, S<:Integer}
+struct CosAnneal{T, S<:Integer} <: AbstractSchedule{false}
     range0::T
     range1::T
     period::S
@@ -234,19 +202,14 @@ struct CosAnneal{T, S<:Integer}
 end
 CosAnneal(;λ0, λ1, period, restart = true) = CosAnneal(λ0, λ1, period, restart)
 
+Base.eltype(::Type{<:CosAnneal{T}}) where T = T
+
 function (schedule::CosAnneal)(t)
     t̂ = schedule.restart ? mod(t - 1, schedule.period) : (t - 1)
 
     return _cycle(schedule.range0, schedule.range1,
                   (1 + cos(π * t̂ / schedule.period)) / 2)
 end
-
-Base.eltype(::Type{<:CosAnneal{T}}) where T = T
-Base.IteratorSize(::Type{<:CosAnneal}) = Base.IsInfinite()
-
-Base.iterate(schedule::CosAnneal, t = 1) = schedule(t), t + 1
-
-Base.axes(::CosAnneal) = (OneToInf(),)
 
 Base.@deprecate Cos(range0, range1, period) CosAnneal(range0, range1, period, true)
 Base.@deprecate Cos(;λ0, λ1, period) CosAnneal(λ0 = λ0, λ1 = λ1, period = period)
