@@ -12,3 +12,21 @@ the symmetric function evaluates to `f(t)`, and when `t ∈ [period / 2, period)
 the symmetric functions evaluates to `f(period - t)`.
 """
 symmetric(f, period) = t -> (t < period / 2) ? f(t) : f(period - t)
+
+# Iterators.peel used to throw a BoundsError
+# ref: https://github.com/JuliaLang/julia/pull/39607
+if VERSION >= v"1.7"
+    _peel(itr) = Iterators.peel(itr)
+else
+    function _peel(itr)
+        try
+            return Iterators.peel(itr)
+        catch e
+            if e isa BoundsError
+                return nothing
+            else
+                rethrow(e)
+            end
+        end
+    end
+end

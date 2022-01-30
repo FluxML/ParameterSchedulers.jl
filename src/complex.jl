@@ -97,7 +97,7 @@ end
 
 function Base.iterate(schedule::Sequence, state = (1, 1, 0, schedule.step_sizes))
     t, i, t0, itr = state
-    _itr = Iterators.peel(itr)
+    _itr = _peel(itr)
     if !isnothing(_itr) && (t > t0 + _itr[1]) # move onto next step range
         if !isempty(_itr[2])
             i += 1
