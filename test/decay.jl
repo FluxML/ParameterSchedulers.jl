@@ -4,14 +4,14 @@
     step_sizes = [rand(1:10), rand(1:10)]
     s = Step(λ = λ, γ = γ, step_sizes = step_sizes)
     @test s == Step(λ, γ, step_sizes)
-    @test λ ≈ [s(t) for t in 1:step_sizes[1]]
-    @test λ * γ ≈ [s(t) for t in (step_sizes[1] + 1):(step_sizes[1] + step_sizes[2])]
-    @test λ * γ^2 ≈ [s(t) for t in (step_sizes[1] + step_sizes[2] + 1):50]
+    @test fill(λ, step_sizes[1]) ≈ [s(t) for t in 1:step_sizes[1]]
+    @test fill(λ * γ, step_sizes[2]) ≈ [s(t) for t in (step_sizes[1] + 1):(step_sizes[1] + step_sizes[2])]
+    @test fill(λ * γ^2, 50 - sum(step_sizes)) ≈ [s(t) for t in (step_sizes[1] + step_sizes[2] + 1):50]
     @test all(p == s(t) for (t, p) in zip(1:100, s))
     s = Step(λ, γ, step_sizes[1])
-    @test λ ≈ [s(t) for t in 1:step_sizes[1]]
-    @test λ * γ ≈ [s(t) for t in (step_sizes[1] + 1):(2 * step_sizes[1])]
-    @test λ * γ^2 ≈ [s(t) for t in (2 * step_sizes[1] + 1):(3 * step_sizes[1])]
+    @test fill(λ, step_sizes[1]) ≈ [s(t) for t in 1:step_sizes[1]]
+    @test fill(λ * γ, step_sizes[1]) ≈ [s(t) for t in (step_sizes[1] + 1):(2 * step_sizes[1])]
+    @test fill(λ * γ^2, step_sizes[1]) ≈ [s(t) for t in (2 * step_sizes[1] + 1):(3 * step_sizes[1])]
     @test Base.IteratorEltype(typeof(s)) == Base.HasEltype()
     @test eltype(s) == eltype(λ)
     @test Base.IteratorSize(typeof(s)) == Base.IsInfinite()
