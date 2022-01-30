@@ -44,28 +44,28 @@
 <hr />
 <p><a href="../docstrings.html">API Reference</a></p>
 </div>
-        <article id="content"><div class='docs' id='Sin'>
-<p><code>public</code> <code>Sin</code> — <code>parametric type</code></p>
+        <article id="content"><div class='docs' id='AbstractSchedule'>
+<p><code>private</code> <code>AbstractSchedule</code> — <code>parametric type</code></p>
 <div class='doc' id='1'>
-<pre><code>Sin(range, offset, period)
-Sin(;λ0, λ1, period)
+<pre><code>AbstractSchedule{IsFinite}
 </code></pre>
-<p>A sine wave schedule with <code>period</code>.
-The output conforms to</p>
-<pre><code class="language-text">abs(λ0 - λ1) * abs(sin(π * (t - 1) / period)) + min(λ0, λ1)
-</code></pre>
-<h1 id="arguments"><a href="#arguments" class="anchor"></a>Arguments</h1>
+<p>Inherit from this type to create a custom schedule.
+Type parameter <code>IsFinite</code> can take three values:</p>
 <ul>
-<li><code>range == abs(λ0 - λ1)</code>: the dynamic range (given by the endpoints)</li>
-<li><code>offset == min(λ0, λ1)</code>: the offset / minimum value</li>
-<li><code>period::Integer</code>: the period</li>
+<li><code>true</code>: for finite schedules</li>
+<li><code>false</code>: for infinite schedules</li>
+<li><code>missing</code>: for higher-order schedules where the length is unknown
+(similar to <code>Base.SizeUnknown()</code>)</li>
+<li><code>T</code>: a type <code>T</code> that indicates all iterator interface functions
+should forward to this type</li>
 </ul>
+<p>Read the <a href="../docs/interfaces/generic.html#generic-interface">generic interface</a> docs section for more.</p>
 </div>
 </div>
 </article>
         <div id="page-navigation">
-            <a id="previous-page" title="Previous" href="ParameterSchedulers.Sequence.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.2426 6.34317L14.8284 4.92896L7.75739 12L14.8285 19.0711L16.2427 17.6569L10.5858 12L16.2426 6.34317Z" fill="currentColor" /></svg></a>
-            <a id="next-page" title="Next" href="ParameterSchedulers.Stateful.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.5858 6.34317L12 4.92896L19.0711 12L12 19.0711L10.5858 17.6569L16.2427 12L10.5858 6.34317Z" fill="currentColor" /></svg></a>
+            <a id="previous-page" title="Previous" href="..&#x2F;docstrings.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.2426 6.34317L14.8284 4.92896L7.75739 12L14.8285 19.0711L16.2427 17.6569L10.5858 12L16.2426 6.34317Z" fill="currentColor" /></svg></a>
+            <a id="next-page" title="Next" href="ParameterSchedulers.Constant.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.5858 6.34317L12 4.92896L19.0711 12L12 19.0711L10.5858 17.6569L16.2427 12L10.5858 6.34317Z" fill="currentColor" /></svg></a>
         </div>
         <footer>
             Built with <a target="_blank" href="https://github.com/MichaelHatherly/Publish.jl">Publish.jl</a> and the <a target="_blank" href="https://julialang.org">Julia Language</a>.

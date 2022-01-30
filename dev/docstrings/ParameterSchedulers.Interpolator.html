@@ -47,8 +47,8 @@
         <article id="content"><div class='docs' id='Interpolator'>
 <p><code>public</code> <code>Interpolator</code> — <code>parametric type</code></p>
 <div class='doc' id='1'>
-<pre><code>Interpolator{T, S}
-Interpolator(schedule, rate)
+<pre><code>Interpolator{T, S, F}
+Interpolator(schedule, rate, ceil_fn = x -&gt; ceil(Int, x))
 </code></pre>
 <p>A schedule whose output is <code>schedule(t / rate)</code> (i.e. it interpolates <code>schedule(t)</code>).</p>
 <p>This can be useful when your code iterates over real numbers at a fixed rate
@@ -56,6 +56,7 @@ Interpolator(schedule, rate)
 but you want to use a schedule that iterates discretely over integers.</p>
 <p>It could also be used to specify <code>schedule</code> in units of epochs,
 while iterating it in units of mini-batches.</p>
+<p>Specify <code>ceil_fn</code> to apply a ceiling (or flooring) function to <code>t / rate</code>.</p>
 </div>
 </div>
 </article>

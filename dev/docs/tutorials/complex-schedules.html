@@ -200,12 +200,43 @@ end
 <pre><code class="plaintext cell-output cell-stream">epoch: 1, batch: 1, η: 0.01
 epoch: 1, batch: 2, η: 0.01
 epoch: 1, batch: 3, η: 0.01
-epoch: 2, batch: 1, η: 0.0062996052494743646
-epoch: 2, batch: 2, η: 0.007937005259840998
+epoch: 2, batch: 1, η: 0.01
+epoch: 2, batch: 2, η: 0.01
 epoch: 2, batch: 3, η: 0.01
-epoch: 3, batch: 1, η: 0.012599210498948734
-epoch: 3, batch: 2, η: 0.015874010519681993
+epoch: 3, batch: 1, η: 0.02
+epoch: 3, batch: 2, η: 0.02
 epoch: 3, batch: 3, η: 0.02
+</code></pre>
+<h2 id="composing-schedules"><a href="#composing-schedules" class="anchor"></a>Composing schedules</h2>
+<p>While the functionality above is already quite powerful, we are still limited to constant values for our schedule’s fields. Just like we use schedules to adjust our model’s hyper-parameters, we might want to use schedules to adjust our schedule’s fields! You can do this with <a href="../../docstrings/ParameterSchedulers.ComposedSchedule.html"><code>ComposedSchedule</code></a>.</p>
+<p>In fact, many of the cyclic schedules are built on top of this feature. As an exercise, we will build <code>SinDecay10</code> which behaves similar to <code>SinDecay2</code> but dropping the peak amplitude by a factor of 10 each time.</p>
+<pre><code cell="complex-schedules" class="language-julia">function SinDecay10(range, offset, period)
+    parameters = (Step(range, 0.1, period), offset, period)
+    ComposedSchedule(Sin(range, offset, period), parameters)
+end
+
+SinDecay10(0.5, 0.1, 5)
+</code></pre>
+<pre><code class="plaintext cell-output cell-result" class="language-plaintext">ComposedSchedule(Sin{Float64, Int64}, (Step{Float64, Repeated{Int64}}(0.5, 0.1, Repeated{Int64}(5)), Constant{Float64}(0.1), Constant{Int64}(5)))</code></pre>
+<p>We passed <code>ComposedSchedule</code> two arguments:</p>
+<ul>
+<li>a schedule whose fields we want to compose</li>
+<li>a tuple that dictates how each field changes</li>
+</ul>
+<p>The <code>parameters</code> matches the arguments to the <code>Sin</code> positional constructor: <code>(range, offset, period)</code>. We specified that the range should decay exponentially by a factor of 10 every <code>period</code> steps.</p>
+<p>By default, <code>ComposedSchedule</code> will use the default constructor to create a new instance of the composed schedule. In our example, this corresponds to something like</p>
+<pre><code class="language-julia">ps = map(p -&gt; p(t), composed.parameters)
+s = typeof(composed.schedule)(ps...)
+</code></pre>
+<p>If this is not going to work for your schedule, then you can use the three argument form: <code>ComposedSchedule(compose_fn, schedule, parameters)</code>. <code>schedule</code> and <code>parameters</code> are the same arguments as before. <code>compose_fn</code> is the new argument that is a function of the form <code>(schedule, parameter_values) -&gt; new_schedule</code>. Here is an dummy example that works the same as before but illustrates how to use <code>compose_fn</code>.</p>
+<pre><code class="language-julia">function SinDecay10(range, offset, period)
+    parameters = (Step(range, 0.1, period), offset, period)
+    ComposedSchedule(Sin(range, offset, period), parameters) do schedule, parameter_values
+        @show schedule
+        @show parameter_values
+        Sin(parameter_values...)
+    end
+end
 </code></pre>
 </article>
         <div id="page-navigation">

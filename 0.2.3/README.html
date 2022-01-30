@@ -54,7 +54,8 @@ using ParameterSchedulers: Scheduler
 opt = Scheduler(Exp(λ = 1e-2, γ = 0.8), Momentum())
 </code></pre>
 <h2 id="available-schedules"><a href="#available-schedules" class="anchor"></a>Available Schedules</h2>
-<p>This is a table of the common schedules implemented, but ParameterSchedulers provides utilities for creating more exotic schedules as well. You can read <a href="https://arxiv.org/abs/1908.06477">this paper</a> for more information on the schedules below.</p>
+<p>This is a table of the common schedules implemented, but ParameterSchedulers provides utilities for creating more exotic schedules as well. The <a href="docs/tutorials/complex-schedules.html#complex-schedules">higher order schedules</a> should make it so that you will rarely need to write a schedule from scratch.</p>
+<p>You can read <a href="https://arxiv.org/abs/1908.06477">this paper</a> for more information on the schedules below.</p>
 <table>
 <thead>
 <tr>
@@ -74,9 +75,9 @@ opt = Scheduler(Exp(λ = 1e-2, γ = 0.8), Momentum())
 <td> Decay </td>
 <td style="text-align:center">
 <pre><code class="plaintext cell-output cell-result" class="language-plaintext">    +---------------+ 
-    |⠉⠙⢄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀|
-    |⠀⠀⠈⠒⠒⠒⠒⡄⠀⠀⠀⠀⠀⠀⠀|
-    |⠀⠀⠀⠀⠀⠀⠀⠈⠦⠤⠤⠤⠤⠤⠤|
+    |⠉⠉⢆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀|
+    |⠀⠀⠀⠉⠉⠉⠉⢢⠀⠀⠀⠀⠀⠀⠀|
+    |⠀⠀⠀⠀⠀⠀⠀⠀⠉⠉⠑⢄⣀⣀⣀|
     +---------------+ </code></pre>
 </td></tr>
 <tr><td>
@@ -94,31 +95,17 @@ opt = Scheduler(Exp(λ = 1e-2, γ = 0.8), Momentum())
     +---------------+ </code></pre>
 </td></tr>
 <tr><td>
-<p><a href="docstrings/ParameterSchedulers.Poly.html" title="`Poly`"><code>Poly(;λ, p, max_iter)</code></a></p>
+<p><a href="docstrings/ParameterSchedulers.CosAnneal.html" title="`CosAnneal`"><code>CosAnneal(;λ0, λ1, period)</code></a></p>
 </td>
 <td>
-<p>Polynomial decay at degree <code>p</code></p>
+<p><a href="https://arxiv.org/abs/1608.03983v5">Cosine annealing</a></p>
 </td>
-<td> Decay </td>
+<td> Cyclic </td>
 <td style="text-align:center">
 <pre><code class="plaintext cell-output cell-result" class="language-plaintext">    +---------------+ 
-    |⠉⠢⢄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀|
-    |⠀⠀⠀⠉⠒⠤⣀⠀⠀⠀⠀⠀⠀⠀⠀|
-    |⠀⠀⠀⠀⠀⠀⠀⠉⠓⠒⠤⠤⣀⣀⣀|
-    +---------------+ </code></pre>
-</td></tr>
-<tr><td>
-<p><a href="docstrings/ParameterSchedulers.Inv.html" title="`Inv`"><code>Inv(;λ, γ, p)</code></a></p>
-</td>
-<td>
-<p>Inverse decay at rate <code>(1 + tγ)^p</code></p>
-</td>
-<td> Decay </td>
-<td style="text-align:center">
-<pre><code class="plaintext cell-output cell-result" class="language-plaintext">    +---------------+ 
-    |⢇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀|
-    |⠈⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀|
-    |⠀⠈⠑⠤⠤⢄⣀⣀⣀⣀⣀⣀⣀⣀⣀|
+    |⠉⠒⡄⠀⠀⠀⡎⠑⠢⡀⠀⠀⢠⠋⠒|
+    |⠀⠀⠈⢆⠀⢰⠁⠀⠀⠑⡄⠀⡜⠀⠀|
+    |⠀⠀⠀⠀⠣⡇⠀⠀⠀⠀⠈⢶⠁⠀⠀|
     +---------------+ </code></pre>
 </td></tr>
 <tr><td>
@@ -164,6 +151,34 @@ opt = Scheduler(Exp(λ = 1e-2, γ = 0.8), Momentum())
     +---------------+ </code></pre>
 </td></tr>
 <tr><td>
+<p><a href="docstrings/ParameterSchedulers.Poly.html" title="`Poly`"><code>Poly(;λ, p, max_iter)</code></a></p>
+</td>
+<td>
+<p>Polynomial decay at degree <code>p</code></p>
+</td>
+<td> Decay </td>
+<td style="text-align:center">
+<pre><code class="plaintext cell-output cell-result" class="language-plaintext">    +---------------+ 
+    |⠉⠢⢄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀|
+    |⠀⠀⠀⠉⠒⠤⣀⠀⠀⠀⠀⠀⠀⠀⠀|
+    |⠀⠀⠀⠀⠀⠀⠀⠉⠓⠒⠤⠤⣀⣀⣀|
+    +---------------+ </code></pre>
+</td></tr>
+<tr><td>
+<p><a href="docstrings/ParameterSchedulers.Inv.html" title="`Inv`"><code>Inv(;λ, γ, p)</code></a></p>
+</td>
+<td>
+<p>Inverse decay at rate <code>(1 + tγ)^p</code></p>
+</td>
+<td> Decay </td>
+<td style="text-align:center">
+<pre><code class="plaintext cell-output cell-result" class="language-plaintext">    +---------------+ 
+    |⢇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀|
+    |⠈⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀|
+    |⠀⠈⠑⠤⠤⢄⣀⣀⣀⣀⣀⣀⣀⣀⣀|
+    +---------------+ </code></pre>
+</td></tr>
+<tr><td>
 <p><a href="docstrings/ParameterSchedulers.Sin.html" title="`Sin`"><code>Sin(;λ0, λ1, period)</code></a></p>
 </td>
 <td>
@@ -203,20 +218,6 @@ opt = Scheduler(Exp(λ = 1e-2, γ = 0.8), Momentum())
     |⠀⡼⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀|
     |⢰⠁⢇⠀⡜⢇⠀⠀⡀⠀⠀⠀⠀⠀⠀|
     |⡎⠀⠘⡼⠀⠈⢆⠎⠈⢆⣀⠜⠢⣀⠤|
-    +---------------+ </code></pre>
-</td></tr>
-<tr><td>
-<p><a href="docstrings/ParameterSchedulers.CosAnneal.html" title="`CosAnneal`"><code>CosAnneal(;λ0, λ1, period)</code></a></p>
-</td>
-<td>
-<p><a href="https://arxiv.org/abs/1608.03983v5">Cosine annealing</a></p>
-</td>
-<td> Cyclic </td>
-<td style="text-align:center">
-<pre><code class="plaintext cell-output cell-result" class="language-plaintext">    +---------------+ 
-    |⠉⠒⡄⠀⠀⠀⡎⠑⠢⡀⠀⠀⢠⠋⠒|
-    |⠀⠀⠈⢆⠀⢰⠁⠀⠀⠑⡄⠀⡜⠀⠀|
-    |⠀⠀⠀⠀⠣⡇⠀⠀⠀⠀⠈⢶⠁⠀⠀|
     +---------------+ </code></pre>
 </td></tr>
 </tbody>

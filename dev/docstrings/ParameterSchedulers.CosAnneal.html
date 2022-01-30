@@ -47,7 +47,7 @@
         <article id="content"><div class='docs' id='CosAnneal'>
 <p><code>public</code> <code>CosAnneal</code> — <code>parametric type</code></p>
 <div class='doc' id='1'>
-<pre><code>CosAnneal{T, S&lt;:Integer}(range0, range1, period, restart)
+<pre><code>CosAnneal(range, offset, period, restart)
 CosAnneal(;λ0, λ1, period, restart = true)
 </code></pre>
 <p>A cosine annealing schedule
@@ -60,8 +60,8 @@ abs(λ0 - λ1) * (1 + cos(π * t̂ / period)) / 2 + min(λ0, λ1)
 in machine learning literature.</p>
 <h1 id="arguments"><a href="#arguments" class="anchor"></a>Arguments</h1>
 <ul>
-<li><code>range0</code>/<code>λ0</code>: the first range endpoint</li>
-<li><code>range1</code>/<code>λ1</code>: the second range endpoint</li>
+<li><code>range == abs(λ0 - λ1)</code>: the dynamic range (given by the endpoints)</li>
+<li><code>offset == min(λ0, λ1)</code>: the offset / minimum value</li>
 <li><code>period::Integer</code>: the period</li>
 <li><code>restart::Bool</code>: use warm-restarts</li>
 </ul>
