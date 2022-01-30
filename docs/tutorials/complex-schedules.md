@@ -91,3 +91,40 @@ for epoch in 1:nepochs
     end
 end
 ```
+
+## Composing schedules
+
+While the functionality above is already quite powerful, we are still limited to constant values for our schedule's fields. Just like we use schedules to adjust our model's hyper-parameters, we might want to use schedules to adjust our schedule's fields! You can do this with [`ComposedSchedule`](#).
+
+In fact, many of the cyclic schedules are built on top of this feature. As an exercise, we will build `SinDecay10` which behaves similar to `SinDecay2` but dropping the peak amplitude by a factor of 10 each time.
+{cell=complex-schedules}
+```julia
+function SinDecay10(range, offset, period)
+    parameters = (Step(range, 0.1, period), offset, period)
+    ComposedSchedule(Sin(range, offset, period), parameters)
+end
+
+SinDecay10(0.5, 0.1, 5)
+```
+We passed `ComposedSchedule` two arguments:
+- a schedule whose fields we want to compose
+- a tuple that dictates how each field changes
+
+The `parameters` matches the arguments to the `Sin` positional constructor: `(range, offset, period)`. We specified that the range should decay exponentially by a factor of 10 every `period` steps.
+
+By default, `ComposedSchedule` will use the default constructor to create a new instance of the composed schedule. In our example, this corresponds to something like
+```julia
+ps = map(p -> p(t), composed.parameters)
+s = typeof(composed.schedule)(ps...)
+```
+If this is not going to work for your schedule, then you can use the three argument form: `ComposedSchedule(compose_fn, schedule, parameters)`. `schedule` and `parameters` are the same arguments as before. `compose_fn` is the new argument that is a function of the form `(schedule, parameter_values) -> new_schedule`. Here is an dummy example that works the same as before but illustrates how to use `compose_fn`.
+```julia
+function SinDecay10(range, offset, period)
+    parameters = (Step(range, 0.1, period), offset, period)
+    ComposedSchedule(Sin(range, offset, period), parameters) do schedule, parameter_values
+        @show schedule
+        @show parameter_values
+        Sin(parameter_values...)
+    end
+end
+```

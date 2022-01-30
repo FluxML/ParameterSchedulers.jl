@@ -189,7 +189,7 @@ end
 SinExp(;λ0, λ1, period, γ) = _sinexp(abs(λ0 - λ1), min(λ0, λ1), period, γ)
 
 """
-    CosAnneal{T, S<:Integer}(range0, range1, period, restart)
+    CosAnneal(range, offset, period, restart)
     CosAnneal(;λ0, λ1, period, restart = true)
 
 A cosine annealing schedule
@@ -203,27 +203,27 @@ This schedule is also referred to as "cosine annealing (with warm restarts)"
 in machine learning literature.
 
 # Arguments
-- `range0`/`λ0`: the first range endpoint
-- `range1`/`λ1`: the second range endpoint
+- `range == abs(λ0 - λ1)`: the dynamic range (given by the endpoints)
+- `offset == min(λ0, λ1)`: the offset / minimum value
 - `period::Integer`: the period
 - `restart::Bool`: use warm-restarts
 """
 struct CosAnneal{T, S<:Integer} <: AbstractSchedule{false}
-    range0::T
-    range1::T
+    range::T
+    offset::T
     period::S
     restart::Bool
 end
-CosAnneal(;λ0, λ1, period, restart = true) = CosAnneal(λ0, λ1, period, restart)
+CosAnneal(;λ0, λ1, period, restart = true) =
+    CosAnneal(abs(λ0 - λ1), min(λ0, λ1), period, restart)
 
 Base.eltype(::Type{<:CosAnneal{T}}) where T = T
 
 function (schedule::CosAnneal)(t)
     t̂ = schedule.restart ? mod(t - 1, schedule.period) : (t - 1)
 
-    return _cycle(schedule.range0, schedule.range1,
-                  (1 + cos(π * t̂ / schedule.period)) / 2)
+    return schedule.range * (1 + cos(π * t̂ / schedule.period)) / 2 + schedule.offset
 end
 
-Base.@deprecate Cos(range0, range1, period) CosAnneal(range0, range1, period, true)
+Base.@deprecate Cos(range0, range1, period) CosAnneal(λ0 = range0, λ1 = range1, period = period)
 Base.@deprecate Cos(;λ0, λ1, period) CosAnneal(λ0 = λ0, λ1 = λ1, period = period)

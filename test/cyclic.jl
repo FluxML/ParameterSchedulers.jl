@@ -95,7 +95,7 @@ end
     period = rand(1:10)
     @testset for (restart, f) in ((true, _cosrestart), (false, _cos))
         s = CosAnneal(λ0 = λ0, λ1 = λ1, period = period, restart = restart)
-        @test s == CosAnneal(λ0, λ1, period, restart)
+        @test s == CosAnneal(abs(λ0 - λ1), min(λ0, λ1), period, restart)
         @test [_cycle(λ0, λ1, f(t, period)) for t in 1:100] ≈ s.(1:100)
         @test all(p == s(t) for (t, p) in zip(1:100, s))
         @test Base.IteratorEltype(typeof(s)) == Base.HasEltype()
