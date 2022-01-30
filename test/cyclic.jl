@@ -5,8 +5,8 @@ _cos(t, period) = (1 + cos(π * (t - 1) / period)) / 2
 _cosrestart(t, period) = (1 + cos(π * mod(t - 1, period) / period)) / 2
 
 @testset "Triangle" begin
-    λ0 = rand()
-    λ1 = rand()
+    λ0 = 0.5 * rand()
+    λ1 = 0.5 * rand() + 1
     period = rand(1:10)
     s = Triangle(λ0 = λ0, λ1 = λ1, period = period)
     @test s == Triangle(abs(λ0 - λ1), min(λ0, λ1), period)
@@ -19,8 +19,8 @@ _cosrestart(t, period) = (1 + cos(π * mod(t - 1, period) / period)) / 2
 end
 
 @testset "TriangleDecay2" begin
-    λ0 = rand()
-    λ1 = rand()
+    λ0 = 0.5 * rand()
+    λ1 = 0.5 * rand() + 1
     period = rand(1:10)
     s = TriangleDecay2(λ0 = λ0, λ1 = λ1, period = period)
     @test s == TriangleDecay2(abs(λ0 - λ1), min(λ0, λ1), period)
@@ -33,8 +33,8 @@ end
 end
 
 @testset "TriangleExp" begin
-    λ0 = rand()
-    λ1 = rand()
+    λ0 = 0.5 * rand()
+    λ1 = 0.5 * rand() + 1
     γ = rand()
     period = rand(1:10)
     s = TriangleExp(λ0 = λ0, λ1 = λ1, period = period, γ = γ)
@@ -47,8 +47,8 @@ end
 end
 
 @testset "Sin" begin
-    λ0 = rand()
-    λ1 = rand()
+    λ0 = 0.5 * rand()
+    λ1 = 0.5 * rand() + 1
     period = rand(1:10)
     s = Sin(λ0 = λ0, λ1 = λ1, period = period)
     @test s == Sin(abs(λ0 - λ1), min(λ0, λ1), period)
@@ -61,8 +61,8 @@ end
 end
 
 @testset "SinDecay2" begin
-    λ0 = rand()
-    λ1 = rand()
+    λ0 = 0.5 * rand()
+    λ1 = 0.5 * rand() + 1
     period = rand(1:10)
     s = SinDecay2(λ0 = λ0, λ1 = λ1, period = period)
     @test s == SinDecay2(abs(λ0 - λ1), min(λ0, λ1), period)
@@ -75,8 +75,8 @@ end
 end
 
 @testset "SinExp" begin
-    λ0 = rand()
-    λ1 = rand()
+    λ0 = 0.5 * rand()
+    λ1 = 0.5 * rand() + 1
     γ = rand()
     period = rand(1:10)
     s = SinExp(λ0 = λ0, λ1 = λ1, period = period, γ = γ)
@@ -90,8 +90,8 @@ end
 end
 
 @testset "CosAnneal" begin
-    λ0 = rand()
-    λ1 = rand()
+    λ0 = 0.5 * rand()
+    λ1 = 0.5 * rand() + 1
     period = rand(1:10)
     @testset for (restart, f) in ((true, _cosrestart), (false, _cos))
         s = CosAnneal(λ0 = λ0, λ1 = λ1, period = period, restart = restart)
