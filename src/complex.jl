@@ -47,16 +47,13 @@ end
 
 A constant schedule that is always `value`.
 """
-struct Constant{T}
+struct Constant{T} <: AbstractSchedule{false}
     value::T
 end
 
-(schedule::Constant)(t) = schedule.value
-
 Base.eltype(::Type{<:Constant{T}}) where T = T
-Base.IteratorSize(::Type{<:Constant}) = Base.IsInfinite()
 
-Base.iterate(schedule::Constant, t = 1) = schedule(t), t + 1
+(schedule::Constant)(t) = schedule.value
 
 """
     Sequence{T, S}
@@ -73,7 +70,7 @@ Note that `schedules` can also be a vector of numbers (not just schedules).
 - `schedules`: a vector of schedules or numbers
 - `step_sizes`: a vector of iteration lengths for each schedule
 """
-struct Sequence{T, S}
+struct Sequence{T, S} <: AbstractSchedule{missing}
     schedules::T
     step_sizes::S
 
@@ -85,28 +82,31 @@ struct Sequence{T, S}
 end
 Sequence(stages::Pair...) = Sequence(first.(stages), last.(stages))
 
-function (schedule::Sequence)(t)
-    accum_steps = cumsum(schedule.step_sizes)
-    i = findlast(x -> t > x, accum_steps)
-    i = isnothing(i) ? 1 :
-            (i >= length(schedule.schedules)) ? length(schedule.schedules) : i + 1
-    toffset = (i > 1) ? t - accum_steps[i - 1] : t
+Base.IteratorEltype(::Type{<:Sequence}) = Base.EltypeUnknown()
 
-    return schedule.schedules[i](toffset)
+function (schedule::Sequence)(t)
+    acc = 0
+    itr = Iterators.takewhile(enumerate(schedule.step_sizes)) do (i, step)
+        acc += step
+        return t > acc
+    end |> collect
+    i, toffset = isempty(itr) ? (0, 0) : last(itr)
+
+    return schedule.schedules[min(i + 1, end)](t - toffset)
 end
 
-Base.IteratorEltype(::Type{<:Sequence}) = Base.EltypeUnknown()
-Base.IteratorSize(::Type{<:Sequence}) = Base.SizeUnknown()
-
-function Base.iterate(schedule::Sequence, state = (1, 1, 1))
-    t, i, t0 = state
-    if (i < length(schedule.step_sizes)) && (t >= t0 + schedule.step_sizes[i])
-        # move onto next step range
-        i += 1
-        t0 = t
+function Base.iterate(schedule::Sequence, state = (1, 1, 0, schedule.step_sizes))
+    t, i, t0, itr = state
+    _itr = _peel(itr)
+    if !isnothing(_itr) && (t > t0 + _itr[1]) # move onto next step range
+        if !isempty(_itr[2])
+            i += 1
+            t0 += _itr[1]
+        end
+        itr = _itr[2]
     end
 
-    return schedule.schedules[i](t - t0 + 1), (t + 1, i, t0)
+    return schedule.schedules[i](t - t0), (t + 1, i, t0, itr)
 end
 
 """
@@ -120,25 +120,20 @@ Create a schedule that loops `f` every `period` iterations.
 - `f`: the schedule to loop
 - `period::Integer`: how often to loop
 """
-struct Loop{T, S<:Integer}
+struct Loop{T, S<:Integer} <: AbstractSchedule{false}
     f::T
     period::S
 end
 Loop(f, period) = Loop(f, period)
 
-(schedule::Loop)(t) = schedule.f(mod1(t, schedule.period))
-
 Base.IteratorEltype(::Type{<:Loop{T}}) where T = Base.IteratorEltype(T)
 Base.eltype(::Type{<:Loop{T}}) where T = eltype(T)
-Base.IteratorSize(::Type{<:Loop}) = Base.IsInfinite()
 
-Base.iterate(schedule::Loop, t = 1) = schedule(t), t + 1
-
-Base.axes(::Loop) = (OneToInf(),)
+(schedule::Loop)(t) = schedule.f(mod1(t, schedule.period))
 
 """
-    Interpolator{T, S}
-    Interpolator(schedule, rate)
+    Interpolator{T, S, F}
+    Interpolator(schedule, rate, ceil_fn = x -> ceil(Int, x))
 
 A schedule whose output is `schedule(t / rate)` (i.e. it interpolates `schedule(t)`).
 
@@ -148,31 +143,51 @@ but you want to use a schedule that iterates discretely over integers.
 
 It could also be used to specify `schedule` in units of epochs,
 while iterating it in units of mini-batches.
+
+Specify `ceil_fn` to apply a ceiling (or flooring) function to `t / rate`.
 """
-struct Interpolator{T, S}
+struct Interpolator{T, S, F} <: AbstractSchedule{T}
     schedule::T
     rate::S
+    ceil_fn::F
 end
-
-(interpolator::Interpolator)(t) = interpolator.schedule(t / interpolator.rate)
+Interpolator(schedule, rate) = Interpolator(schedule, rate, x -> ceil(Int, x))
 
 Base.eltype(::Type{<:Interpolator{T}}) where T = eltype(T)
 Base.IteratorEltype(::Type{<:Interpolator{T}}) where T = Base.IteratorEltype(T)
 Base.IteratorSize(::Type{<:Interpolator{T}}) where T = Base.IteratorSize(T)
 
-Base.iterate(interpolator::Interpolator, t = 1) = interpolator(t), t + 1
+(interpolator::Interpolator)(t) =
+    interpolator.schedule(interpolator.ceil_fn(t / interpolator.rate))
 
-"""
-    reverse(f, period)
+struct ComposedSchedule{T, S, F} <: AbstractSchedule{T}
+    compose_fn::F
+    schedule::T
+    parameters::S
 
-Return a reverse function such that `reverse(f, period)(t) == f(period - t)`.
-"""
-reverse(f, period) = t -> f(period - t)
-"""
-    symmetric(f, period)
+    function ComposedSchedule(compose_fn::F, schedule::T, parameters::S) where {T, F, S}
+        _parameters = map(p -> p isa Number ? Constant(p) : p, parameters)
 
-Return a symmetric function such that for `t ∈ [1, period / 2)`,
-the symmetric function evaluates to `f(t)`, and when `t ∈ [period / 2, period)`,
-the symmetric functions evaluates to `f(period - t)`.
-"""
-symmetric(f, period) = t -> (t < period / 2) ? f(t) : f(period - t)
+        return new{T, typeof(_parameters), F}(compose_fn, schedule, _parameters)
+    end
+end
+ComposedSchedule(schedule::T, parameters::Union{Tuple, AbstractVector}) where T =
+    ComposedSchedule((s, ps) -> T(ps...), schedule, parameters)
+
+function Base.show(io::IO, schedule::ComposedSchedule{T}) where T
+    ioc = IOContext(io, :compact => true)
+    print(ioc, "ComposedSchedule(", T, ", ")
+    show(ioc, schedule.parameters)
+    print(io, ")")
+end
+
+Base.eltype(::Type{<:ComposedSchedule{T}}) where T = eltype(T)
+Base.length(s::ComposedSchedule) = length(s.schedule)
+Base.axes(s::ComposedSchedule) = axes(s.schedule)
+
+function (composition::ComposedSchedule)(t)
+    ps = map(p -> p(t), composition.parameters)
+    s = composition.compose_fn(composition.schedule, ps)
+
+    return s(t)
+end

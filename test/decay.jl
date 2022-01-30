@@ -1,20 +1,17 @@
 @testset "Step" begin
-    function _getbucket(t, buckets)
-        i = findlast(x -> t > x, cumsum(buckets))
-        i = isnothing(i) ? 1 : i + 1
-
-        return i
-    end
-
     λ = rand()
     γ = rand()
     step_sizes = [rand(1:10), rand(1:10)]
     s = Step(λ = λ, γ = γ, step_sizes = step_sizes)
     @test s == Step(λ, γ, step_sizes)
-    @test Step(λ, γ, 1).step_sizes == [1]
-    @test all(λ == s(t) for t in 1:step_sizes[1])
-    @test all(λ * γ == s(t) for t in (step_sizes[1] + 1):(step_sizes[1] + step_sizes[2] + 1))
+    @test fill(λ, step_sizes[1]) ≈ [s(t) for t in 1:step_sizes[1]]
+    @test fill(λ * γ, step_sizes[2]) ≈ [s(t) for t in (step_sizes[1] + 1):(step_sizes[1] + step_sizes[2])]
+    @test fill(λ * γ^2, 50 - sum(step_sizes)) ≈ [s(t) for t in (step_sizes[1] + step_sizes[2] + 1):50]
     @test all(p == s(t) for (t, p) in zip(1:100, s))
+    s = Step(λ, γ, step_sizes[1])
+    @test fill(λ, step_sizes[1]) ≈ [s(t) for t in 1:step_sizes[1]]
+    @test fill(λ * γ, step_sizes[1]) ≈ [s(t) for t in (step_sizes[1] + 1):(2 * step_sizes[1])]
+    @test fill(λ * γ^2, step_sizes[1]) ≈ [s(t) for t in (2 * step_sizes[1] + 1):(3 * step_sizes[1])]
     @test Base.IteratorEltype(typeof(s)) == Base.HasEltype()
     @test eltype(s) == eltype(λ)
     @test Base.IteratorSize(typeof(s)) == Base.IsInfinite()
@@ -26,7 +23,7 @@ end
     γ = rand()
     s = Exp(λ = λ, γ = γ)
     @test s == Exp(λ, γ)
-    @test all(λ * γ^(t - 1) == s(t) for t in 1:100)
+    @test [λ * γ^(t - 1) for t in 1:100] == s.(1:100)
     @test all(p == s(t) for (t, p) in zip(1:100, s))
     @test Base.IteratorEltype(typeof(s)) == Base.HasEltype()
     @test eltype(s) == eltype(λ)
@@ -40,7 +37,7 @@ end
     max_iter = rand(1:100)
     s = Poly(λ = λ, p = p, max_iter = max_iter)
     @test s == Poly(λ, p, max_iter)
-    @test all(λ * (1 - (t - 1) / max_iter)^p == s(t) for t in 1:max_iter)
+    @test [λ * (1 - (t - 1) / max_iter)^p for t in 1:max_iter] == s.(1:max_iter)
     @test all(p == s(t) for (t, p) in zip(1:max_iter, s))
     @test Base.IteratorEltype(typeof(s)) == Base.HasEltype()
     @test eltype(s) == eltype(λ)
@@ -56,7 +53,7 @@ end
     p = rand(1:20)
     s = Inv(λ = λ, p = p, γ = γ)
     @test s == Inv(λ, γ, p)
-    @test all(λ / (1 + (t - 1) * γ)^p == s(t) for t in 1:100)
+    @test [λ / (1 + (t - 1) * γ)^p for t in 1:100] == s.(1:100)
     @test all(p == s(t) for (t, p) in zip(1:100, s))
     @test Base.IteratorEltype(typeof(s)) == Base.HasEltype()
     @test eltype(s) == eltype(λ)
