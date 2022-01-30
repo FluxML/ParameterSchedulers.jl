@@ -166,7 +166,7 @@ struct ComposedSchedule{T, S, F} <: AbstractSchedule{T}
         return new{F, T, S}(compose_fn, schedule, _parameters)
     end
 end
-ComposedSchedule(schedule::T, parameters::Union{Tuple, AbstractVector}) =
+ComposedSchedule(schedule::T, parameters::Union{Tuple, AbstractVector}) where T =
     ComposedSchedule(T, schedule, parameters)
 
 Base.eltype(::Type{<:ComposedSchedule{T}}) where T = eltype(T)
