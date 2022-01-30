@@ -37,7 +37,7 @@ end
 
 @testset "Interpolator" begin
     dt = 1e-3
-    s = Interpolator(sin, dt)
+    s = Interpolator(sin, dt, identity)
     @test [s(t) for t in dt:dt:(100 * dt)] ≈ sin.(1:100)
 
     values = [1, 2, 3]

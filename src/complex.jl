@@ -132,8 +132,8 @@ Base.eltype(::Type{<:Loop{T}}) where T = eltype(T)
 (schedule::Loop)(t) = schedule.f(mod1(t, schedule.period))
 
 """
-    Interpolator{T, S}
-    Interpolator(schedule, rate)
+    Interpolator{T, S, F}
+    Interpolator(schedule, rate, ceil_fn = x -> ceil(Int, x))
 
 A schedule whose output is `schedule(t / rate)` (i.e. it interpolates `schedule(t)`).
 
@@ -143,17 +143,22 @@ but you want to use a schedule that iterates discretely over integers.
 
 It could also be used to specify `schedule` in units of epochs,
 while iterating it in units of mini-batches.
+
+Specify `ceil_fn` to apply a ceiling (or flooring) function to `t / rate`.
 """
-struct Interpolator{T, S} <: AbstractSchedule{T}
+struct Interpolator{T, S, F} <: AbstractSchedule{T}
     schedule::T
     rate::S
+    ceil_fn::F
 end
+Interpolator(schedule, rate) = Interpolator(schedule, rate, x -> ceil(Int, x))
 
 Base.eltype(::Type{<:Interpolator{T}}) where T = eltype(T)
 Base.IteratorEltype(::Type{<:Interpolator{T}}) where T = Base.IteratorEltype(T)
 Base.IteratorSize(::Type{<:Interpolator{T}}) where T = Base.IteratorSize(T)
 
-(interpolator::Interpolator)(t) = interpolator.schedule(t / interpolator.rate)
+(interpolator::Interpolator)(t) =
+    interpolator.schedule(interpolator.ceil_fn(t / interpolator.rate))
 
 struct ComposedSchedule{T, S, F} <: AbstractSchedule{T}
     compose_fn::F
@@ -163,14 +168,22 @@ struct ComposedSchedule{T, S, F} <: AbstractSchedule{T}
     function ComposedSchedule(compose_fn::F, schedule::T, parameters::S) where {T, F, S}
         _parameters = map(p -> p isa Number ? Constant(p) : p, parameters)
 
-        return new{F, T, S}(compose_fn, schedule, _parameters)
+        return new{T, typeof(_parameters), F}(compose_fn, schedule, _parameters)
     end
 end
 ComposedSchedule(schedule::T, parameters::Union{Tuple, AbstractVector}) where T =
-    ComposedSchedule(T, schedule, parameters)
+    ComposedSchedule((s, ps) -> T(ps...), schedule, parameters)
+
+function Base.show(io::IO, schedule::ComposedSchedule{T}) where T
+    ioc = IOContext(io, :compact => true)
+    print(ioc, "ComposedSchedule(", T, ", ")
+    show(ioc, schedule.parameters)
+    print(io, ")")
+end
 
 Base.eltype(::Type{<:ComposedSchedule{T}}) where T = eltype(T)
 Base.length(s::ComposedSchedule) = length(s.schedule)
+Base.axes(s::ComposedSchedule) = axes(s.schedule)
 
 function (composition::ComposedSchedule)(t)
     ps = map(p -> p(t), composition.parameters)

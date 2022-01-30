@@ -22,6 +22,5 @@ Base.IteratorSize(::Type{<:AbstractSchedule{T}}) where T = Base.IteratorSize(T)
 Base.axes(::AbstractSchedule{false}) = (OneToInf(),)
 Base.axes(s::AbstractSchedule{true}) = 1:length(s)
 Base.axes(::AbstractSchedule{missing}) = (OneToInf(),)
-Base.axes(::AbstractSchedule{T}) where T = axes(T)
 
 Base.iterate(schedule::AbstractSchedule, t = 1) = schedule(t), t + 1
