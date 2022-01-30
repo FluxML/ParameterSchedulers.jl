@@ -4,8 +4,8 @@
     s = Sequence(schedules, step_sizes)
     @test s == Sequence([s => t for (s, t) in zip(schedules, step_sizes)]...)
     i = rand(UInt) + 1
-    @test s(i) == ((i > step_sizes[1]) ? sqrt(i - step_sizes[1]) : log(i))
-    @test all(p == ((t > step_sizes[1]) ? sqrt(t - step_sizes[1]) : log(t))
+    @test s(i) ≈ ((i > step_sizes[1]) ? sqrt(i - step_sizes[1]) : log(i))
+    @test all(p ≈ ((t > step_sizes[1]) ? sqrt(t - step_sizes[1]) : log(t))
               for (t, p) in zip(1:50, s))
     @test Base.IteratorEltype(typeof(s)) == Base.EltypeUnknown()
     @test Base.IteratorSize(typeof(s)) == Base.SizeUnknown()
