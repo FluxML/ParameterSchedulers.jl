@@ -23,7 +23,7 @@ struct Triangle{T, S<:Integer} <: AbstractSchedule{false}
     offset::T
     period::S
 end
-function Triangle(range::T, offset::T, period::S) where {T, S<:Integer}
+function Triangle(range::T, offset::T, period::S) where {T, S}
     @warn """Triangle(range0, range1, period) is now Triangle(range, offset, period).
              To specify by endpoints, use the keyword argument form.
              This message will be removed in the next version.""" _id=(:tri) maxlog=1
@@ -117,7 +117,7 @@ struct Sin{T, S<:Integer} <: AbstractSchedule{false}
     offset::T
     period::S
 end
-function Sin(range::T, offset::T, period::S) where {T, S<:Integer}
+function Sin(range::T, offset::T, period::S) where {T, S}
     @warn """Sin(range0, range1, period) is now Sin(range, offset, period).
              To specify by endpoints, use the keyword argument form.
              This message will be removed in the next version.""" _id=(:sine) maxlog=1
