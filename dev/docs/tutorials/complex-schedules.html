@@ -106,21 +106,21 @@ t = 1:nepochs |&gt; collect
 lineplot(t, s.(t); border = :none)
 </code></pre>
 <pre><code class="plaintext cell-output cell-result" class="language-plaintext">       ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
-   0.5 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
-       ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
-       ⠀⠀⠀⢀⡀⠀⠀⢀⡀⠀⠀⢀⡀⠀⠀⢀⡀⠀⠀⠀⡀⢸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
-       ⠀⠀⠀⡇⡇⠀⠀⡇⡇⠀⠀⡇⡇⠀⠀⡇⡇⠀⠀⡏⡇⡎⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
-       ⠀⠀⠀⡇⡇⠀⠀⡇⡇⠀⠀⡇⡇⠀⠀⡇⡇⠀⠀⡇⡇⡇⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
-       ⠀⠀⠀⡇⢱⠀⠀⡇⢱⠀⠀⡇⢸⠀⠀⡇⢱⠀⠀⡇⢸⡇⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
-       ⠀⠀⢸⠀⢸⠀⢸⠀⢸⠀⢸⠀⢸⠀⢰⠁⢸⠀⢰⠁⢸⡇⢇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
-       ⠀⠀⢸⠀⢸⠀⢸⠀⢸⠀⢸⠀⢸⠀⢸⠀⢸⠀⢸⠀⢸⡇⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
-       ⠀⠀⢸⠀⢸⡀⢸⠀⠸⡀⢸⠀⠸⡀⢸⠀⢸⡀⢸⠀⠸⡇⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
-       ⠀⠀⢸⠀⠀⡇⡜⠀⠀⡇⡜⠀⠀⡇⡜⠀⠀⡇⡸⠀⠀⠀⠘⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
-       ⠀⠀⡇⠀⠀⡇⡇⠀⠀⡇⡇⠀⠀⡇⡇⠀⠀⡇⡇⠀⠀⠀⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
-       ⠀⠀⡇⠀⠀⡇⡇⠀⠀⡇⡇⠀⠀⡇⡇⠀⠀⡇⡇⠀⠀⠀⠀⢣⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
-       ⠀⠀⡇⠀⠀⢇⡇⠀⠀⢇⡇⠀⠀⢇⡇⠀⠀⢣⡇⠀⠀⠀⠀⠸⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
-       ⠀⢀⠇⠀⠀⢸⠁⠀⠀⢸⠃⠀⠀⢸⠃⠀⠀⢸⠃⠀⠀⠀⠀⠀⢣⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
-     0 ⠀⢸⠀⠀⠀⢸⠀⠀⠀⢸⠀⠀⠀⢸⠀⠀⠀⢸⠀⠀⠀⠀⠀⠀⠀⠣⢄⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⠀ 
+   0.5 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+       ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+       ⠀⠀⠀⢀⡀⠀⠀⢀⡀⠀⠀⢀⡀⠀⠀⢀⡀⠀⠀⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+       ⠀⠀⠀⡇⡇⠀⠀⡇⡇⠀⠀⡇⡇⠀⠀⡇⡇⠀⠀⡏⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+       ⠀⠀⠀⡇⡇⠀⠀⡇⡇⠀⠀⡇⡇⠀⠀⡇⡇⠀⠀⡇⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+       ⠀⠀⠀⡇⢱⠀⠀⡇⢱⠀⠀⡇⢸⠀⠀⡇⢱⠀⠀⡇⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+       ⠀⠀⢸⠀⢸⠀⢸⠀⢸⠀⢸⠀⢸⠀⢰⠁⢸⠀⢰⠁⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+       ⠀⠀⢸⠀⢸⠀⢸⠀⢸⠀⢸⠀⢸⠀⢸⠀⢸⠀⢸⠀⢸⢠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+       ⠀⠀⢸⠀⢸⡀⢸⠀⠸⡀⢸⠀⠸⡀⢸⠀⢸⡀⢸⠀⠸⡟⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+       ⠀⠀⢸⠀⠀⡇⡜⠀⠀⡇⡜⠀⠀⡇⡜⠀⠀⡇⡸⠀⠀⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+       ⠀⠀⡇⠀⠀⡇⡇⠀⠀⡇⡇⠀⠀⡇⡇⠀⠀⡇⡇⠀⠀⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+       ⠀⠀⡇⠀⠀⡇⡇⠀⠀⡇⡇⠀⠀⡇⡇⠀⠀⡇⡇⠀⠀⠀⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+       ⠀⠀⡇⠀⠀⢇⡇⠀⠀⢇⡇⠀⠀⢇⡇⠀⠀⢣⡇⠀⠀⠀⠈⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+       ⠀⢀⠇⠀⠀⢸⠁⠀⠀⢸⠃⠀⠀⢸⠃⠀⠀⢸⠃⠀⠀⠀⠀⠱⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+     0 ⠀⢸⠀⠀⠀⢸⠀⠀⠀⢸⠀⠀⠀⢸⠀⠀⠀⢸⠀⠀⠀⠀⠀⠀⠑⢤⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⠀ 
        ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
        ⠀0⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀50⠀ </code></pre>
 <p>Alternatively, we might simply wish to manually set the parameter every interval. <code>Sequence</code> also accepts a vector of numbers.</p>
@@ -146,6 +146,30 @@ lineplot(t, s.(t); border = :none)
      0 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠒⠀ 
        ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
        ⠀0⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀20⠀ </code></pre>
+<p><code>Sequence</code> also accepts <a href="https://docs.julialang.org/en/v1.7/manual/arrays/#Generator-Expressions"><code>Base.Generators</code></a>.</p>
+<pre><code cell="complex-schedules" class="language-julia">s = Sequence(2 / t for t in 1:10)
+t = 1:50 |&gt; collect
+lineplot(t, s.(t); border = :none)
+</code></pre>
+<pre><code class="plaintext cell-output cell-result" class="language-plaintext">     ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+   2 ⠀⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+     ⠀⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+     ⠀⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+     ⠀⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+     ⠀⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+     ⠀⠀⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+     ⠀⠀⢇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+     ⠀⠀⠸⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+     ⠀⠀⠀⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+     ⠀⠀⠀⠘⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+     ⠀⠀⠀⠀⠉⠙⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+     ⠀⠀⠀⠀⠀⠀⠑⠒⠒⢆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+     ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠉⠉⠣⠤⠤⠤⠤⢄⣀⣀⣀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+     ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠉⠉⠉⠉⠉⠒⠒⠒⠒⠒⠒⠒⠲⠤⠤⠤⠀ 
+   0 ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+     ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
+     ⠀0⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀50⠀ </code></pre>
+<p>We can also pass a separate generator for <code>schedules</code> and <code>step_sizes</code>. When only a single generator is passed, <code>step_sizes</code> is the iterator that the generator is based on.</p>
 <h2 id="interpolating-schedules"><a href="#interpolating-schedules" class="anchor"></a>Interpolating schedules</h2>
 <p>Sometimes, we want to specify a schedule in different units than our iteration state. Below, we’ll see two common examples where this might be the case, and how <a href="../../docstrings/ParameterSchedulers.Interpolator.html"><code>Interpolator</code></a> can make our lives a bit easier.</p>
 <p>In our first example, we’ll consider a situation where our iteration state is continuous. This is typical in differential equation solvers where we iterate over time (i.e. over <code>dt, 2dt, 3dt, ...</code> where <code>dt</code> is the solver time step). Conceptually, each step over time should move our schedule forward “by one” (i.e. over iteration states <code>1, 2, 3, ...</code>). To move from one iteration scheme to the other, we want to <em>interpolate</em> our time range at a rate of <code>dt</code>.</p>
