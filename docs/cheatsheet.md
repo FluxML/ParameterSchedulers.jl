@@ -32,7 +32,7 @@ If you are coming from PyTorch or Tensorflow, the following table should help yo
 
 ## Cosine annealing variants
 
-In addition to the plain cosine annealing w/ warm restarts schedule, we may want to decay the peak learning rate or increase the period. Both can be done using [`ComposedSchedule`](#).
+In addition to the plain cosine annealing w/ warm restarts schedule, we may want to decay the peak learning rate or increase the period. Both can be done using [`ComposedSchedule`](#) or [`Sequence`](#).
 
 Let's start with the simpler task: decaying the learning rate.
 ```julia
@@ -41,7 +41,15 @@ s = ComposedSchedule(CosAnneal(range, offset, period),
                      (Step(range, m_mul, period), offset, period))
 ```
 
+To increase the period by a fixed multiple, we should think of each period of the schedule as an individual schedule concatenated together. This is exactly what [`Sequence`](#) is except that there is no limit to the number of periods that we concatenate together. Fortunately, `Sequence` accepts [`Base.Generators`](https://docs.julialang.org/en/v1.7/manual/arrays/#Generator-Expressions). When combined with [InfiniteArrays.jl](https://github.com/JuliaArrays/InfiniteArrays.jl), we can create an infinite sequence of individual schedules.
+```julia
+using InfiniteArrays: OneToInf
 
+# increase period by factor t_mul
+e = Exp(period, t_mul)
+s = Sequence(CosAnneal(range, offset, e(t)) for t in OneToInf(),
+             e(t) for t in OneToInf())
+```
 
 ## `ReduceLROnPlateau` style schedules
 

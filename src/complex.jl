@@ -74,6 +74,11 @@ struct Sequence{T, S} <: AbstractSchedule{missing}
     schedules::T
     step_sizes::S
 
+    function Sequence(schedules::Base.Generator, step_sizes)
+        _schedules = Iterators.map(s -> s isa Number ? Constant(s) : s, schedules)
+
+        new{typeof(_schedules), typeof(step_sizes)}(_schedules, step_sizes)
+    end
     function Sequence(schedules, step_sizes)
         _schedules = map(s -> s isa Number ? Constant(s) : s, schedules)
 
@@ -81,6 +86,7 @@ struct Sequence{T, S} <: AbstractSchedule{missing}
     end
 end
 Sequence(stages::Pair...) = Sequence(first.(stages), last.(stages))
+Sequence(schedule_fn::Base.Generator) = Sequence(schedule_fn, schedule_fn.iter)
 
 Base.IteratorEltype(::Type{<:Sequence}) = Base.EltypeUnknown()
 
@@ -90,23 +96,27 @@ function (schedule::Sequence)(t)
         acc += step
         return t > acc
     end |> collect
-    i, toffset = isempty(itr) ? (0, 0) : last(itr)
+    i, toffset = isempty(itr) ? (0, 0) : (last(itr)[1], acc - last(itr)[2] - 1)
+    sitr = _peel(Iterators.drop(schedule.schedules, i))
+    s = isnothing(sitr) ? schedule.schedules[end] : first(sitr)
 
-    return schedule.schedules[min(i + 1, end)](t - toffset)
+    # @show s, t, toffset, acc
+    return s(t - toffset)
 end
 
-function Base.iterate(schedule::Sequence, state = (1, 1, 0, schedule.step_sizes))
-    t, i, t0, itr = state
-    _itr = _peel(itr)
-    if !isnothing(_itr) && (t > t0 + _itr[1]) # move onto next step range
-        if !isempty(_itr[2])
-            i += 1
-            t0 += _itr[1]
+function Base.iterate(schedule::Sequence,
+                      state = (1, 0, _peel(schedule.schedules)..., schedule.step_sizes))
+    t, t0, s, sched_itr, step_itr = state
+    _step_itr = _peel(step_itr)
+    if !isnothing(_step_itr) && (t > t0 + _step_itr[1]) # move onto next step range
+        if !isempty(_step_itr[2])
+            s, sched_itr = _peel(sched_itr)
+            t0 += _step_itr[1]
         end
-        itr = _itr[2]
+        step_itr = _step_itr[2]
     end
 
-    return schedule.schedules[i](t - t0), (t + 1, i, t0, itr)
+    return s(t - t0), (t + 1, t0, s, sched_itr, step_itr)
 end
 
 """

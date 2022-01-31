@@ -15,6 +15,17 @@
     @test s(i) == ((i > step_sizes[1]) ? params[2] : params[1])
     @test all(p == ((t > step_sizes[1]) ? params[2] : params[1])
               for (t, p) in zip(1:50, s))
+
+    @testset "Infinite Sequences" begin
+        s = Sequence(Exp(1.0, 0.5 * step) for step in OneToInf())
+        t0 = 1
+        for step in 1:4
+            e = Exp(1.0, 0.5 * step)
+            ts = t0:(t0 - 1 + step)
+            @test s.(ts) ≈ e.(1:step)
+            t0 += step
+        end
+    end
 end
 
 @testset "Loop" begin
