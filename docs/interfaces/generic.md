@@ -1,13 +1,34 @@
 # Generic interface
 
-All schedules must implement the interface `(s::MySchedule)(t)` which returns the schedule value at iteration `t`. Additionally, a schedule must implement the [iteration interface](https://docs.julialang.org/en/v1/manual/interfaces/#man-interface-iteration).
+All schedules must implement the interface `(s::MySchedule)(t)` which returns the schedule value at iteration `t`. Additionally, a schedule must implement `Base.iterate` from the [iteration interface](https://docs.julialang.org/en/v1/manual/interfaces/#man-interface-iteration) and `Base.eltype` when possible. This is the minimal interface required to work with the rest of ParameterSchedulers.jl.
+
+It is *strongly* recommended that your schedule subtypes [`ParameterSchedulers.AbstractSchedule`](#). This will define `Base.iterate` and several other pieces of the iteration interface for you.
+
+`AbstractSchedule` takes a single type parameter, `IsFinite`. Below are the possible values.
+- `AbstractSchedule{true}`: use for finite schedules
+    - `Base.IteratorSize` is auto-implemented as `Base.HasLength()`
+    - `Base.axes(s)` is auto-implemented as `1:length(s)`
+    - Requires `Base.length` to be implemented by you
+- `AbstractSchedule{false}`: use for infinite schedules
+    - `Base.IteratorSize` is auto-implemented as `Base.IsInfinite()`
+    - `Base.axes` is auto-implemented as `OneToInf()`
+- `AbstractSchedule{missing}`: use for schedules where infinite/finite is unknown
+    - `Base.IteratorSize` is auto-implemented as `Base.SizeUnknown()`
+    - `Base.axes` is auto-implemented as `OneToInf()`
+- `AbstractSchedule{T}`: use for schedules where the length depends on `T`
+    - `Base.IteratorSize` is auto-implemented as `Base.IteratorSize(T)`
+
+# Examples
+
+## Lambda schedule
 
 Below we implement `Lambda` to illustrate what is required for a custom schedule. `Lambda` simply wraps a function, `f`, and the schedule value at iteration `t` is `f(t)`.
 {cell=generic-interface}
 ```julia
 using ParameterSchedulers
+using ParameterSchedulers: AbstractSchedule
 
-struct Lambda{T}
+struct Lambda{T} <: AbstractSchedule{missing}
     f::T
 end
 ```
@@ -18,6 +39,9 @@ Next we implement the necessary interfaces. The easiest way to define `(s::Lambd
 (schedule::Lambda)(t) = schedule.f(t)
 
 Base.iterate(schedule::Lambda, t = 1) = schedule(t), t + 1
+
+# since the eltype is unknown, we indicate it
+Base.IteratorEltype(::Type{<:Lambda}) = Base.EltypeUnknown()
 ```
 
 !!! tip
@@ -35,18 +59,17 @@ t = 1:10 |> collect
 lineplot(t, s.(t); border = :none)
 ```
 
-# More examples
-
-Below, we implement two more custom schedules that conform to the decay and cyclic definitions. The interface is no different than `Lambda` above.
-
 ## Decay by half
 
 We will implement a `Decay2` schedule that halves the parameter value every iteration. First, we define the struct.
 {cell=decay-interface}
 ```julia
 using ParameterSchedulers
+using ParameterSchedulers: AbstractSchedule
 
-struct Decay2{T<:Number}
+# we subtype AbstractSchedule{IsFinite} with IsFinite == false
+# this is because this is an infinite schedule
+struct Decay2{T<:Number} <: AbstractSchedule{false}
     λ::T
 end
 ```
@@ -55,7 +78,6 @@ After this, we can define the interface functions. Our decay function will be de
 {cell=decay-interface}
 ```julia
 (schedule::Decay2)(t) = schedule.λ / 2^(t - 1)
-Base.iterate(schedule::Decay2, t = 1) = schedule(t), t + 1
 ```
 
 Now, we can use `Decay2` schedule like any other decay schedule. Below, sequence two different `Decay2` schedules.
@@ -74,8 +96,9 @@ Now, we'll use the interface to implement a new cyclic schedule, `Square`, which
 {cell=cyclic-interface}
 ```julia
 using ParameterSchedulers
+using ParameterSchedulers: AbstractSchedule
 
-struct Square{T<:Number, S<:Integer}
+struct Square{T<:Number, S<:Integer} <: AbstractSchedule{false}
     λ0::T
     λ1::T
     period::S
@@ -87,7 +110,6 @@ Now, we implement the interface. The cycle function, ``g(t)``, will return `λ1`
 ```julia
 (schedule::Square{T})(t) where T =
     (mod(t - 1, schedule.period) < schedule.period / 2) ? schedule.λ1 : schedule.λ0
-Base.iterate(schedule::Square, t = 1) = schedule(t), t + 1
 ```
 
 `Square` is ready to use like any other schedule.
