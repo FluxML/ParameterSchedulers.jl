@@ -45,11 +45,42 @@
 <p><a href="../../docstrings.html">API Reference</a></p>
 </div>
         <article id="content"><h1 id="generic-interface"><a href="#generic-interface" class="anchor"></a>Generic interface</h1>
-<p>All schedules must implement the interface <code>(s::MySchedule)(t)</code> which returns the schedule value at iteration <code>t</code>. Additionally, a schedule must implement the <a href="https://docs.julialang.org/en/v1/manual/interfaces/#man-interface-iteration">iteration interface</a>.</p>
+<p>All schedules must implement the interface <code>(s::MySchedule)(t)</code> which returns the schedule value at iteration <code>t</code>. Additionally, a schedule must implement <code>Base.iterate</code> from the <a href="https://docs.julialang.org/en/v1/manual/interfaces/#man-interface-iteration">iteration interface</a> and <code>Base.eltype</code> when possible. This is the minimal interface required to work with the rest of ParameterSchedulers.jl.</p>
+<p>It is <em>strongly</em> recommended that your schedule subtypes <a href="../../docstrings/ParameterSchedulers.AbstractSchedule.html"><code>ParameterSchedulers.AbstractSchedule</code></a>. This will define <code>Base.iterate</code> and several other pieces of the iteration interface for you.</p>
+<p><code>AbstractSchedule</code> takes a single type parameter, <code>IsFinite</code>. Below are the possible values.</p>
+<ul>
+<li><code>AbstractSchedule{true}</code>: use for finite schedules
+<ul>
+<li><code>Base.IteratorSize</code> is auto-implemented as <code>Base.HasLength()</code></li>
+<li><code>Base.axes(s)</code> is auto-implemented as <code>1:length(s)</code></li>
+<li>Requires <code>Base.length</code> to be implemented by you</li>
+</ul>
+</li>
+<li><code>AbstractSchedule{false}</code>: use for infinite schedules
+<ul>
+<li><code>Base.IteratorSize</code> is auto-implemented as <code>Base.IsInfinite()</code></li>
+<li><code>Base.axes</code> is auto-implemented as <code>OneToInf()</code></li>
+</ul>
+</li>
+<li><code>AbstractSchedule{missing}</code>: use for schedules where infinite/finite is unknown
+<ul>
+<li><code>Base.IteratorSize</code> is auto-implemented as <code>Base.SizeUnknown()</code></li>
+<li><code>Base.axes</code> is auto-implemented as <code>OneToInf()</code></li>
+</ul>
+</li>
+<li><code>AbstractSchedule{T}</code>: use for schedules where the length depends on <code>T</code>
+<ul>
+<li><code>Base.IteratorSize</code> is auto-implemented as <code>Base.IteratorSize(T)</code></li>
+</ul>
+</li>
+</ul>
+<h1 id="examples"><a href="#examples" class="anchor"></a>Examples</h1>
+<h2 id="lambda-schedule"><a href="#lambda-schedule" class="anchor"></a>Lambda schedule</h2>
 <p>Below we implement <code>Lambda</code> to illustrate what is required for a custom schedule. <code>Lambda</code> simply wraps a function, <code>f</code>, and the schedule value at iteration <code>t</code> is <code>f(t)</code>.</p>
 <pre><code cell="generic-interface" class="language-julia">using ParameterSchedulers
+using ParameterSchedulers: AbstractSchedule
 
-struct Lambda{T}
+struct Lambda{T} &lt;: AbstractSchedule{missing}
     f::T
 end
 </code></pre>
@@ -57,6 +88,9 @@ end
 <pre><code cell="generic-interface" class="language-julia">(schedule::Lambda)(t) = schedule.f(t)
 
 Base.iterate(schedule::Lambda, t = 1) = schedule(t), t + 1
+
+# since the eltype is unknown, we indicate it
+Base.IteratorEltype(::Type{&lt;:Lambda}) = Base.EltypeUnknown()
 </code></pre>
 <div class="admonition tip"><p class="admonition-title">Tip</p>
 <p>Sometimes, it might be more efficient to define <code>Base.iterate</code> separately from <code>s(t)</code>. See <a href="../../docstrings/ParameterSchedulers.Step.html"><code>Step</code></a> for an example what this might look like.</p>
@@ -87,19 +121,19 @@ lineplot(t, s.(t); border = :none)
    0 ⠀⡜⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢱⠎⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣧⠃⠀⠀⠀⠀ 
      ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ 
      ⠀1⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀10⠀ </code></pre>
-<h1 id="more-examples"><a href="#more-examples" class="anchor"></a>More examples</h1>
-<p>Below, we implement two more custom schedules that conform to the decay and cyclic definitions. The interface is no different than <code>Lambda</code> above.</p>
 <h2 id="decay-by-half"><a href="#decay-by-half" class="anchor"></a>Decay by half</h2>
 <p>We will implement a <code>Decay2</code> schedule that halves the parameter value every iteration. First, we define the struct.</p>
 <pre><code cell="decay-interface" class="language-julia">using ParameterSchedulers
+using ParameterSchedulers: AbstractSchedule
 
-struct Decay2{T&lt;:Number}
+# we subtype AbstractSchedule{IsFinite} with IsFinite == false
+# this is because this is an infinite schedule
+struct Decay2{T&lt;:Number} &lt;: AbstractSchedule{false}
     λ::T
 end
 </code></pre>
 <p>After this, we can define the interface functions. Our decay function will be defined as <span class="math tex">\(g(t) = \frac{1}{2^{t - 1}}\)</span>.</p>
 <pre><code cell="decay-interface" class="language-julia">(schedule::Decay2)(t) = schedule.λ / 2^(t - 1)
-Base.iterate(schedule::Decay2, t = 1) = schedule(t), t + 1
 </code></pre>
 <p>Now, we can use <code>Decay2</code> schedule like any other decay schedule. Below, sequence two different <code>Decay2</code> schedules.</p>
 <pre><code cell="decay-interface" class="language-julia">using UnicodePlots
@@ -129,8 +163,9 @@ lineplot(t, s.(t); border = :none)
 <h2 id="a-square-wave-schedule"><a href="#a-square-wave-schedule" class="anchor"></a>A square wave schedule</h2>
 <p>Now, we’ll use the interface to implement a new cyclic schedule, <code>Square</code>, which implements a <a href="https://en.wikipedia.org/wiki/Square_wave">square wave</a>.</p>
 <pre><code cell="cyclic-interface" class="language-julia">using ParameterSchedulers
+using ParameterSchedulers: AbstractSchedule
 
-struct Square{T&lt;:Number, S&lt;:Integer}
+struct Square{T&lt;:Number, S&lt;:Integer} &lt;: AbstractSchedule{false}
     λ0::T
     λ1::T
     period::S
@@ -139,7 +174,6 @@ end
 <p>Now, we implement the interface. The cycle function, <span class="math tex">\(g(t)\)</span>, will return <code>λ1</code> for the first <code>period / 2</code> steps, then <code>λ0</code> for the next.</p>
 <pre><code cell="cyclic-interface" class="language-julia">(schedule::Square{T})(t) where T =
     (mod(t - 1, schedule.period) &lt; schedule.period / 2) ? schedule.λ1 : schedule.λ0
-Base.iterate(schedule::Square, t = 1) = schedule(t), t + 1
 </code></pre>
 <p><code>Square</code> is ready to use like any other schedule.</p>
 <pre><code cell="cyclic-interface" class="language-julia">using UnicodePlots
