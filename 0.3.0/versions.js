@@ -1,5 +1,5 @@
-var PUBLISH_ROOT = '/ParameterSchedulers.jl/0.2.0';
-var PUBLISH_VERSION = "0.2.0";
+var PUBLISH_ROOT = '/ParameterSchedulers.jl/0.3.0';
+var PUBLISH_VERSION = "0.3.0";
 var PUBLISH_VERSIONS = [
     ["dev","/ParameterSchedulers.jl/dev/index.html"],
     ["0.3.0","/ParameterSchedulers.jl/0.3.0/index.html"],
