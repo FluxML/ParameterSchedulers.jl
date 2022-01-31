@@ -26,6 +26,7 @@ Below we implement `Lambda` to illustrate what is required for a custom schedule
 {cell=generic-interface}
 ```julia
 using ParameterSchedulers
+using ParameterSchedulers: AbstractSchedule
 
 struct Lambda{T} <: AbstractSchedule{missing}
     f::T
@@ -95,6 +96,7 @@ Now, we'll use the interface to implement a new cyclic schedule, `Square`, which
 {cell=cyclic-interface}
 ```julia
 using ParameterSchedulers
+using ParameterSchedulers: AbstractSchedule
 
 struct Square{T<:Number, S<:Integer} <: AbstractSchedule{false}
     λ0::T
