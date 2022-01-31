@@ -4,12 +4,30 @@ All schedules must implement the interface `(s::MySchedule)(t)` which returns th
 
 It is *strongly* recommended that your schedule subtypes [`ParameterSchedulers.AbstractSchedule`](#). This will define `Base.iterate` and several other pieces of the iteration interface for you.
 
-Below we implement `Lambda` to illustrate what is required for a custom schedule. `Lambda` simply wraps a function, `f`, and the schedule value at iteration `t` is `f(t)`. Just for illustration purposes, we won't subtype `AbstractSchedule`.
+`AbstractSchedule` takes a single type parameter, `IsFinite`. Below are the possible values.
+- `AbstractSchedule{true}`: use for finite schedules
+    - `Base.IteratorSize` is auto-implemented as `Base.HasLength()`
+    - `Base.axes(s)` is auto-implemented as `1:length(s)`
+    - Requires `Base.length` to be implemented by you
+- `AbstractSchedule{false}`: use for infinite schedules
+    - `Base.IteratorSize` is auto-implemented as `Base.IsInfinite()`
+    - `Base.axes` is auto-implemented as `OneToInf()`
+- `AbstractSchedule{missing}`: use for schedules where infinite/finite is unknown
+    - `Base.IteratorSize` is auto-implemented as `Base.SizeUnknown()`
+    - `Base.axes` is auto-implemented as `OneToInf()`
+- `AbstractSchedule{T}`: use for schedules where the length depends on `T`
+    - `Base.IteratorSize` is auto-implemented as `Base.IteratorSize(T)`
+
+# Examples
+
+## Lambda schedule
+
+Below we implement `Lambda` to illustrate what is required for a custom schedule. `Lambda` simply wraps a function, `f`, and the schedule value at iteration `t` is `f(t)`.
 {cell=generic-interface}
 ```julia
 using ParameterSchedulers
 
-struct Lambda{T}
+struct Lambda{T} <: AbstractSchedule{missing}
     f::T
 end
 ```
@@ -39,10 +57,6 @@ s = Loop(Lambda(log), 4)
 t = 1:10 |> collect
 lineplot(t, s.(t); border = :none)
 ```
-
-# More examples
-
-Below, we implement two more custom schedules that conform to the decay and cyclic definitions.
 
 ## Decay by half
 
