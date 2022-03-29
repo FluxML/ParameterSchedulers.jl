@@ -2,6 +2,7 @@ using Pkg
 
 Pkg.develop(path = "..")
 
+using Revise
 using Publish
 using ParameterSchedulers
 using Artifacts, LazyArtifacts
