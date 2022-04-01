@@ -170,6 +170,32 @@ Base.IteratorSize(::Type{<:Interpolator{T}}) where T = Base.IteratorSize(T)
 (interpolator::Interpolator)(t) =
     interpolator.schedule(interpolator.ceil_fn(t / interpolator.rate))
 
+"""
+    OffsetStart(schedule, offset)
+
+`schedule` that starts at `t == offset`
+(i.e. calling an `OffsetStart` with `t = 1` is equivalent to calling
+`schedule` with `t = offset`)
+"""
+struct OffsetStart{T} <: AbstractSchedule{T}
+    schedule::T
+    offset::Int
+end
+
+Base.eltype(::Type{<:OffsetStart{T}}) where T = eltype(T)
+Base.IteratorEltype(::Type{<:OffsetStart{T}}) where T = Base.IteratorEltype(T)
+
+(offset_schedule::OffsetStart)(t) = offset_schedule.schedule(t - 1 + offset_schedule.offset)
+
+"""
+    ComposedSchedule([(s, ps) -> T(ps...), ]schedule::T, parameters)
+
+A `schedule` whose fields are given by `parameters.(t)` at iteration `t`.
+
+At each step `t`, this gets a new set of parameters with `parameters.(t)`,
+then creates a new `schedule` given the first (optional) argument.
+The new `schedule(t)` is the returned value.
+"""
 struct ComposedSchedule{T, S, F} <: AbstractSchedule{T}
     compose_fn::F
     schedule::T
