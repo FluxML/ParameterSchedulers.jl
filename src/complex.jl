@@ -171,21 +171,21 @@ Base.IteratorSize(::Type{<:Interpolator{T}}) where T = Base.IteratorSize(T)
     interpolator.schedule(interpolator.ceil_fn(t / interpolator.rate))
 
 """
-    OffsetStart(schedule, offset)
+    Shifted(schedule, offset)
 
-`schedule` that starts at `t == offset`
-(i.e. calling an `OffsetStart` with `t = 1` is equivalent to calling
+A `schedule` who's starting iteration is shifted to `offset`.
+(i.e. calling an `Shifted` with `t = 1` is equivalent to calling
 `schedule` with `t = offset`)
 """
-struct OffsetStart{T} <: AbstractSchedule{T}
+struct Shifted{T} <: AbstractSchedule{T}
     schedule::T
     offset::Int
 end
 
-Base.eltype(::Type{<:OffsetStart{T}}) where T = eltype(T)
-Base.IteratorEltype(::Type{<:OffsetStart{T}}) where T = Base.IteratorEltype(T)
+Base.eltype(::Type{<:Shifted{T}}) where T = eltype(T)
+Base.IteratorEltype(::Type{<:Shifted{T}}) where T = Base.IteratorEltype(T)
 
-(offset_schedule::OffsetStart)(t) = offset_schedule.schedule(t - 1 + offset_schedule.offset)
+(offset_schedule::Shifted)(t) = offset_schedule.schedule(t - 1 + offset_schedule.offset)
 
 """
     ComposedSchedule([(s, ps) -> T(ps...), ]schedule::T, parameters)

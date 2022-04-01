@@ -15,7 +15,7 @@ export Triangle, TriangleDecay2, TriangleExp,
        CosAnneal
 
 include("complex.jl")
-export Sequence, Loop, Interpolator, OffsetStart, ComposedSchedule
+export Sequence, Loop, Interpolator, Shifted, ComposedSchedule
 
 include("utils.jl")
 
