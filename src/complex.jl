@@ -96,11 +96,12 @@ function (schedule::Sequence)(t)
         acc += step
         return t > acc
     end |> collect
-    i, toffset = isempty(itr) ? (0, 0) : (last(itr)[1], acc - last(itr)[2] - 1)
+    i = isempty(itr) ? 0 : last(itr)[1]
+    toffset = isempty(itr) ? 0 :
+        acc - something(_peel(Iterators.drop(schedule.step_sizes, i)), (0,))[1]
     sitr = _peel(Iterators.drop(schedule.schedules, i))
     s = isnothing(sitr) ? schedule.schedules[end] : first(sitr)
 
-    # @show s, t, toffset, acc
     return s(t - toffset)
 end
 
@@ -170,6 +171,32 @@ Base.IteratorSize(::Type{<:Interpolator{T}}) where T = Base.IteratorSize(T)
 (interpolator::Interpolator)(t) =
     interpolator.schedule(interpolator.ceil_fn(t / interpolator.rate))
 
+"""
+    Shifted(schedule, offset)
+
+A `schedule` who's starting iteration is shifted to `offset`.
+(i.e. calling an `Shifted` with `t = 1` is equivalent to calling
+`schedule` with `t = offset`)
+"""
+struct Shifted{T} <: AbstractSchedule{T}
+    schedule::T
+    offset::Int
+end
+
+Base.eltype(::Type{<:Shifted{T}}) where T = eltype(T)
+Base.IteratorEltype(::Type{<:Shifted{T}}) where T = Base.IteratorEltype(T)
+
+(offset_schedule::Shifted)(t) = offset_schedule.schedule(t - 1 + offset_schedule.offset)
+
+"""
+    ComposedSchedule([(s, ps) -> T(ps...), ]schedule::T, parameters)
+
+A `schedule` whose fields are given by `parameters.(t)` at iteration `t`.
+
+At each step `t`, this gets a new set of parameters with `parameters.(t)`,
+then creates a new `schedule` given the first (optional) argument.
+The new `schedule(t)` is the returned value.
+"""
 struct ComposedSchedule{T, S, F} <: AbstractSchedule{T}
     compose_fn::F
     schedule::T

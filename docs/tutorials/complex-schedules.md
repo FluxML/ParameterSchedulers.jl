@@ -60,6 +60,8 @@ lineplot(t, s.(t); border = :none)
 ```
 We can also pass a separate generator for `schedules` and `step_sizes`. When only a single generator is passed, `step_sizes` is the iterator that the generator is based on.
 
+Lastly, the schedules in a `Sequence` can use [`Shifted`](#) to start at an iteration other than `t = 1`.
+
 ## Interpolating schedules
 
 Sometimes, we want to specify a schedule in different units than our iteration state. Below, we'll see two common examples where this might be the case, and how [`Interpolator`](#) can make our lives a bit easier.

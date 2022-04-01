@@ -59,6 +59,13 @@ end
     @test [s(t) for t in 1:(sum(epochs) * nbatches)] == correct_seq
 end
 
+@testset "Shifted" begin
+    s = Triangle(λ0 = 0, λ1 = 1, period = 10)
+    soffset = Shifted(s, 5)
+
+    @test [soffset(t) for t in 1:50] == [s(t) for t in 5:54]
+end
+
 @testset "Stateful" begin
     stateful_s = Stateful(log)
     @test all(next!(stateful_s) == log(i) for i in 1:100)
