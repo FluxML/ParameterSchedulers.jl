@@ -8,6 +8,7 @@
 * [Basic schedules](docs/tutorials/basic-schedules.md)
 * [Optimizers](docs/tutorials/optimizers.md)
 * [Complex schedules](docs/tutorials/complex-schedules.md)
+* [Warmup schedules](docs/tutorials/warmup-schedules.md)
 
 [Interface](docs/interfaces/generic.md)
 

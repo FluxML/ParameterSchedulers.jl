@@ -96,11 +96,12 @@ function (schedule::Sequence)(t)
         acc += step
         return t > acc
     end |> collect
-    i, toffset = isempty(itr) ? (0, 0) : (last(itr)[1], acc - last(itr)[2] - 1)
+    i = isempty(itr) ? 0 : last(itr)[1]
+    toffset = isempty(itr) ? 0 :
+        acc - something(_peel(Iterators.drop(schedule.step_sizes, i)), (0,))[1]
     sitr = _peel(Iterators.drop(schedule.schedules, i))
     s = isnothing(sitr) ? schedule.schedules[end] : first(sitr)
 
-    # @show s, t, toffset, acc
     return s(t - toffset)
 end
 
