@@ -55,7 +55,7 @@ julia> opt = Scheduler(s, Momentum(); update_func = (o, s) -> o.rho = s)
 Scheduler(CosAnneal{Float64,Int64}(0.1, 0.8, 10), Momentum(0.01, 0.9, IdDict{Any,Any}()))
 ```
 """
-mutable struct Scheduler{T, O, F}
+mutable struct Scheduler{T, O, F} <: Flux.Optimise.AbstractOptimiser
     state::IdDict{Any, Int}
     schedule::T
     optim::O
