@@ -11,7 +11,7 @@ using Flux, ParameterSchedulers
 
 data = [(rand(4, 10), rand([-1, 1], 1, 10)) for _ in 1:3]
 m = Chain(Dense(4, 4, tanh), Dense(4, 1, tanh))
-p = params(m)
+p = Flux.params(m)
 opt = Descent()
 s = Exp(λ = 1e-1, γ = 0.2)
 
@@ -85,7 +85,7 @@ s = Inv(λ = 1e-1, p = 2, γ = 0.2)
 opt = Scheduler(s, Descent())
 loss(x, y, m) = Flux.mse(m(x), y)
 cb = () -> @show(opt.optim.eta)
-Flux.@epochs nepochs Flux.train!((x, y) -> loss(x, y, m), params(m), data, opt, cb = cb)
+Flux.@epochs nepochs Flux.train!((x, y) -> loss(x, y, m), Flux.params(m), data, opt, cb = cb)
 ```
 
 Finally, you might be interested in reading [Interpolating schedules](#) to see how to specify a schedule in terms of epochs but iterate it at the granularity of batches.
