@@ -53,7 +53,7 @@
 
 data = [(rand(4, 10), rand([-1, 1], 1, 10)) for _ in 1:3]
 m = Chain(Dense(4, 4, tanh), Dense(4, 1, tanh))
-p = params(m)
+p = Flux.params(m)
 opt = Descent()
 s = Exp(λ = 1e-1, γ = 0.2)
 
@@ -64,7 +64,10 @@ for (η, (x, y)) in zip(s, data)
     println(&quot;η: &quot;, opt.eta)
 end
 </code></pre>
-<pre><code class="plaintext cell-output cell-result" class="language-plaintext">LoadError(&quot;string&quot;, 5, UndefVarError(:params))</code></pre>
+<pre><code class="plaintext cell-output cell-stream">η: 0.1
+η: 0.020000000000000004
+η: 0.004000000000000001
+</code></pre>
 <p>We can also adjust the learning on an epoch basis instead. All that is required is to change what we zip our schedule with.</p>
 <pre><code cell="optimizers" class="language-julia">nepochs = 6
 s = Step(λ = 1e-1, γ = 0.2, step_sizes = [3, 2, 1])
@@ -77,7 +80,25 @@ for (η, epoch) in zip(s, 1:nepochs)
     end
 end
 </code></pre>
-<pre><code class="plaintext cell-output cell-result" class="language-plaintext">LoadError(&quot;string&quot;, 3, UndefVarError(:opt))</code></pre>
+<pre><code class="plaintext cell-output cell-stream">epoch: 1, batch: 1, η: 0.1
+epoch: 1, batch: 2, η: 0.1
+epoch: 1, batch: 3, η: 0.1
+epoch: 2, batch: 1, η: 0.1
+epoch: 2, batch: 2, η: 0.1
+epoch: 2, batch: 3, η: 0.1
+epoch: 3, batch: 1, η: 0.1
+epoch: 3, batch: 2, η: 0.1
+epoch: 3, batch: 3, η: 0.1
+epoch: 4, batch: 1, η: 0.020000000000000004
+epoch: 4, batch: 2, η: 0.020000000000000004
+epoch: 4, batch: 3, η: 0.020000000000000004
+epoch: 5, batch: 1, η: 0.020000000000000004
+epoch: 5, batch: 2, η: 0.020000000000000004
+epoch: 5, batch: 3, η: 0.020000000000000004
+epoch: 6, batch: 1, η: 0.004000000000000001
+epoch: 6, batch: 2, η: 0.004000000000000001
+epoch: 6, batch: 3, η: 0.004000000000000001
+</code></pre>
 <h2 id="stateful-iteration-with-training"><a href="#stateful-iteration-with-training" class="anchor"></a>Stateful iteration with training</h2>
 <p>Sometimes zipping up the schedule with an iterator isn’t sufficient. For example, we might want to advance the schedule with every batch but not be forced to restart each epoch. In such a situation with nested loops, it becomes useful to use <a href="../../docstrings/ParameterSchedulers.Stateful.html"><code>ParameterSchedulers.Stateful</code></a> which maintains its own iteration state.</p>
 <pre><code cell="optimizers" class="language-julia">nepochs = 3
@@ -91,7 +112,16 @@ for epoch in 1:nepochs
     end
 end
 </code></pre>
-<pre><code class="plaintext cell-output cell-result" class="language-plaintext">LoadError(&quot;string&quot;, 3, UndefVarError(:opt))</code></pre>
+<pre><code class="plaintext cell-output cell-stream">epoch: 1, batch: 1, η: 0.1
+epoch: 1, batch: 2, η: 0.06944444444444445
+epoch: 1, batch: 3, η: 0.051020408163265314
+epoch: 2, batch: 1, η: 0.03906249999999999
+epoch: 2, batch: 2, η: 0.030864197530864196
+epoch: 2, batch: 3, η: 0.025
+epoch: 3, batch: 1, η: 0.020661157024793386
+epoch: 3, batch: 2, η: 0.01736111111111111
+epoch: 3, batch: 3, η: 0.014792899408284023
+</code></pre>
 <h2 id="working-with-flux-optimizers"><a href="#working-with-flux-optimizers" class="anchor"></a>Working with Flux optimizers</h2>
 <div class="admonition warning"><p class="admonition-title">Warning</p>
 <p>Currently, we are porting <code>Scheduler</code> to Flux.jl.
@@ -112,17 +142,36 @@ for epoch in 1:nepochs
     end
 end
 </code></pre>
-<pre><code class="plaintext cell-output cell-result" class="language-plaintext">LoadError(&quot;string&quot;, 6, UndefVarError(:p))</code></pre>
+<pre><code class="plaintext cell-output cell-stream">epoch: 1, batch: 1, η: 0.1
+epoch: 1, batch: 2, η: 0.06944444444444445
+epoch: 1, batch: 3, η: 0.051020408163265314
+epoch: 2, batch: 1, η: 0.03906249999999999
+epoch: 2, batch: 2, η: 0.030864197530864196
+epoch: 2, batch: 3, η: 0.025
+epoch: 3, batch: 1, η: 0.020661157024793386
+epoch: 3, batch: 2, η: 0.01736111111111111
+epoch: 3, batch: 3, η: 0.014792899408284023
+</code></pre>
 <p>The scheduler, <code>opt</code>, can be used anywhere a Flux optimizer can. For example, it can be passed to <code>Flux.train!</code>:</p>
 <pre><code cell="optimizers" class="language-julia">s = Inv(λ = 1e-1, p = 2, γ = 0.2)
 opt = Scheduler(s, Descent())
 loss(x, y, m) = Flux.mse(m(x), y)
 cb = () -&gt; @show(opt.optim.eta)
-Flux.@epochs nepochs Flux.train!((x, y) -&gt; loss(x, y, m), params(m), data, opt, cb = cb)
+Flux.@epochs nepochs Flux.train!((x, y) -&gt; loss(x, y, m), Flux.params(m), data, opt, cb = cb)
 </code></pre>
 <pre><code class="plaintext cell-output cell-stream">[ Info: Epoch 1
+opt.optim.eta = 0.1
+opt.optim.eta = 0.06944444444444445
+opt.optim.eta = 0.051020408163265314
+[ Info: Epoch 2
+opt.optim.eta = 0.03906249999999999
+opt.optim.eta = 0.030864197530864196
+opt.optim.eta = 0.025
+[ Info: Epoch 3
+opt.optim.eta = 0.020661157024793386
+opt.optim.eta = 0.01736111111111111
+opt.optim.eta = 0.014792899408284023
 </code></pre>
-<pre><code class="plaintext cell-output cell-result" class="language-plaintext">LoadError(&quot;string&quot;, 5, UndefVarError(:params))</code></pre>
 <p>Finally, you might be interested in reading <a href="complex-schedules.html#interpolating-schedules">Interpolating schedules</a> to see how to specify a schedule in terms of epochs but iterate it at the granularity of batches.</p>
 </article>
         <div id="page-navigation">
