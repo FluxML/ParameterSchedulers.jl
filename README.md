@@ -1,7 +1,7 @@
 # ParameterSchedulers
 
-[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://darsnack.github.io/ParameterSchedulers.jl/dev)
-[![Build Status](https://github.com/darsnack/ParameterSchedulers.jl/workflows/CI/badge.svg)](https://github.com/darsnack/ParameterSchedulers.jl/actions)
+[![Dev](https://img.shields.io/badge/docs-dev-blue.svg)](https://fluxml.github.io/ParameterSchedulers.jl/dev)
+[![Build Status](https://github.com/FluxML/ParameterSchedulers.jl/workflows/CI/badge.svg)](https://github.com/FluxML/ParameterSchedulers.jl/actions)
 
 ParameterSchedulers.jl provides common machine learning (ML) schedulers for hyper-parameters. Though this package is framework agnostic, a convenient interface for pairing schedules with [Flux.jl](https://github.com/FluxML/Flux.jl) optimizers is available. Using this package with Flux is as simple as:
 ```julia
