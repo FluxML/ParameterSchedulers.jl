@@ -46,8 +46,8 @@
 <p><a href="docstrings.html">API Reference</a></p>
 </div>
         <article id="content"><h1 id="parameterschedulers"><a href="#parameterschedulers" class="anchor"></a>ParameterSchedulers</h1>
-<p><a href="https://darsnack.github.io/ParameterSchedulers.jl/dev"><img src="https://img.shields.io/badge/docs-dev-blue.svg" alt="Dev" /></a>
-<a href="https://github.com/darsnack/ParameterSchedulers.jl/actions"><img src="https://github.com/darsnack/ParameterSchedulers.jl/workflows/CI/badge.svg" alt="Build Status" /></a></p>
+<p><a href="https://fluxml.github.io/ParameterSchedulers.jl/dev"><img src="https://img.shields.io/badge/docs-dev-blue.svg" alt="Dev" /></a>
+<a href="https://github.com/FluxML/ParameterSchedulers.jl/actions"><img src="https://github.com/FluxML/ParameterSchedulers.jl/workflows/CI/badge.svg" alt="Build Status" /></a></p>
 <p>ParameterSchedulers.jl provides common machine learning (ML) schedulers for hyper-parameters. Though this package is framework agnostic, a convenient interface for pairing schedules with <a href="https://github.com/FluxML/Flux.jl">Flux.jl</a> optimizers is available. Using this package with Flux is as simple as:</p>
 <pre><code class="language-julia">using Flux, ParameterSchedulers
 using ParameterSchedulers: Scheduler
@@ -147,8 +147,8 @@ opt = Scheduler(Exp(λ = 1e-2, γ = 0.8), Momentum())
 <td style="text-align:center">
 <pre><code class="plaintext cell-output cell-result" class="language-plaintext">    +---------------+
     |⠀⡼⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀|
-    |⢰⠁⢇⠀⡰⢇⠀⠀⡀⠀⠀⠀⠀⠀⠀|
-    |⡎⠀⠘⣴⠁⠈⢆⠎⠈⢆⣀⠜⠢⣀⠤|
+    |⢰⠁⢇⠀⡜⢇⠀⠀⡀⠀⠀⠀⠀⠀⠀|
+    |⡎⠀⠘⡼⠀⠈⢆⠎⠈⢆⣀⠜⠢⣀⠤|
     +---------------+</code></pre>
 </td></tr>
 <tr><td>
@@ -203,8 +203,8 @@ opt = Scheduler(Exp(λ = 1e-2, γ = 0.8), Momentum())
 <td style="text-align:center">
 <pre><code class="plaintext cell-output cell-result" class="language-plaintext">    +---------------+
     |⠀⡼⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀|
-    |⢰⠁⢇⠀⢠⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀|
-    |⡎⠀⠘⣤⠃⠘⣄⡠⠒⢄⣀⡠⢄⣀⣀|
+    |⢰⠁⢇⠀⡠⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀|
+    |⡎⠀⠘⡴⠁⠘⣄⡠⠒⢄⣀⡠⢄⣀⣀|
     +---------------+</code></pre>
 </td></tr>
 <tr><td>
