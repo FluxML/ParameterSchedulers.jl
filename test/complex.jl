@@ -16,6 +16,13 @@
     @test all(p == ((t > step_sizes[1]) ? params[2] : params[1])
               for (t, p) in zip(1:50, s))
 
+    # test iterating past end of sequence
+    s = Sequence(1 => 1, Step(0.1, 0.5, 10) => 50)
+    @test s(1) == 1
+    @test s(2) == 0.1
+    @test s(42) == 0.00625
+    @test s(52) == 0.003125
+
     @testset "Infinite Sequences" begin
         s = Sequence(Exp(1.0, 0.5 * step) for step in OneToInf())
         t0 = 1
