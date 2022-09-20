@@ -98,7 +98,7 @@ function (schedule::Sequence)(t)
     end |> collect
     i = isempty(itr) ? 0 : last(itr)[1]
     toffset = isempty(itr) ? 0 :
-        acc - something(_peel(Iterators.drop(schedule.step_sizes, i)), (0,))[1]
+        acc - something(_peel(Iterators.drop(schedule.step_sizes, i)), (last(schedule.step_sizes),))[1]
     sitr = _peel(Iterators.drop(schedule.schedules, i))
     s = isnothing(sitr) ? schedule.schedules[end] : first(sitr)
 
