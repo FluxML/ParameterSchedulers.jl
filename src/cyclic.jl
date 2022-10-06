@@ -189,7 +189,7 @@ end
 SinExp(;λ0, λ1, period, γ) = _sinexp(abs(λ0 - λ1), min(λ0, λ1), period, γ)
 
 """
-    CosAnneal(range, offset, period, restart)
+    CosAnneal(range, offset, period, restart = true)
     CosAnneal(;λ0, λ1, period, restart = true)
 
 A cosine annealing schedule
@@ -214,6 +214,7 @@ struct CosAnneal{T, S<:Integer} <: AbstractSchedule{false}
     period::S
     restart::Bool
 end
+CosAnneal(range, offset, period) = CosAnneal(range, offset, period, true)
 CosAnneal(;λ0, λ1, period, restart = true) =
     CosAnneal(abs(λ0 - λ1), min(λ0, λ1), period, restart)
 
