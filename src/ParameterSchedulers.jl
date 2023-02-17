@@ -80,8 +80,8 @@ function Flux.Optimise.apply!(opt::Scheduler, x, Δ)
 end
 
 for Opt in (Descent, Momentum, Nesterov, RMSProp,
-            ADAM, RADAM, AdaMax, OADAM, ADAGrad,
-            ADADelta, AMSGrad, NADAM, AdaBelief)
+            Adam, RAdam, AdaMax, OAdam, AdaGrad,
+            AdaDelta, AMSGrad, NAdam, AdaBelief)
     @eval begin
         Scheduler(schedule, opt::$Opt; update_func = (o, s) -> (o.eta = s)) =
             Scheduler(schedule, opt, update_func)
