@@ -4,8 +4,14 @@ authors = ["Kyle Daruwalla"]
 version = "0.3.5"
 
 [deps]
-Flux = "587475ba-b771-5e3f-ad9e-33799f191a9c"
 InfiniteArrays = "4858937d-0d70-526a-a4dd-2d5cb5dd786c"
+PackageExtensionCompat = "65ce6f38-6b18-4e1d-a461-8949797d7930"
+
+[weakdeps]
+Flux = "587475ba-b771-5e3f-ad9e-33799f191a9c"
+
+[extensions]
+ParameterSchedulersFluxExt = "Flux"
 
 [compat]
 Flux = "0.11.2, 0.12, 0.13"
@@ -13,12 +19,13 @@ InfiniteArrays = "0.10.4, 0.11, 0.12"
 julia = "1.6"
 
 [extras]
+Flux = "587475ba-b771-5e3f-ad9e-33799f191a9c"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [publish]
-title = "ParameterSchedulers.jl"
-theme = "_flux-theme"
 ignore = ["^(gh-pages|juliamnt|julia.dmg)$"]
+theme = "_flux-theme"
+title = "ParameterSchedulers.jl"
 
 [targets]
-test = ["Test"]
+test = ["Test", "Flux"]
