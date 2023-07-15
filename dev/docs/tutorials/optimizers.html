@@ -64,7 +64,12 @@ for (η, (x, y)) in zip(s, data)
     println(&quot;η: &quot;, opt.eta)
 end
 </code></pre>
-<pre><code class="plaintext cell-output cell-stream">η: 0.1
+<pre><code class="plaintext cell-output cell-stream">┌ Warning: Layer with Float32 parameters got Float64 input.
+│   The input will be converted, but any earlier layers may be very slow.
+│   layer = Dense(4 =&gt; 4, tanh)  # 20 parameters
+│   summary(x) = &quot;4×10 Matrix{Float64}&quot;
+└ @ Flux ~/.julia/packages/Flux/n3cOc/src/layers/stateless.jl:60
+η: 0.1
 η: 0.020000000000000004
 η: 0.004000000000000001
 </code></pre>
@@ -80,7 +85,12 @@ for (η, epoch) in zip(s, 1:nepochs)
     end
 end
 </code></pre>
-<pre><code class="plaintext cell-output cell-stream">epoch: 1, batch: 1, η: 0.1
+<pre><code class="plaintext cell-output cell-stream">┌ Warning: Layer with Float32 parameters got Float64 input.
+│   The input will be converted, but any earlier layers may be very slow.
+│   layer = Dense(4 =&gt; 4, tanh)  # 20 parameters
+│   summary(x) = &quot;4×10 Matrix{Float64}&quot;
+└ @ Flux ~/.julia/packages/Flux/n3cOc/src/layers/stateless.jl:60
+epoch: 1, batch: 1, η: 0.1
 epoch: 1, batch: 2, η: 0.1
 epoch: 1, batch: 3, η: 0.1
 epoch: 2, batch: 1, η: 0.1
@@ -112,7 +122,12 @@ for epoch in 1:nepochs
     end
 end
 </code></pre>
-<pre><code class="plaintext cell-output cell-stream">epoch: 1, batch: 1, η: 0.1
+<pre><code class="plaintext cell-output cell-stream">┌ Warning: Layer with Float32 parameters got Float64 input.
+│   The input will be converted, but any earlier layers may be very slow.
+│   layer = Dense(4 =&gt; 4, tanh)  # 20 parameters
+│   summary(x) = &quot;4×10 Matrix{Float64}&quot;
+└ @ Flux ~/.julia/packages/Flux/n3cOc/src/layers/stateless.jl:60
+epoch: 1, batch: 1, η: 0.1
 epoch: 1, batch: 2, η: 0.06944444444444445
 epoch: 1, batch: 3, η: 0.051020408163265314
 epoch: 2, batch: 1, η: 0.03906249999999999
@@ -142,7 +157,12 @@ for epoch in 1:nepochs
     end
 end
 </code></pre>
-<pre><code class="plaintext cell-output cell-stream">epoch: 1, batch: 1, η: 0.1
+<pre><code class="plaintext cell-output cell-stream">┌ Warning: Layer with Float32 parameters got Float64 input.
+│   The input will be converted, but any earlier layers may be very slow.
+│   layer = Dense(4 =&gt; 4, tanh)  # 20 parameters
+│   summary(x) = &quot;4×10 Matrix{Float64}&quot;
+└ @ Flux ~/.julia/packages/Flux/n3cOc/src/layers/stateless.jl:60
+epoch: 1, batch: 1, η: 0.1
 epoch: 1, batch: 2, η: 0.06944444444444445
 epoch: 1, batch: 3, η: 0.051020408163265314
 epoch: 2, batch: 1, η: 0.03906249999999999
@@ -161,9 +181,14 @@ Flux.@epochs nepochs Flux.train!((x, y) -&gt; loss(x, y, m), Flux.params(m), dat
 </code></pre>
 <pre><code class="plaintext cell-output cell-stream">┌ Warning: The macro `@epochs` will be removed from Flux 0.14.
 │ As an alternative, you can write a simple `for i in 1:epochs` loop.
-│   caller = eval at boot.jl:368 [inlined]
-└ @ Core ./boot.jl:368
+│   caller = eval at boot.jl:370 [inlined]
+└ @ Core ./boot.jl:370
 [ Info: Epoch 1
+┌ Warning: Layer with Float32 parameters got Float64 input.
+│   The input will be converted, but any earlier layers may be very slow.
+│   layer = Dense(4 =&gt; 4, tanh)  # 20 parameters
+│   summary(x) = &quot;4×10 Matrix{Float64}&quot;
+└ @ Flux ~/.julia/packages/Flux/n3cOc/src/layers/stateless.jl:60
 opt.optim.eta = 0.1
 opt.optim.eta = 0.06944444444444445
 opt.optim.eta = 0.051020408163265314

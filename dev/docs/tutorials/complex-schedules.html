@@ -223,7 +223,12 @@ for epoch in 1:nepochs
     end
 end
 </code></pre>
-<pre><code class="plaintext cell-output cell-stream">epoch: 1, batch: 1, η: 0.01
+<pre><code class="plaintext cell-output cell-stream">┌ Warning: Layer with Float32 parameters got Float64 input.
+│   The input will be converted, but any earlier layers may be very slow.
+│   layer = Dense(4 =&gt; 4, tanh)  # 20 parameters
+│   summary(x) = &quot;4×10 Matrix{Float64}&quot;
+└ @ Flux ~/.julia/packages/Flux/n3cOc/src/layers/stateless.jl:60
+epoch: 1, batch: 1, η: 0.01
 epoch: 1, batch: 2, η: 0.01
 epoch: 1, batch: 3, η: 0.01
 epoch: 2, batch: 1, η: 0.01
