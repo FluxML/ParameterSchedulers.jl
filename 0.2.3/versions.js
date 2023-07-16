@@ -2,6 +2,7 @@ var PUBLISH_ROOT = '/ParameterSchedulers.jl/0.2.3';
 var PUBLISH_VERSION = "0.2.3";
 var PUBLISH_VERSIONS = [
     ["dev","/ParameterSchedulers.jl/dev/index.html"],
+    ["0.3.6","/ParameterSchedulers.jl/0.3.6/index.html"],
     ["0.3.5","/ParameterSchedulers.jl/0.3.5/index.html"],
     ["0.3.4","/ParameterSchedulers.jl/0.3.4/index.html"],
     ["0.3.3","/ParameterSchedulers.jl/0.3.3/index.html"],
