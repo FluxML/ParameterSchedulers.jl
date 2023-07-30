@@ -68,7 +68,7 @@ end
 │   The input will be converted, but any earlier layers may be very slow.
 │   layer = Dense(4 =&gt; 4, tanh)  # 20 parameters
 │   summary(x) = &quot;4×10 Matrix{Float64}&quot;
-└ @ Flux ~/.julia/packages/Flux/n3cOc/src/layers/stateless.jl:60
+└ @ Flux ~/.julia/packages/Flux/r3RWW/src/layers/stateless.jl:60
 η: 0.1
 η: 0.020000000000000004
 η: 0.004000000000000001
@@ -89,7 +89,7 @@ end
 │   The input will be converted, but any earlier layers may be very slow.
 │   layer = Dense(4 =&gt; 4, tanh)  # 20 parameters
 │   summary(x) = &quot;4×10 Matrix{Float64}&quot;
-└ @ Flux ~/.julia/packages/Flux/n3cOc/src/layers/stateless.jl:60
+└ @ Flux ~/.julia/packages/Flux/r3RWW/src/layers/stateless.jl:60
 epoch: 1, batch: 1, η: 0.1
 epoch: 1, batch: 2, η: 0.1
 epoch: 1, batch: 3, η: 0.1
@@ -126,7 +126,7 @@ end
 │   The input will be converted, but any earlier layers may be very slow.
 │   layer = Dense(4 =&gt; 4, tanh)  # 20 parameters
 │   summary(x) = &quot;4×10 Matrix{Float64}&quot;
-└ @ Flux ~/.julia/packages/Flux/n3cOc/src/layers/stateless.jl:60
+└ @ Flux ~/.julia/packages/Flux/r3RWW/src/layers/stateless.jl:60
 epoch: 1, batch: 1, η: 0.1
 epoch: 1, batch: 2, η: 0.06944444444444445
 epoch: 1, batch: 3, η: 0.051020408163265314
@@ -161,7 +161,7 @@ end
 │   The input will be converted, but any earlier layers may be very slow.
 │   layer = Dense(4 =&gt; 4, tanh)  # 20 parameters
 │   summary(x) = &quot;4×10 Matrix{Float64}&quot;
-└ @ Flux ~/.julia/packages/Flux/n3cOc/src/layers/stateless.jl:60
+└ @ Flux ~/.julia/packages/Flux/r3RWW/src/layers/stateless.jl:60
 epoch: 1, batch: 1, η: 0.1
 epoch: 1, batch: 2, η: 0.06944444444444445
 epoch: 1, batch: 3, η: 0.051020408163265314
@@ -179,28 +179,7 @@ loss(x, y, m) = Flux.mse(m(x), y)
 cb = () -&gt; @show(opt.optim.eta)
 Flux.@epochs nepochs Flux.train!((x, y) -&gt; loss(x, y, m), Flux.params(m), data, opt, cb = cb)
 </code></pre>
-<pre><code class="plaintext cell-output cell-stream">┌ Warning: The macro `@epochs` will be removed from Flux 0.14.
-│ As an alternative, you can write a simple `for i in 1:epochs` loop.
-│   caller = eval at boot.jl:370 [inlined]
-└ @ Core ./boot.jl:370
-[ Info: Epoch 1
-┌ Warning: Layer with Float32 parameters got Float64 input.
-│   The input will be converted, but any earlier layers may be very slow.
-│   layer = Dense(4 =&gt; 4, tanh)  # 20 parameters
-│   summary(x) = &quot;4×10 Matrix{Float64}&quot;
-└ @ Flux ~/.julia/packages/Flux/n3cOc/src/layers/stateless.jl:60
-opt.optim.eta = 0.1
-opt.optim.eta = 0.06944444444444445
-opt.optim.eta = 0.051020408163265314
-[ Info: Epoch 2
-opt.optim.eta = 0.03906249999999999
-opt.optim.eta = 0.030864197530864196
-opt.optim.eta = 0.025
-[ Info: Epoch 3
-opt.optim.eta = 0.020661157024793386
-opt.optim.eta = 0.01736111111111111
-opt.optim.eta = 0.014792899408284023
-</code></pre>
+<pre><code class="plaintext cell-output cell-result" class="language-plaintext">LoadError(&quot;string&quot;, 5, LoadError(&quot;string&quot;, 5, UndefVarError(Symbol(&quot;@epochs&quot;))))</code></pre>
 <p>Finally, you might be interested in reading <a href="complex-schedules.html#interpolating-schedules">Interpolating schedules</a> to see how to specify a schedule in terms of epochs but iterate it at the granularity of batches.</p>
 </article>
         <div id="page-navigation">
