@@ -189,11 +189,8 @@ function SinExp(range, offset, period, γ)
 end
 SinExp(;λ0, λ1, period, γ) = _sinexp(abs(λ0 - λ1), min(λ0, λ1), period, γ)
 
-function _sindecay2(range::T, offset, period) where T
-    parameters = (Interpolator(Exp(range, T(1/2)), period), offset, period)
-
-    return ComposedSchedule(Sin(range, offset, period), parameters)
-end
+_sinexp(range, offset, period, γ) =
+    ComposedSchedule(Sin(range, offset, period), (Exp(range, γ), offset, period))
 
 """
     CosAnneal(range, offset, period, restart = true)
