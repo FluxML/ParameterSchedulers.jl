@@ -53,11 +53,6 @@ where `Triangle(t)` is `(2 / π) * abs(asin(sin(π * (t - 1) / schedule.period))
 - `range1`/`λ1`: the second range endpoint
 - `period::Integer`: the period
 """
-function _tridecay2(range::T, offset, period) where T
-    parameters = (Interpolator(Exp(range, T(1/2)), period), offset, period)
-
-    return ComposedSchedule(Triangle(range, offset, period), parameters)
-end
 function TriangleDecay2(range, offset, period)
     @warn """TriangleDecay2(range0, range1, period) is now TriangleDecay2(range, offset, period).
              To specify by endpoints, use the keyword argument form.
@@ -66,6 +61,12 @@ function TriangleDecay2(range, offset, period)
     return _tridecay2(range, offset, period)
 end
 TriangleDecay2(;λ0, λ1, period) = _tridecay2(abs(λ0 - λ1), min(λ0, λ1), period)
+
+function _tridecay2(range::T, offset, period) where T
+    parameters = (Interpolator(Exp(range, T(1/2)), period), offset, period)
+
+    return ComposedSchedule(Triangle(range, offset, period), parameters)
+end
 
 """
     TriangleExp{T, S<:Integer}(range0, range1, period, decay)
@@ -86,8 +87,6 @@ where `Triangle(t)` is `(2 / π) * abs(asin(sin(π * (t - 1) / schedule.period))
 - `period::Integer`: the period
 - `decay`/`γ`: the decay rate
 """
-_triexp(range, offset, period, γ) =
-    ComposedSchedule(Triangle(range, offset, period), (Exp(range, γ), offset, period))
 function TriangleExp(range, offset, period, γ)
     @warn """TriangleExp(range0, range1, period, γ) is now TriangleExp(range, offset, period, γ).
              To specify by endpoints, use the keyword argument form.
@@ -96,6 +95,9 @@ function TriangleExp(range, offset, period, γ)
     return _triexp(range, offset, period, γ)
 end
 TriangleExp(;λ0, λ1, period, γ) = _triexp(abs(λ0 - λ1), min(λ0, λ1), period, γ)
+
+_triexp(range, offset, period, γ) =
+    ComposedSchedule(Triangle(range, offset, period), (Exp(range, γ), offset, period))
 
 """
     Sin(range, offset, period)
@@ -146,11 +148,6 @@ where `Sin(t)` is `abs(sin(π * (t - 1) / period))` (see [`Sin`](#)).
 - `offset == min(λ0, λ1)`: the offset / minimum value
 - `period::Integer`: the period
 """
-function _sindecay2(range::T, offset, period) where T
-    parameters = (Interpolator(Exp(range, T(1/2)), period), offset, period)
-
-    return ComposedSchedule(Sin(range, offset, period), parameters)
-end
 function SinDecay2(range, offset, period)
     @warn """SinDecay2(range0, range1, period) is now SinDecay2(range, offset, period).
              To specify by endpoints, use the keyword argument form.
@@ -159,6 +156,12 @@ function SinDecay2(range, offset, period)
     return _sindecay2(range, offset, period)
 end
 SinDecay2(;λ0, λ1, period) = _sindecay2(abs(λ0 - λ1), min(λ0, λ1), period)
+
+function _sindecay2(range::T, offset, period) where T
+    parameters = (Interpolator(Exp(range, T(1/2)), period), offset, period)
+
+    return ComposedSchedule(Sin(range, offset, period), parameters)
+end
 
 """
     SinExp(range, offset, period, γ)
@@ -177,8 +180,6 @@ where `Sin(t)` is `abs(sin(π * (t - 1) / period))` (see [`Sin`](#)).
 - `period::Integer`: the period
 - `γ`: the decay rate
 """
-_sinexp(range, offset, period, γ) =
-    ComposedSchedule(Sin(range, offset, period), (Exp(range, γ), offset, period))
 function SinExp(range, offset, period, γ)
     @warn """SinExp(range0, range1, period, γ) is now SinExp(range, offset, period, γ).
              To specify by endpoints, use the keyword argument form.
@@ -187,6 +188,12 @@ function SinExp(range, offset, period, γ)
     return _sinexp(range, offset, period, γ)
 end
 SinExp(;λ0, λ1, period, γ) = _sinexp(abs(λ0 - λ1), min(λ0, λ1), period, γ)
+
+function _sindecay2(range::T, offset, period) where T
+    parameters = (Interpolator(Exp(range, T(1/2)), period), offset, period)
+
+    return ComposedSchedule(Sin(range, offset, period), parameters)
+end
 
 """
     CosAnneal(range, offset, period, restart = true)
