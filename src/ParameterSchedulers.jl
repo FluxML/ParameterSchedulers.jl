@@ -18,4 +18,10 @@ export Sequence, Loop, Interpolator, Shifted, ComposedSchedule
 
 include("utils.jl")
 
+ext = Base.get_extension(@__MODULE__, :ParameterSchedulersFluxExt)
+if !isnothing(ext)
+    Scheduler = ext.Scheduler
+    export Scheduler
+end
+
 end
