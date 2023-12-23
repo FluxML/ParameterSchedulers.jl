@@ -60,16 +60,15 @@ mutable struct Scheduler{T, O, F} <: Flux.Optimise.AbstractOptimiser
     schedule::T
     optim::O
     update_func::F
+end
+function Scheduler(state::IdDict{Any, Int},
+                   schedule::T,
+                   optim::O,
+                   update_func::F) where {T, O, F}
+    @warn """Scheduler will transition to explicit Optimisers.jl style
+             optimizers in the next release""" _id=(:scheduler) maxlog=1
 
-    function Scheduler{T, O, F}(state::IdDict{Any, Int},
-                                schedule::T,
-                                optim::O,
-                                update_func::F) where {T, O, F}
-        @warn """Scheduler will transition to explicit Optimisers.jl style
-                 optimizers in the next release""" _id=(:scheduler) maxlog=1
-
-        return new{T, O, F}(state, schedule, optim, update_func)
-    end
+    return Scheduler{T, O, F}(state, schedule, optim, update_func)
 end
 Scheduler(schedule, opt, update_func) =
     Scheduler(IdDict{Any, Int}(), schedule, opt, update_func)
