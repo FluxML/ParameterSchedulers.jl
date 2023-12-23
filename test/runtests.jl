@@ -1,5 +1,5 @@
 using ParameterSchedulers
-using Flux
+using Zygote
 using Optimisers
 using Test
 
@@ -22,7 +22,7 @@ end
         o = Optimisers.setup(Scheduler(Optimisers.Descent, s), m)
         x = ones(Float32, 3)
         for t in 1:10
-            g = Flux.gradient(m -> sum(m.W * x + m.b), m)[1]
+            g = Zygote.gradient(m -> sum(m.W * x + m.b), m)[1]
             o, m′ = Optimisers.update(o, m, g)
             @test m′.W ≈ m.W - g.W * s(t)
             @test m′.b ≈ m.b - g.b * s(t)
@@ -36,7 +36,7 @@ end
         o = Optimisers.setup(Scheduler(Optimisers.Momentum, eta = seta, rho = srho), m)
         x = ones(Float32, 3)
         for t in 1:10
-            g = Flux.gradient(m -> sum(m.W * x + m.b), m)[1]
+            g = Zygote.gradient(m -> sum(m.W * x + m.b), m)[1]
             o′, m′ = Optimisers.update(o, m, g)
             @test m′.W ≈ m.W - (srho(t) * o.W.state.opt + g.W * seta(t))
             @test m′.b ≈ m.b - (srho(t) * o.b.state.opt + g.b * seta(t))
