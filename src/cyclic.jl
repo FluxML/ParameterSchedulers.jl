@@ -23,13 +23,8 @@ struct Triangle{T, S<:Integer} <: AbstractSchedule{false}
     offset::T
     period::S
 end
-function Triangle(range::T, offset::T, period::S) where {T, S}
-    @warn """Triangle(range0, range1, period) is now Triangle(range, offset, period).
-             To specify by endpoints, use the keyword argument form.
-             This message will be removed in the next version.""" _id=(:tri) maxlog=1
-
+Triangle(range::T, offset::T, period::S) where {T, S} =
     Triangle{T, S}(range, offset, period)
-end
 Triangle(;λ0, λ1, period) = Triangle(abs(λ0 - λ1), min(λ0, λ1), period)
 
 Base.eltype(::Type{<:Triangle{T}}) where T = T
@@ -54,13 +49,7 @@ where `Triangle(t)` is `(2 / π) * abs(asin(sin(π * (t - 1) / schedule.period))
 - `range1`/`λ1`: the second range endpoint
 - `period::Integer`: the period
 """
-function TriangleDecay2(range, offset, period)
-    @warn """TriangleDecay2(range0, range1, period) is now TriangleDecay2(range, offset, period).
-             To specify by endpoints, use the keyword argument form.
-             This message will be removed in the next version.""" _id=(:tri) maxlog=1
-
-    return _tridecay2(range, offset, period)
-end
+TriangleDecay2(range, offset, period) = _tridecay2(range, offset, period)
 TriangleDecay2(;λ0, λ1, period) = _tridecay2(abs(λ0 - λ1), min(λ0, λ1), period)
 
 function _tridecay2(range::T, offset, period) where T
@@ -89,13 +78,7 @@ where `Triangle(t)` is `(2 / π) * abs(asin(sin(π * (t - 1) / schedule.period))
 - `period::Integer`: the period
 - `decay`/`γ`: the decay rate
 """
-function TriangleExp(range, offset, period, γ)
-    @warn """TriangleExp(range0, range1, period, γ) is now TriangleExp(range, offset, period, γ).
-             To specify by endpoints, use the keyword argument form.
-             This message will be removed in the next version.""" _id=(:tri) maxlog=1
-
-    return _triexp(range, offset, period, γ)
-end
+TriangleExp(range, offset, period, γ) = _triexp(range, offset, period, γ)
 TriangleExp(;λ0, λ1, period, γ) = _triexp(abs(λ0 - λ1), min(λ0, λ1), period, γ)
 
 _triexp(range, offset, period, γ) =
@@ -121,13 +104,7 @@ struct Sin{T, S<:Integer} <: AbstractSchedule{false}
     offset::T
     period::S
 end
-function Sin(range::T, offset::T, period::S) where {T, S}
-    @warn """Sin(range0, range1, period) is now Sin(range, offset, period).
-             To specify by endpoints, use the keyword argument form.
-             This message will be removed in the next version.""" _id=(:sine) maxlog=1
-
-    Sin{T, S}(range, offset, period)
-end
+Sin(range::T, offset::T, period::S) where {T, S} = Sin{T, S}(range, offset, period)
 Sin(;λ0, λ1, period) = Sin(abs(λ0 - λ1), min(λ0, λ1), period)
 
 Base.eltype(::Type{<:Sin{T}}) where T = T
@@ -150,13 +127,7 @@ where `Sin(t)` is `abs(sin(π * (t - 1) / period))` (see [`Sin`](@ref)).
 - `offset == min(λ0, λ1)`: the offset / minimum value
 - `period::Integer`: the period
 """
-function SinDecay2(range, offset, period)
-    @warn """SinDecay2(range0, range1, period) is now SinDecay2(range, offset, period).
-             To specify by endpoints, use the keyword argument form.
-             This message will be removed in the next version.""" _id=(:sine) maxlog=1
-
-    return _sindecay2(range, offset, period)
-end
+SinDecay2(range, offset, period) = _sindecay2(range, offset, period)
 SinDecay2(;λ0, λ1, period) = _sindecay2(abs(λ0 - λ1), min(λ0, λ1), period)
 
 function _sindecay2(range::T, offset, period) where T
@@ -182,13 +153,7 @@ where `Sin(t)` is `abs(sin(π * (t - 1) / period))` (see [`Sin`](@ref)).
 - `period::Integer`: the period
 - `γ`: the decay rate
 """
-function SinExp(range, offset, period, γ)
-    @warn """SinExp(range0, range1, period, γ) is now SinExp(range, offset, period, γ).
-             To specify by endpoints, use the keyword argument form.
-             This message will be removed in the next version.""" _id=(:sine) maxlog=1
-
-    return _sinexp(range, offset, period, γ)
-end
+SinExp(range, offset, period, γ) = _sinexp(range, offset, period, γ)
 SinExp(;λ0, λ1, period, γ) = _sinexp(abs(λ0 - λ1), min(λ0, λ1), period, γ)
 
 _sinexp(range, offset, period, γ) =
@@ -231,6 +196,3 @@ function (schedule::CosAnneal)(t)
 
     return schedule.range * (1 + cos(π * t̂ / schedule.period)) / 2 + schedule.offset
 end
-
-Base.@deprecate Cos(range0, range1, period) CosAnneal(λ0 = range0, λ1 = range1, period = period)
-Base.@deprecate Cos(;λ0, λ1, period) CosAnneal(λ0 = λ0, λ1 = λ1, period = period)

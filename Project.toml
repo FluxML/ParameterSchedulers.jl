@@ -9,10 +9,11 @@ Optimisers = "3bd65402-5787-11e9-1adc-39752487f4e2"
 
 [compat]
 InfiniteArrays = "0.10.4, 0.11, 0.12, 0.13"
-julia = "1.6"
 Optimisers = "0.3.1"
+julia = "1.6"
 
 [extras]
+Flux = "587475ba-b771-5e3f-ad9e-33799f191a9c"
 Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
 
 [publish]
@@ -21,4 +22,4 @@ theme = "_flux-theme"
 title = "ParameterSchedulers.jl"
 
 [targets]
-test = ["Test"]
+test = ["Flux", "Test"]

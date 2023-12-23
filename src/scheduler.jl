@@ -38,12 +38,15 @@ struct Scheduler{T<:Union{<:Tuple, <:NamedTuple}, F} <: AbstractRule
     schedules::T
 end
 Scheduler(constructor, schedules...) = Scheduler(constructor, schedules)
-Scheduler(constructor; schedules...) = Scheduler(constructor, schedules)
+Scheduler(constructor; schedules...) = Scheduler(constructor, (; schedules...))
 
 _get_opt(scheduler::Scheduler{<:Tuple}, t) =
-    scheduler.constructor((s(t) for s in schedules)...)
-_get_opt(scheduler::Scheduler{<:NamedTuple}, t) =
-    scheduler.constructor(NamedTuple{keys(schedules)}(s(t) for s in schedules)...)
+    scheduler.constructor((s(t) for s in scheduler.schedules)...)
+function _get_opt(scheduler::Scheduler{<:NamedTuple}, t)
+    kwargs = NamedTuple{keys(scheduler.schedules)}(s(t) for s in scheduler.schedules)
+
+    return scheduler.constructor(kwargs...)
+end
 
 Optimisers.init(o::Scheduler, x::AbstractArray) =
     (t = 1, opt = Optimisers.init(_get_opt(o, 1), x))
