@@ -19,7 +19,7 @@ end
     @testset "Basic usage" begin
         m = (W = ones(Float32, 4, 3), b = ones(Float32, 4))
         s = Exp(0.1, 0.5)
-        o = Flux.setup(Scheduler(Optimisers.Descent, s), m)
+        o = Optimisers.setup(Scheduler(Optimisers.Descent, s), m)
         x = ones(Float32, 3)
         for t in 1:10
             g = Flux.gradient(m -> sum(m.W * x + m.b), m)[1]
@@ -33,7 +33,7 @@ end
         m = (W = ones(Float32, 4, 3), b = ones(Float32, 4))
         seta = Exp(0.1, 0.5)
         srho = Exp(0.9, 0.9)
-        o = Flux.setup(Scheduler(Optimisers.Momentum, eta = seta, rho = srho), m)
+        o = Optimisers.setup(Scheduler(Optimisers.Momentum, eta = seta, rho = srho), m)
         x = ones(Float32, 3)
         for t in 1:10
             g = Flux.gradient(m -> sum(m.W * x + m.b), m)[1]
