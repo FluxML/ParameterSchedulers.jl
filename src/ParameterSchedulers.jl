@@ -40,6 +40,10 @@ If `opt` does not have a field `eta`, then there is no default behavior
 - `update_func`: a mutating function of with inputs `(optim, param)`
                  that mutates `optim`'s fields based on the current `param` value
 
+!!! warning
+    `Scheduler` functionality depends on `Flux`. Load `Flux` with `using Flux`
+    before using `Scheduler`.
+
 # Examples
 ```julia
 # cosine annealing schedule for Descent
