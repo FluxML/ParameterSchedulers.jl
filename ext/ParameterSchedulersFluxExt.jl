@@ -3,7 +3,6 @@ module ParameterSchedulersFluxExt
 
 using ParameterSchedulers, Flux
 
-export Scheduler
 
 mutable struct Scheduler{T, O, F} <: Flux.Optimise.AbstractOptimiser
     state::IdDict{Any, Int}
