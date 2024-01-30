@@ -55,8 +55,6 @@ Scheduler(CosAnneal{Float64,Int64}(0.1, 0.8, 10), Momentum(0.01, 0.9, IdDict{Any
 """
 function Scheduler end
 
-export Scheduler
-
 using PackageExtensionCompat
 function __init__()
     @require_extensions

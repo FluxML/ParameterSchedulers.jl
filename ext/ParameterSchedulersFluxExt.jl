@@ -53,4 +53,3 @@ for Opt in (Descent, Momentum, Nesterov, RMSProp,
 end
 
 end # module
-
