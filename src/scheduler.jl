@@ -4,9 +4,9 @@
     Scheduler(constructor; field_a = schedule_a, field_b = schedule_b, ...)
 
 Wrap one or more schedules and optimizer together with a `Scheduler`.
-On each call to [`Optimisers.apply!`](@ref Optimisers.apply!), the schedules
-are iterated and `constructor` is used to invoke an optimization rule with
-updated parameters.
+On each call to [`Optimisers.apply!`](https://fluxml.ai/Optimisers.jl/dev/api/#Optimisers.apply!),
+the schedules are iterated and `constructor` is used to invoke an
+optimization rule with updated parameters.
 The `Scheduler` can be used anywhere an Optimisers.jl optimizer is used.
 
 If passed a single schedule and optimizer rule, the scheduler updates the

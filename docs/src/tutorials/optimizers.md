@@ -7,18 +7,20 @@ A schedule by itself is not helpful; we need to use the schedules to adjust para
 Since every schedule is a standard iterator, we can insert it into a training loop by simply zipping up with another iterator. For example, the following code adjusts the learning rate of the optimizer before each batch of training.
 ```@example optimizers
 using Flux, ParameterSchedulers
+using Optimisers: Descent, adjust!
 
 data = [(Flux.rand32(4, 10), rand([-1, 1], 1, 10)) for _ in 1:3]
 m = Chain(Dense(4, 4, tanh), Dense(4, 1, tanh))
-p = Flux.params(m)
 opt = Descent()
+opt_st = Flux.setup(opt, m)
 s = Exp(λ = 1e-1, γ = 0.2)
 
-for (η, (x, y)) in zip(s, data)
-    opt.eta = η
-    g = Flux.gradient(() -> Flux.mse(m(x), y), p)
-    Flux.update!(opt, p, g)
-    println("η: ", opt.eta)
+for (eta, (x, y)) in zip(s, data)
+    global opt_st, m
+    adjust!(opt_st, eta)
+    g = Flux.gradient(m -> Flux.mse(m(x), y), m)[1]
+    opt_st, m = Flux.update!(opt_st, m, g)
+    println("opt state: ", opt_st.layers[1].weight.rule)
 end
 ```
 
@@ -26,12 +28,14 @@ We can also adjust the learning on an epoch basis instead. All that is required 
 ```@example optimizers
 nepochs = 6
 s = Step(λ = 1e-1, γ = 0.2, step_sizes = [3, 2, 1])
-for (η, epoch) in zip(s, 1:nepochs)
-    opt.eta = η
+for (eta, epoch) in zip(s, 1:nepochs)
+    global opt_st
+    adjust!(opt_st, eta)
     for (i, (x, y)) in enumerate(data)
-        g = Flux.gradient(() -> Flux.mse(m(x), y), p)
-        Flux.update!(opt, p, g)
-        println("epoch: $epoch, batch: $i, η: $(opt.eta)")
+        global m
+        g = Flux.gradient(m -> Flux.mse(m(x), y), m)[1]
+        opt_st, m = Flux.update!(opt_st, m, g)
+        println("epoch: $epoch, batch: $i, opt state: $(opt_st.layers[1].weight.rule)")
     end
 end
 ```
@@ -45,20 +49,16 @@ nepochs = 3
 s = ParameterSchedulers.Stateful(Inv(λ = 1e-1, γ = 0.2, p = 2))
 for epoch in 1:nepochs
     for (i, (x, y)) in enumerate(data)
-        opt.eta = ParameterSchedulers.next!(s)
-        g = Flux.gradient(() -> Flux.mse(m(x), y), p)
-        Flux.update!(opt, p, g)
-        println("epoch: $epoch, batch: $i, η: $(opt.eta)")
+        global opt_st, m
+        adjust!(opt_st, ParameterSchedulers.next!(s))
+        g = Flux.gradient(m -> Flux.mse(m(x), y), m)[1]
+        opt_st, m = Flux.update!(opt_st, m, g)
+        println("epoch: $epoch, batch: $i, opt state: $(opt_st.layers[1].weight.rule)")
     end
 end
 ```
 
 ## Working with Flux optimizers
-
-!!! warning
-    Currently, we are porting `Scheduler` to Flux.jl.
-    It may be renamed once it is ported out of this package.
-    The API will also undergo minor changes.
 
 While the approaches above can be helpful when dealing with fine-grained training loops, it is usually simpler to just use a [`ParameterSchedulers.Scheduler`](@ref).
 ```@example optimizers
@@ -66,23 +66,28 @@ using ParameterSchedulers: Scheduler
 
 nepochs = 3
 s = Inv(λ = 1e-1, p = 2, γ = 0.2)
-opt = Scheduler(s, Descent())
+opt = Scheduler(Descent, s)
+opt_st = Flux.setup(opt, m)
 for epoch in 1:nepochs
     for (i, (x, y)) in enumerate(data)
-        g = Flux.gradient(() -> Flux.mse(m(x), y), p)
-        Flux.update!(opt, p, g)
-        println("epoch: $epoch, batch: $i, η: $(opt.optim.eta)")
+        global opt_st, m
+        sched_step = opt_st.layers[1].weight.state.t
+        println("epoch: $epoch, batch: $i, sched state: $sched_step")
+        g = Flux.gradient(m -> Flux.mse(m(x), y), m)[1]
+        opt_st, m = Flux.update!(opt_st, m, g)
     end
 end
 ```
 The scheduler, `opt`, can be used anywhere a Flux optimizer can. For example, it can be passed to `Flux.train!`:
 ```@example optimizers
 s = Inv(λ = 1e-1, p = 2, γ = 0.2)
-opt = Scheduler(s, Descent())
-loss(x, y, m) = Flux.mse(m(x), y)
-cb = () -> @show(opt.optim.eta)
+opt = Scheduler(Descent, s)
+opt_st = Flux.setup(opt, m)
+loss(m, x, y) = Flux.mse(m(x), y)
 for epoch in 1:nepochs
-    Flux.train!((x, y) -> loss(x, y, m), Flux.params(m), data, opt, cb = cb)
+    sched_step = opt_st.layers[1].weight.state.t
+    println("epoch: $epoch, sched state: $sched_step")
+    Flux.train!(loss, m, data, opt_st)
 end
 ```
 
