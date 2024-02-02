@@ -3,7 +3,7 @@
 If you are coming from PyTorch or Tensorflow, the following table should help you find the corresponding schedule policy in ParameterSchedulers.jl.
 
 !!! note
-    PyTorch typically wraps an optimizer as the first argument, but we ignore that functionality in the table. To wrap a Flux.jl optimizer with a schedule from the rightmost column, use [`ParameterSchedules.Scheduler`](#).
+    PyTorch typically wraps an optimizer as the first argument, but we ignore that functionality in the table. To wrap a Flux.jl optimizer with a schedule from the rightmost column, use [`ParameterSchedulers.Scheduler`](@ref).
     The variable `lr` in the middle/rightmost column refers to the initial learning rate of the optimizer.
 
 | PyTorch                                                                        | Tensorflow                                            | ParameterSchedulers.jl                                |
@@ -18,21 +18,21 @@ If you are coming from PyTorch or Tensorflow, the following table should help yo
 | N/A                                                                            | `ExponentialDecay(lr, steps, gamma, False)`           | `Interpolator(Exp(lr, gamma), steps)`                 |
 | `CosineAnnealingLR(_, T_max, eta_min)`                                         | `CosineDecay(lr, T_max, eta_min)`                     | `CosAnneal(lr, eta_min, T_0, false)`                  |
 | `CosineAnnealingRestarts(_, T_0, 1, eta_min)`                                  | `CosineDecayRestarts(lr, T_0, 1, 1, eta_min)`         | `CosAnneal(lr, eta_min, T_0)`                         |
-| `CosineAnnealingRestarts(_, T_0, T_mult, eta_min)`                             | `CosineDecayRestarts(lr, T_0, T_mult, 1, alpha)`      | See [below](# "Cosine annealing variants")            |
-| N/A                                                                            | `CosineDecayRestarts(lr, T_0, T_mult, m_mul, alpha)`  | See [below](# "Cosine annealing variants")            |
+| `CosineAnnealingRestarts(_, T_0, T_mult, eta_min)`                             | `CosineDecayRestarts(lr, T_0, T_mult, 1, alpha)`      | See [below](@ref "Cosine annealing variants")            |
+| N/A                                                                            | `CosineDecayRestarts(lr, T_0, T_mult, m_mul, alpha)`  | See [below](@ref "Cosine annealing variants")            |
 | `SequentialLR(_, schedulers, milestones)`                                      | N/A                                                   | `Sequence(schedulers, milestones)`                    |
-| `ReduceLROnPlateau(_, mode, factor, patience, threshold, 'abs', 0)`            | N/A                                                   | See [below](# "`ReduceLROnPlateau` style schedules")  |
+| `ReduceLROnPlateau(_, mode, factor, patience, threshold, 'abs', 0)`            | N/A                                                   | See [below](@ref "`ReduceLROnPlateau` style schedules")  |
 | `CyclicLR(_, base_lr, max_lr, step_size, step_size, 'triangular', _, None)`    | N/A                                                   | `Triangle(base_lr, max_lr, step_size)`                |
 | `CyclicLR(_, base_lr, max_lr, step_size, step_size, 'triangular2', _, None)`   | N/A                                                   | `TriangleDecay2(base_lr, max_lr, step_size)`          |
 | `CyclicLR(_, base_lr, max_lr, step_size, step_size, 'exp_range', gamma, None)` | N/A                                                   | `TriangleExp(base_lr, max_lr, step_size, gamma)`      |
-| `CyclicLR(_, base_lr, max_lr, step_size, step_size, _, _, scale_fn)`           | N/A                                                   | See [Arbitrary looping schedules](#)                  |
+| `CyclicLR(_, base_lr, max_lr, step_size, step_size, _, _, scale_fn)`           | N/A                                                   | See [Arbitrary looping schedules](@ref)                  |
 | N/A                                                                            | `InverseTimeDecay(lr, 1, decay_rate, False)`          | `Inv(lr, decay_rate, 1)`                              |
 | N/A                                                                            | `InverseTimeDecay(lr, decay_step, decay_rate, False)` | `Interpolator(Inv(lr, decay_rate, 1), decay_step)`    |
 | N/A                                                                            | `PolynomialDecay(lr, decay_steps, 0, power, False)`   | `Poly(lr, power, decay_steps)`                        |
 
 ## Cosine annealing variants
 
-In addition to the plain cosine annealing w/ warm restarts schedule, we may want to decay the peak learning rate or increase the period. Both can be done using [`ComposedSchedule`](#) or [`Sequence`](#).
+In addition to the plain cosine annealing w/ warm restarts schedule, we may want to decay the peak learning rate or increase the period. Both can be done using [`ComposedSchedule`](@ref) or [`Sequence`](@ref).
 
 Let's start with the simpler task: decaying the learning rate.
 ```julia
@@ -41,7 +41,7 @@ s = ComposedSchedule(CosAnneal(range, offset, period),
                      (Step(range, m_mul, period), offset, period))
 ```
 
-To increase the period by a fixed multiple, we should think of each period of the schedule as an individual schedule concatenated together. This is exactly what [`Sequence`](#) is except that there is no limit to the number of periods that we concatenate together. Fortunately, `Sequence` accepts [`Base.Generators`](https://docs.julialang.org/en/v1.7/manual/arrays/#Generator-Expressions). When combined with [InfiniteArrays.jl](https://github.com/JuliaArrays/InfiniteArrays.jl), we can create an infinite sequence of individual schedules.
+To increase the period by a fixed multiple, we should think of each period of the schedule as an individual schedule concatenated together. This is exactly what [`Sequence`](@ref) is except that there is no limit to the number of periods that we concatenate together. Fortunately, `Sequence` accepts [`Base.Generators`](https://docs.julialang.org/en/v1.7/manual/arrays/#Generator-Expressions). When combined with [InfiniteArrays.jl](https://github.com/JuliaArrays/InfiniteArrays.jl), we can create an infinite sequence of individual schedules.
 ```julia
 using InfiniteArrays: OneToInf
 
@@ -53,7 +53,7 @@ s = Sequence(CosAnneal(range, offset, e(t)) for t in OneToInf(),
 
 ## `ReduceLROnPlateau` style schedules
 
-Unlike PyTorch, ParameterSchedulers.jl doesn't create a monolithic schedule to control dynamic schedules. Instead, [`ParameterSchedulers.Stateful`](#) has an `advance` keyword argument that can allow for arbitrary advancement of schedules based on a predicate function. When combined with `Flux.plateau` as the predicate, we get `ReduceLROnPlateau`.
+Unlike PyTorch, ParameterSchedulers.jl doesn't create a monolithic schedule to control dynamic schedules. Instead, [`ParameterSchedulers.Stateful`](@ref) has an `advance` keyword argument that can allow for arbitrary advancement of schedules based on a predicate function. When combined with `Flux.plateau` as the predicate, we get `ReduceLROnPlateau`.
 ```julia
 # the code below is written to match
 # ReduceLROnPlateau(_, 'max', factor, patience, threshold, 'abs', 0)

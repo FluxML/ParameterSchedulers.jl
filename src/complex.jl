@@ -189,7 +189,7 @@ Base.IteratorEltype(::Type{<:Shifted{T}}) where T = Base.IteratorEltype(T)
 (offset_schedule::Shifted)(t) = offset_schedule.schedule(t - 1 + offset_schedule.offset)
 
 """
-    ComposedSchedule([(s, ps) -> T(ps...), ]schedule::T, parameters)
+    ComposedSchedule([(s, ps) -> T(ps...),] schedule::T, parameters)
 
 A `schedule` whose fields are given by `parameters.(t)` at iteration `t`.
 

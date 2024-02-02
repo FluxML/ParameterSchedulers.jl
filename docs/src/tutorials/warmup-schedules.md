@@ -1,13 +1,12 @@
 # Warm-up Schedules
 
-A popular technique for scheduling learning rates is "warming-up" the optimizer by ramping the learning rate up from zero to the "true" initial learning rate, then starting the "real" schedule. This is easily implementable with ParameterSchedulers.jl using [`Sequence`](#).
+A popular technique for scheduling learning rates is "warming-up" the optimizer by ramping the learning rate up from zero to the "true" initial learning rate, then starting the "real" schedule. This is easily implementable with ParameterSchedulers.jl using [`Sequence`](@ref).
 
 ## Linear ramp
 
-Suppose we want to increase our learning rate using a linear ramp function. We can achieve this by running a [`Triangle`](#) schedule for a half-period.
+Suppose we want to increase our learning rate using a linear ramp function. We can achieve this by running a [`Triangle`](@ref) schedule for a half-period.
 
-{cell=ramp}
-```julia
+```@example warmup-schedule
 using ParameterSchedulers
 using UnicodePlots
 
@@ -23,8 +22,7 @@ lineplot(t, ramp.(t); border = :none)
 
 Of course, if we run the `Triangle` for more than `warmup` iterations, it will be periodic. So, we want to make sure to start our "real" schedule immediately after half a period.
 
-{cell=ramp}
-```julia
+```@example warmup-schedule
 total_iters = 100
 
 # let's wrap it all up in a convenience constructor
@@ -39,10 +37,9 @@ lineplot(t, s.(t); border = :none)
 
 ## Sine ramp
 
-Another common ramp function is a half period of a sine wave. We can use [`Sin`](#) and the same technique as the previous section.
+Another common ramp function is a half period of a sine wave. We can use [`Sin`](@ref) and the same technique as the previous section.
 
-{cell=ramp}
-```julia
+```@example warmup-schedule
 WarmupSin(startlr, initlr, warmup, total_iters, schedule) =
     Sequence(Sin(λ0 = startlr, λ1 = initlr, period = 2 * warmup) => warmup,
              schedule => total_iters)
@@ -54,10 +51,9 @@ lineplot(t, s.(t); border = :none)
 
 ## Using `Shifted` to start the "real" schedule
 
-Sometimes, the "real" schedule doesn't start at the `initial_lr` like `Exp`. Suppose we want a sine warmup followed by a `Triangle` schedule. `Triangle` starts at `min(λ0, λ1)`, so to get this correct, we want to start the `Triangle` half-way through its first period. We can use [`Shifted`](#) to do this.
+Sometimes, the "real" schedule doesn't start at the `initial_lr` like `Exp`. Suppose we want a sine warmup followed by a `Triangle` schedule. `Triangle` starts at `min(λ0, λ1)`, so to get this correct, we want to start the `Triangle` half-way through its first period. We can use [`Shifted`](@ref) to do this.
 
-{cell=ramp}
-```julia
+```@example warmup-schedule
 # shift the Triangle by half a period + 1 to start at the peak
 tri = Shifted(Triangle(λ0 = min_lr, λ1 = initial_lr, period = 10), 6)
 s = WarmupSin(min_lr, initial_lr, warmup, total_iters, tri)

@@ -46,7 +46,8 @@ The output conforms to
 ```text
 abs(λ0 - λ1) * Triangle(t) / (2^floor((t - 1) / period)) + min(λ0, λ1)
 ```
-where `Triangle(t)` is `(2 / π) * abs(asin(sin(π * (t - 1) / schedule.period)))` (see [`Triangle`](#)).
+where `Triangle(t)` is `(2 / π) * abs(asin(sin(π * (t - 1) / schedule.period)))`
+(see [`Triangle`](@ref)).
 
 # Arguments
 - `range0`/`λ0`: the first range endpoint
@@ -79,7 +80,8 @@ The output conforms to
 ```text
 abs(λ0 - λ1) * Triangle(t) * γ^(t - 1) + min(λ0, λ1)
 ```
-where `Triangle(t)` is `(2 / π) * abs(asin(sin(π * (t - 1) / schedule.period)))` (see [`Triangle`](#)).
+where `Triangle(t)` is `(2 / π) * abs(asin(sin(π * (t - 1) / schedule.period)))`
+(see [`Triangle`](@ref)).
 
 # Arguments
 - `range0`/`λ0`: the first range endpoint
@@ -141,7 +143,7 @@ The output conforms to
 ```text
 abs(λ0 - λ1) * Sin(t) / (2^floor((t - 1) / period)) + min(λ0, λ1)
 ```
-where `Sin(t)` is `abs(sin(π * (t - 1) / period))` (see [`Sin`](#)).
+where `Sin(t)` is `abs(sin(π * (t - 1) / period))` (see [`Sin`](@ref)).
 
 # Arguments
 - `range == abs(λ0 - λ1)`: the dynamic range (given by the endpoints)
@@ -172,7 +174,7 @@ The output conforms to
 ```text
 abs(λ0 - λ1) * Sin(t) * γ^(t - 1) + min(λ0, λ1)
 ```
-where `Sin(t)` is `abs(sin(π * (t - 1) / period))` (see [`Sin`](#)).
+where `Sin(t)` is `abs(sin(π * (t - 1) / period))` (see [`Sin`](@ref)).
 
 # Arguments
 - `range == abs(λ0 - λ1)`: the dynamic range (given by the endpoints)

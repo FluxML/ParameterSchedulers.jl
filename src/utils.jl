@@ -4,6 +4,7 @@
 Return a reverse function such that `reverse(f, period)(t) == f(period - t)`.
 """
 reverse(f, period) = t -> f(period - t)
+
 """
     symmetric(f, period)
 
