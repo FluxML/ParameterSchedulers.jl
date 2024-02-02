@@ -10,7 +10,7 @@ Type parameter `IsFinite` can take three values:
 - `T`: a type `T` that indicates all iterator interface functions
        should forward to this type
 
-Read the [generic interface](#) docs section for more.
+Read the [generic interface](@ref "Generic interface") docs section for more.
 """
 abstract type AbstractSchedule{IsFinite} end
 
