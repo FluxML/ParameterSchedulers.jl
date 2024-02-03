@@ -125,34 +125,32 @@ lineplot(trange, s.(trange); border = :none)</code></pre><pre class="documenter-
    <span class="sgr90">0.001</span> <span class="sgr90">⠀</span>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀<span class="sgr32">⣇⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀⣀</span><span class="sgr90">⠀</span> 
          <span class="sgr90">⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀</span> 
          ⠀<span class="sgr90">0</span>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀<span class="sgr90">2</span>⠀ </code></pre><p>Notice that our schedule changes around 1 second (half way through the simulation).</p><p>For the second example, we&#39;ll look at a machine learning use-case. We want to write our schedule in terms of epochs, but our training loop iterates the scheduler every mini-batch.</p><pre><code class="language-julia hljs">using Flux
+using Optimisers
 using ParameterSchedulers: Scheduler
 
 nepochs = 3
-data = [(rand(4, 10), rand([-1, 1], 1, 10)) for _ in 1:3]
+data = [(Flux.rand32(4, 10), rand([-1, 1], 1, 10)) for _ in 1:3]
 m = Chain(Dense(4, 4, tanh), Dense(4, 1, tanh))
-p = Flux.params(m)
-s = Interpolator(Sequence(1e-2 =&gt; 1, Exp(1e-2, 2.0) =&gt; 2), length(data))
-opt = Scheduler(s, Descent())
+s = Interpolator(Sequence(1f-2 =&gt; 1, Exp(1f-2, 2f0) =&gt; 2), length(data))
+opt = Scheduler(Optimisers.Descent, s)
+opt_st = Flux.setup(opt, m)
 for epoch in 1:nepochs
     for (i, (x, y)) in enumerate(data)
-        g = Flux.gradient(() -&gt; Flux.mse(m(x), y), p)
-        Flux.update!(opt, p, g)
-        println(&quot;epoch: $epoch, batch: $i, η: $(opt.optim.eta)&quot;)
+        global opt_st, m
+        step = opt_st.layers[1].weight.state.t
+        println(&quot;epoch: $epoch, batch: $i, sched step = $step&quot;)
+        g = Flux.gradient(m -&gt; Flux.mse(m(x), y), m)[1]
+        opt_st, m = Flux.update!(opt_st, m, g)
     end
-end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">┌ Warning: Layer with Float32 parameters got Float64 input.
-│   The input will be converted, but any earlier layers may be very slow.
-│   layer = Dense(4 =&gt; 4, tanh)  # 20 parameters
-│   summary(x) = &quot;4×10 Matrix{Float64}&quot;
-└ @ Flux ~/.julia/packages/Flux/n3cOc/src/layers/stateless.jl:60
-epoch: 1, batch: 1, η: 0.01
-epoch: 1, batch: 2, η: 0.01
-epoch: 1, batch: 3, η: 0.01
-epoch: 2, batch: 1, η: 0.01
-epoch: 2, batch: 2, η: 0.01
-epoch: 2, batch: 3, η: 0.01
-epoch: 3, batch: 1, η: 0.02
-epoch: 3, batch: 2, η: 0.02
-epoch: 3, batch: 3, η: 0.02</code></pre><h2 id="Composing-schedules"><a class="docs-heading-anchor" href="#Composing-schedules">Composing schedules</a><a id="Composing-schedules-1"></a><a class="docs-heading-anchor-permalink" href="#Composing-schedules" title="Permalink"></a></h2><p>While the functionality above is already quite powerful, we are still limited to constant values for our schedule&#39;s fields. Just like we use schedules to adjust our model&#39;s hyper-parameters, we might want to use schedules to adjust our schedule&#39;s fields! You can do this with <a href="../../api/complex/#ParameterSchedulers.ComposedSchedule"><code>ComposedSchedule</code></a>.</p><p>In fact, many of the cyclic schedules are built on top of this feature. As an exercise, we will build <code>SinDecay10</code> which behaves similar to <code>SinDecay2</code> but dropping the peak amplitude by a factor of 10 each time.</p><pre><code class="language-julia hljs">function SinDecay10(range, offset, period)
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">epoch: 1, batch: 1, sched step = 1
+epoch: 1, batch: 2, sched step = 2
+epoch: 1, batch: 3, sched step = 3
+epoch: 2, batch: 1, sched step = 4
+epoch: 2, batch: 2, sched step = 5
+epoch: 2, batch: 3, sched step = 6
+epoch: 3, batch: 1, sched step = 7
+epoch: 3, batch: 2, sched step = 8
+epoch: 3, batch: 3, sched step = 9</code></pre><h2 id="Composing-schedules"><a class="docs-heading-anchor" href="#Composing-schedules">Composing schedules</a><a id="Composing-schedules-1"></a><a class="docs-heading-anchor-permalink" href="#Composing-schedules" title="Permalink"></a></h2><p>While the functionality above is already quite powerful, we are still limited to constant values for our schedule&#39;s fields. Just like we use schedules to adjust our model&#39;s hyper-parameters, we might want to use schedules to adjust our schedule&#39;s fields! You can do this with <a href="../../api/complex/#ParameterSchedulers.ComposedSchedule"><code>ComposedSchedule</code></a>.</p><p>In fact, many of the cyclic schedules are built on top of this feature. As an exercise, we will build <code>SinDecay10</code> which behaves similar to <code>SinDecay2</code> but dropping the peak amplitude by a factor of 10 each time.</p><pre><code class="language-julia hljs">function SinDecay10(range, offset, period)
     parameters = (Step(range, 0.1, period), offset, period)
     ComposedSchedule(Sin(range, offset, period), parameters)
 end
@@ -165,4 +163,4 @@ s = typeof(composed.schedule)(ps...)</code></pre><p>If this is not going to work
         @show parameter_values
         Sin(parameter_values...)
     end
-end</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../optimizers/">« Scheduling optimizers</a><a class="docs-footer-nextpage" href="../warmup-schedules/">Warm-up Schedules »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="auto">Automatic (OS)</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.2.1 on <span class="colophon-date" title="Friday 2 February 2024 22:25">Friday 2 February 2024</span>. Using Julia version 1.6.7.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+end</code></pre></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../optimizers/">« Scheduling optimizers</a><a class="docs-footer-nextpage" href="../warmup-schedules/">Warm-up Schedules »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="auto">Automatic (OS)</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.2.1 on <span class="colophon-date" title="Saturday 3 February 2024 00:14">Saturday 3 February 2024</span>. Using Julia version 1.10.0.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
