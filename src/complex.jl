@@ -228,3 +228,28 @@ function (composition::ComposedSchedule)(t)
 
     return s(t)
 end
+
+"""
+    OneCycle(nsteps, maxval;
+             startval = maxval / 25,
+             endval = maxval / 1f5,
+             percent_start = 0.25)
+
+Creates a one-cycle cosine schedule over `nsteps` steps warming up from `startval`
+up to `maxval` for `ceil(percent_start * nsteps)`, then back to `endval`
+(see [Super-Convergence: Very Fast Training of Neural Networks Using Large Learning Rates](https://arxiv.org/abs/1708.07120)).
+"""
+function OneCycle(nsteps, maxval;
+                  startval = max / 25,
+                  endval = max / 1f5,
+                  percent_start = 0.25)
+    @assert 0 < percent_start < 1
+
+    warmup = ceil(Int, nsteps * percent_start)
+    warmdown = nsteps - warmup
+
+    return Sequence(
+        Sin(λ0=maxval, λ1=startval, period=2*warmup) => warmup,
+        Shifted(Sin(λ0=maxval, λ1=endval, period=2*warmdown), warmdown + 1) => warmdown
+    )
+end

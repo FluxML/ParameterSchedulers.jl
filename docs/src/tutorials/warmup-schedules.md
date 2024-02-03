@@ -1,6 +1,22 @@
 # Warm-up Schedules
 
-A popular technique for scheduling learning rates is "warming-up" the optimizer by ramping the learning rate up from zero to the "true" initial learning rate, then starting the "real" schedule. This is easily implementable with ParameterSchedulers.jl using [`Sequence`](@ref).
+A popular technique for scheduling learning rates is "warming-up" the optimizer by ramping the learning rate up from near zero to the "true" initial learning rate, then starting the "real" schedule. This is easily implementable with ParameterSchedulers.jl using [`Sequence`](@ref).
+
+## One cycle cosine schedule
+
+A one-cycle cosine schedule is the most popular warm-up schedule. It ramps up once and ramps down once using a cosine waveform. Since this schedule is so common, we provide a convenience constructor in ParameterSchedulers.jl, [`OneCycle`](@ref).
+
+```@example onecycle
+using ParameterSchedulers
+using UnicodePlots
+
+nsteps = 10
+maxval = 1f-1
+onecycle = OneCycle(10, 1f-1; percent_start = 0.4)
+
+t = 1:nsteps |> collect
+lineplot(t, onecycle.(t); border = :none)
+```
 
 ## Linear ramp
 
