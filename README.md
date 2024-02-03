@@ -8,7 +8,7 @@ ParameterSchedulers.jl provides common machine learning (ML) schedulers for hype
 using Flux, ParameterSchedulers
 using ParameterSchedulers: Scheduler
 
-opt = Scheduler(Exp(λ = 1e-2, γ = 0.8), Momentum())
+opt = Scheduler(Momentum, Exp(λ = 1e-2, γ = 0.8))
 ```
 
 ## Available Schedules

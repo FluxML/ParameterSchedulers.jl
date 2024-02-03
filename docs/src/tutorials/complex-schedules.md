@@ -78,19 +78,22 @@ Notice that our schedule changes around 1 second (half way through the simulatio
 For the second example, we'll look at a machine learning use-case. We want to write our schedule in terms of epochs, but our training loop iterates the scheduler every mini-batch.
 ```@example complex-schedules
 using Flux
+using Optimisers
 using ParameterSchedulers: Scheduler
 
 nepochs = 3
-data = [(rand(4, 10), rand([-1, 1], 1, 10)) for _ in 1:3]
+data = [(Flux.rand32(4, 10), rand([-1, 1], 1, 10)) for _ in 1:3]
 m = Chain(Dense(4, 4, tanh), Dense(4, 1, tanh))
-p = Flux.params(m)
-s = Interpolator(Sequence(1e-2 => 1, Exp(1e-2, 2.0) => 2), length(data))
-opt = Scheduler(s, Descent())
+s = Interpolator(Sequence(1f-2 => 1, Exp(1f-2, 2f0) => 2), length(data))
+opt = Scheduler(Optimisers.Descent, s)
+opt_st = Flux.setup(opt, m)
 for epoch in 1:nepochs
     for (i, (x, y)) in enumerate(data)
-        g = Flux.gradient(() -> Flux.mse(m(x), y), p)
-        Flux.update!(opt, p, g)
-        println("epoch: $epoch, batch: $i, η: $(opt.optim.eta)")
+        global opt_st, m
+        step = opt_st.layers[1].weight.state.t
+        println("epoch: $epoch, batch: $i, sched step = $step")
+        g = Flux.gradient(m -> Flux.mse(m(x), y), m)[1]
+        opt_st, m = Flux.update!(opt_st, m, g)
     end
 end
 ```
