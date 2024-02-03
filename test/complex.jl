@@ -83,3 +83,30 @@ end
     @test log(2) == next!(stateful_s)
     @test log(2) == next!(stateful_s)
 end
+
+@testset "OneCycle" begin
+    function onecycle(t, nsteps, startval, maxval, endval, pct)
+        warmup = ceil(Int, pct * nsteps)
+        warmdown = nsteps - warmup
+
+        if t > nsteps
+            return endval
+        elseif  t <= warmup
+            return _cycle(startval, maxval, _sin(t, 2 * warmup))
+        else
+            return _cycle(maxval, endval, _cos(t, 2 * warmdown))
+        end
+    end
+
+    nsteps = 50
+    maxval = 1f-1
+    s = OneCycle(nsteps, maxval)
+    @test all(s(t) == onecycle(t, nsteps, maxval / 25, maxval, maxval / 1f5, 0.25)
+              for t in 1:(2 * nsteps))
+    startval = 1f-4
+    endval = 1f-2
+    pct = 0.3
+    s = OneCycle(nsteps, maxval; startval, endval, percent_start = pct)
+    @test all(s(t) == onecycle(t, nsteps, startval, maxval, endval, pct)
+              for t in 1:(2 * nsteps))
+end
