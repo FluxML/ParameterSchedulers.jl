@@ -6,7 +6,7 @@ data = [(Flux.rand32(4, 10), rand([-1, 1], 1, 10)) for _ in 1:3]
 m = Chain(Dense(4, 4, tanh), Dense(4, 1, tanh))
 opt = Descent()
 opt_st = Flux.setup(opt, m)
-s = Exp(λ = 1e-1, γ = 0.2)
+s = Exp(start = 1e-1, decay = 0.2)
 
 for (eta, (x, y)) in zip(s, data)
     global opt_st, m
@@ -17,7 +17,7 @@ for (eta, (x, y)) in zip(s, data)
 end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">opt state: Descent(0.1f0)
 opt state: Descent(0.02f0)
 opt state: Descent(0.004f0)</code></pre><p>We can also adjust the learning on an epoch basis instead. All that is required is to change what we zip our schedule with.</p><pre><code class="language-julia hljs">nepochs = 6
-s = Step(λ = 1e-1, γ = 0.2, step_sizes = [3, 2, 1])
+s = Step(start = 1e-1, decay = 0.2, step_sizes = [3, 2, 1])
 for (eta, epoch) in zip(s, 1:nepochs)
     global opt_st
     adjust!(opt_st, eta)
@@ -45,7 +45,7 @@ epoch: 5, batch: 3, opt state: Descent(0.02f0)
 epoch: 6, batch: 1, opt state: Descent(0.004f0)
 epoch: 6, batch: 2, opt state: Descent(0.004f0)
 epoch: 6, batch: 3, opt state: Descent(0.004f0)</code></pre><h2 id="Stateful-iteration-with-training"><a class="docs-heading-anchor" href="#Stateful-iteration-with-training">Stateful iteration with training</a><a id="Stateful-iteration-with-training-1"></a><a class="docs-heading-anchor-permalink" href="#Stateful-iteration-with-training" title="Permalink"></a></h2><p>Sometimes zipping up the schedule with an iterator isn&#39;t sufficient. For example, we might want to advance the schedule with every batch but not be forced to restart each epoch. In such a situation with nested loops, it becomes useful to use <a href="../../api/general/#ParameterSchedulers.Stateful"><code>ParameterSchedulers.Stateful</code></a> which maintains its own iteration state. {cell=optimizers}</p><pre><code class="language-julia hljs">nepochs = 3
-s = ParameterSchedulers.Stateful(Inv(λ = 1e-1, γ = 0.2, p = 2))
+s = ParameterSchedulers.Stateful(Inv(start = 1e-1, decay = 0.2, degree = 2))
 for epoch in 1:nepochs
     for (i, (x, y)) in enumerate(data)
         global opt_st, m
@@ -65,7 +65,7 @@ epoch: 3, batch: 2, opt state: Descent(0.017361112f0)
 epoch: 3, batch: 3, opt state: Descent(0.0147929f0)</code></pre><h2 id="Working-with-Flux-optimizers"><a class="docs-heading-anchor" href="#Working-with-Flux-optimizers">Working with Flux optimizers</a><a id="Working-with-Flux-optimizers-1"></a><a class="docs-heading-anchor-permalink" href="#Working-with-Flux-optimizers" title="Permalink"></a></h2><p>While the approaches above can be helpful when dealing with fine-grained training loops, it is usually simpler to just use a <a href="../../api/general/#ParameterSchedulers.Scheduler"><code>ParameterSchedulers.Scheduler</code></a>.</p><pre><code class="language-julia hljs">using ParameterSchedulers: Scheduler
 
 nepochs = 3
-s = Inv(λ = 1e-1, p = 2, γ = 0.2)
+s = Inv(start = 1e-1, degree = 2, decay = 0.2)
 opt = Scheduler(Descent, s)
 opt_st = Flux.setup(opt, m)
 for epoch in 1:nepochs
@@ -84,7 +84,7 @@ epoch: 2, batch: 2, sched state: 5
 epoch: 2, batch: 3, sched state: 6
 epoch: 3, batch: 1, sched state: 7
 epoch: 3, batch: 2, sched state: 8
-epoch: 3, batch: 3, sched state: 9</code></pre><p>The scheduler, <code>opt</code>, can be used anywhere a Flux optimizer can. For example, it can be passed to <code>Flux.train!</code>:</p><pre><code class="language-julia hljs">s = Inv(λ = 1e-1, p = 2, γ = 0.2)
+epoch: 3, batch: 3, sched state: 9</code></pre><p>The scheduler, <code>opt</code>, can be used anywhere a Flux optimizer can. For example, it can be passed to <code>Flux.train!</code>:</p><pre><code class="language-julia hljs">s = Inv(start = 1e-1, degree = 2, decay = 0.2)
 opt = Scheduler(Descent, s)
 opt_st = Flux.setup(opt, m)
 loss(m, x, y) = Flux.mse(m(x), y)
@@ -94,4 +94,4 @@ for epoch in 1:nepochs
     Flux.train!(loss, m, data, opt_st)
 end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">epoch: 1, sched state: 1
 epoch: 2, sched state: 4
-epoch: 3, sched state: 7</code></pre><p>Finally, you might be interested in reading <a href="../complex-schedules/#Interpolating-schedules">Interpolating schedules</a> to see how to specify a schedule in terms of epochs but iterate it at the granularity of batches.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../basic-schedules/">« Basic schedules</a><a class="docs-footer-nextpage" href="../complex-schedules/">Complex schedules »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="auto">Automatic (OS)</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.2.1 on <span class="colophon-date" title="Saturday 3 February 2024 00:14">Saturday 3 February 2024</span>. Using Julia version 1.10.0.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+epoch: 3, sched state: 7</code></pre><p>Finally, you might be interested in reading <a href="../complex-schedules/#Interpolating-schedules">Interpolating schedules</a> to see how to specify a schedule in terms of epochs but iterate it at the granularity of batches.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../basic-schedules/">« Basic schedules</a><a class="docs-footer-nextpage" href="../complex-schedules/">Complex schedules »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.3.0 on <span class="colophon-date" title="Saturday 2 March 2024 22:17">Saturday 2 March 2024</span>. Using Julia version 1.10.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
