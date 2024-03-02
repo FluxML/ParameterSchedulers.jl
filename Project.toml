@@ -1,7 +1,7 @@
 name = "ParameterSchedulers"
 uuid = "d7d3b36b-41b8-4d0d-a2bf-768c6151755e"
 authors = ["Kyle Daruwalla"]
-version = "0.4.0"
+version = "0.4.1"
 
 [deps]
 InfiniteArrays = "4858937d-0d70-526a-a4dd-2d5cb5dd786c"

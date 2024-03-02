@@ -6,7 +6,7 @@ using ParameterSchedulers # hide
 
 All schedules types in ParameterSchedulers.jl behave as callable iterators. For example, we can call the simple exponential decay schedule ([`Exp`](@ref)) below at a specific iteration:
 ```@example getting-started
-s = Exp(λ = 0.1, γ = 0.8)
+s = Exp(start = 0.1, decay = 0.8)
 println("s(1): ", s(1))
 println("s(5): ", s(5))
 ```
@@ -42,7 +42,8 @@ println("s: ", next!(stateful_s))
 
 Also note that `Stateful` cannot be called (or iterated with `Base.iterate`):
 ```@example getting-started
-try stateful_s(1)
+try
+    stateful_s(1)
 catch e
     println(e)
 end

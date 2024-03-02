@@ -1,3 +1,5 @@
+import Base
+
 """
     reverse(f, period)
 
@@ -30,4 +32,24 @@ else
             end
         end
     end
+end
+
+"""
+    depkwargs(fn::Symbol, kwargs, remaps::Pair...) 
+
+Remap depracated `kwargs` when calling `fn` according to each pair in `remaps`. Such `remaps`
+parameter provides the mapping between `old_param_name => new_param_name`.
+"""
+function depkwargs(fn::Symbol, kwargs, remaps::Pair...)
+    remaps = Dict(remaps...)
+    kwargs = map(keys(kwargs)) do kw
+        if haskey(remaps, kw)
+            Base.depwarn("Keyword $kw is deprecated. Replacing with $(remaps[kw]) instead.", fn)
+            return remaps[kw] => kwargs[kw]
+        else
+            return kw => kwargs[kw]
+        end
+    end
+
+    return (; kwargs...)
 end

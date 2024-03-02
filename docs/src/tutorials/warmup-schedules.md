@@ -14,7 +14,7 @@ min_lr = 1e-6 # don't actually start with lr = 0
 initial_lr = 1e-2
 warmup = 20 # warmup for 20 epochs
 
-ramp = Triangle(λ0 = min_lr, λ1 = initial_lr, period = 2 * warmup)
+ramp = Triangle(l0 = min_lr, l1 = initial_lr, period = 2 * warmup)
 
 t = 1:warmup |> collect
 lineplot(t, ramp.(t); border = :none)
@@ -27,7 +27,7 @@ total_iters = 100
 
 # let's wrap it all up in a convenience constructor
 WarmupLinear(startlr, initlr, warmup, total_iters, schedule) =
-    Sequence(Triangle(λ0 = startlr, λ1 = initlr, period = 2 * warmup) => warmup,
+    Sequence(Triangle(l0 = startlr, l1 = initlr, period = 2 * warmup) => warmup,
              schedule => total_iters)
 
 s = WarmupLinear(min_lr, initial_lr, warmup, total_iters, Exp(initial_lr, 0.8))
@@ -41,7 +41,7 @@ Another common ramp function is a half period of a sine wave. We can use [`Sin`]
 
 ```@example warmup-schedule
 WarmupSin(startlr, initlr, warmup, total_iters, schedule) =
-    Sequence(Sin(λ0 = startlr, λ1 = initlr, period = 2 * warmup) => warmup,
+    Sequence(Sin(l0 = startlr, l1 = initlr, period = 2 * warmup) => warmup,
              schedule => total_iters)
 
 s = WarmupSin(min_lr, initial_lr, warmup, total_iters, Exp(initial_lr, 0.8))
@@ -55,7 +55,7 @@ Sometimes, the "real" schedule doesn't start at the `initial_lr` like `Exp`. Sup
 
 ```@example warmup-schedule
 # shift the Triangle by half a period + 1 to start at the peak
-tri = Shifted(Triangle(λ0 = min_lr, λ1 = initial_lr, period = 10), 6)
+tri = Shifted(Triangle(l0 = min_lr, l1 = initial_lr, period = 10), 6)
 s = WarmupSin(min_lr, initial_lr, warmup, total_iters, tri)
 t = 1:50 |> collect
 lineplot(t, s.(t); border = :none)
