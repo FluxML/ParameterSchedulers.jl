@@ -24,10 +24,10 @@ keywords. These will be iterated in order and passed onto to `constructor`
 # Examples
 ```julia
 # cosine annealing schedule for Descent
-julia> opt = Scheduler(Descent, CosAnneal(λ0 = 0.1, λ1 = 0.8, period = 10));
+julia> opt = Scheduler(Descent, CosAnneal(l0 = 0.1, l1 = 0.8, period = 10));
 
 # schedule learning rate and momentum of Momentum
-julia> opt = Scheduler(Momentum, CosAnneal(λ0 = 0.1, λ1 = 0.8, period = 10), Exp(0.999, 0.8));
+julia> opt = Scheduler(Momentum, CosAnneal(l0 = 0.1, l1 = 0.8, period = 10), Exp(0.999, 0.8));
 
 # schedule the weight decay term of AdamW
 julia> opt = Scheduler(AdamW, decay = Exp(1e-3, 0.7));

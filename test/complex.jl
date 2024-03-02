@@ -67,7 +67,7 @@ end
 end
 
 @testset "Shifted" begin
-    s = Triangle(λ0 = 0, λ1 = 1, period = 10)
+    s = Triangle(l0 = 0, l1 = 1, period = 10)
     soffset = Shifted(s, 5)
 
     @test [soffset(t) for t in 1:50] == [s(t) for t in 5:54]

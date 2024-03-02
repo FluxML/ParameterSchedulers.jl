@@ -8,7 +8,7 @@ ParameterSchedulers.jl provides common machine learning (ML) schedulers for hype
 using Flux, ParameterSchedulers
 using ParameterSchedulers: Scheduler
 
-opt = Scheduler(Momentum, Exp(λ = 1e-2, γ = 0.8))
+opt = Scheduler(Momentum, Exp(start = 1e-2, decay = 0.8))
 ```
 
 ## Available Schedules
@@ -30,12 +30,12 @@ You can read [this paper](https://arxiv.org/abs/1908.06477) for more information
 <tbody>
 <tr><td>
 
-[`Step(;λ, γ, step_sizes)`](https://fluxml.ai/ParameterSchedulers.jl/api/decay.html#ParameterSchedulers.Step)
+[`Step(; start, decay, step_sizes)`](https://fluxml.ai/ParameterSchedulers.jl/api/decay.html#ParameterSchedulers.Step)
 
 </td>
 <td>
 
-Exponential decay by `γ` every step in `step_sizes`
+Exponential decay by `decay` every step in `step_sizes`
 
 </td>
 <td> Decay </td>
@@ -44,19 +44,19 @@ Exponential decay by `γ` every step in `step_sizes`
 ```@example
 using UnicodePlots, ParameterSchedulers # hide
 t = 1:10 |> collect # hide
-s = Step(λ = 1.0, γ = 0.8, step_sizes = [2, 3, 2]) # hide
+s = Step(start = 1.0, decay = 0.8, step_sizes = [2, 3, 2]) # hide
 lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false) # hide
 ```
 </td></tr>
 
 <tr><td>
 
-[`Exp(;λ, γ)`](https://fluxml.ai/ParameterSchedulers.jl/api/decay.html#ParameterSchedulers.Exp)
+[`Exp(start, decay)`](https://fluxml.ai/ParameterSchedulers.jl/api/decay.html#ParameterSchedulers.Exp)
 
 </td>
 <td>
 
-Exponential decay by `γ` every iteration
+Exponential decay by `decay` every iteration
 
 </td>
 <td> Decay </td>
@@ -65,14 +65,14 @@ Exponential decay by `γ` every iteration
 ```@example
 using UnicodePlots, ParameterSchedulers # hide
 t = 1:10 |> collect # hide
-s = Exp(λ = 1.0, γ = 0.5) # hide
+s = Exp(start = 1.0, decay = 0.5) # hide
 lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false) # hide
 ```
 </td></tr>
 
 <tr><td>
 
-[`CosAnneal(;λ0, λ1, period)`](https://fluxml.ai/ParameterSchedulers.jl/api/cyclic.html#ParameterSchedulers.CosAnneal)
+[`CosAnneal(;l0, l1, period)`](https://fluxml.ai/ParameterSchedulers.jl/api/cyclic.html#ParameterSchedulers.CosAnneal)
 
 </td>
 <td>
@@ -86,14 +86,14 @@ lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false) # hi
 ```@example
 using UnicodePlots, ParameterSchedulers # hide
 t = 1:10 |> collect # hide
-s = CosAnneal(λ0 = 0.0, λ1 = 1.0, period = 4) # hide
+s = CosAnneal(l0 = 0.0, l1 = 1.0, period = 4) # hide
 lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false) # hide
 ```
 </td></tr>
 
 <tr><td>
 
-[`Triangle(;λ0, λ1, period)`](https://fluxml.ai/ParameterSchedulers.jl/api/cyclic.html#ParameterSchedulers.Triangle)
+[`Triangle(l0, l1, period)`](https://fluxml.ai/ParameterSchedulers.jl/api/cyclic.html#ParameterSchedulers.Triangle)
 
 </td>
 <td>
@@ -107,14 +107,14 @@ lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false) # hi
 ```@example
 using UnicodePlots, ParameterSchedulers # hide
 t = 1:10 |> collect # hide
-s = Triangle(λ0 = 0.0, λ1 = 1.0, period = 2) # hide
+s = Triangle(l0 = 0.0, l1 = 1.0, period = 2) # hide
 lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false) # hide
 ```
 </td></tr>
 
 <tr><td>
 
-[`TriangleDecay2(;λ0, λ1, period)`](https://fluxml.ai/ParameterSchedulers.jl/api/cyclic.html#ParameterSchedulers.TriangleDecay2)
+[`TriangleDecay2(l0, l1, period)`](https://fluxml.ai/ParameterSchedulers.jl/api/cyclic.html#ParameterSchedulers.TriangleDecay2)
 
 </td>
 <td>
@@ -128,19 +128,19 @@ lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false) # hi
 ```@example
 using UnicodePlots, ParameterSchedulers # hide
 t = 1:10 |> collect # hide
-s = TriangleDecay2(λ0 = 0.0, λ1 = 1.0, period = 2) # hide
+s = TriangleDecay2(l0 = 0.0, l1 = 1.0, period = 2) # hide
 lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false) # hide
 ```
 </td></tr>
 
 <tr><td>
 
-[`TriangleExp(;λ0, λ1, period, γ)`](https://fluxml.ai/ParameterSchedulers.jl/api/cyclic.html#ParameterSchedulers.TriangleExp)
+[`TriangleExp(l0, l1, period, decay)`](https://fluxml.ai/ParameterSchedulers.jl/api/cyclic.html#ParameterSchedulers.TriangleExp)
 
 </td>
 <td>
 
-[Triangle wave](https://en.wikipedia.org/wiki/Triangle_wave) function with exponential amplitude decay at rate `γ`
+[Triangle wave](https://en.wikipedia.org/wiki/Triangle_wave) function with exponential amplitude decay at rate `decay`
 
 </td>
 <td> Cyclic </td>
@@ -149,19 +149,19 @@ lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false) # hi
 ```@example
 using UnicodePlots, ParameterSchedulers # hide
 t = 1:10 |> collect # hide
-s = TriangleExp(λ0 = 0.0, λ1 = 1.0, period = 2, γ = 0.8) # hide
+s = TriangleExp(l0 = 0.0, l1 = 1.0, period = 2, decay = 0.8) # hide
 lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false) # hide
 ```
 </td></tr>
 
 <tr><td>
 
-[`Poly(;λ, p, max_iter)`](https://fluxml.ai/ParameterSchedulers.jl/api/decay.html#ParameterSchedulers.Poly)
+[`Poly(start, degree, max_iter)`](https://fluxml.ai/ParameterSchedulers.jl/api/decay.html#ParameterSchedulers.Poly)
 
 </td>
 <td>
 
-Polynomial decay at degree `p`
+Polynomial decay at degree `degree`.
 
 </td>
 <td> Decay </td>
@@ -170,19 +170,19 @@ Polynomial decay at degree `p`
 ```@example
 using UnicodePlots, ParameterSchedulers # hide
 t = 1:10 |> collect # hide
-s = Poly(λ = 1.0, p = 2, max_iter = t[end]) # hide
+s = Poly(start = 1.0, degree = 2, max_iter = t[end]) # hide
 lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false) # hide
 ```
 </td></tr>
 
 <tr><td>
 
-[`Inv(;λ, γ, p)`](https://fluxml.ai/ParameterSchedulers.jl/api/decay.html#ParameterSchedulers.Inv)
+[`Inv(start, decay, degree)`](https://fluxml.ai/ParameterSchedulers.jl/api/decay.html#ParameterSchedulers.Inv)
 
 </td>
 <td>
 
-Inverse decay at rate `(1 + tγ)^p`
+Inverse decay at rate `(1 + t * decay)^degree`
 
 </td>
 <td> Decay </td>
@@ -191,14 +191,14 @@ Inverse decay at rate `(1 + tγ)^p`
 ```@example
 using UnicodePlots, ParameterSchedulers # hide
 t = 1:10 |> collect # hide
-s = Inv(λ = 1.0, p = 2, γ = 0.8) # hide
+s = Inv(start = 1.0, degree = 2, decay = 0.8) # hide
 lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false) # hide
 ```
 </td></tr>
 
 <tr><td>
 
-[`Sin(;λ0, λ1, period)`](https://fluxml.ai/ParameterSchedulers.jl/api/cyclic.html#ParameterSchedulers.Sin)
+[`Sin(;l0, l1, period)`](https://fluxml.ai/ParameterSchedulers.jl/api/cyclic.html#ParameterSchedulers.Sin)
 
 </td>
 <td>
@@ -212,14 +212,14 @@ Sine function
 ```@example
 using UnicodePlots, ParameterSchedulers # hide
 t = 1:10 |> collect # hide
-s = Sin(λ0 = 0.0, λ1 = 1.0, period = 2) # hide
+s = Sin(l0 = 0.0, l1 = 1.0, period = 2) # hide
 lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false) # hide
 ```
 </td></tr>
 
 <tr><td>
 
-[`SinDecay2(;λ0, λ1, period)`](https://fluxml.ai/ParameterSchedulers.jl/api/cyclic.html#ParameterSchedulers.SinDecay2)
+[`SinDecay2(l0, l1, period)`](https://fluxml.ai/ParameterSchedulers.jl/api/cyclic.html#ParameterSchedulers.SinDecay2)
 
 </td>
 <td>
@@ -233,19 +233,19 @@ Sine function with half the amplitude every `period`
 ```@example
 using UnicodePlots, ParameterSchedulers # hide
 t = 1:10 |> collect # hide
-s = SinDecay2(λ0 = 0.0, λ1 = 1.0, period = 2) # hide
+s = SinDecay2(l0 = 0.0, l1 = 1.0, period = 2) # hide
 lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false) # hide
 ```
 </td></tr>
 
 <tr><td>
 
-[`SinExp(;λ0, λ1, period)`](https://fluxml.ai/ParameterSchedulers.jl/api/cyclic.html#ParameterSchedulers.SinExp)
+[`SinExp(l0, l1, period)`](https://fluxml.ai/ParameterSchedulers.jl/api/cyclic.html#ParameterSchedulers.SinExp)
 
 </td>
 <td>
 
-Sine function with exponential amplitude decay at rate `γ`
+Sine function with exponential amplitude decay at rate `decay`
 
 </td>
 <td> Cyclic </td>
@@ -254,7 +254,7 @@ Sine function with exponential amplitude decay at rate `γ`
 ```@example
 using UnicodePlots, ParameterSchedulers # hide
 t = 1:10 |> collect # hide
-s = SinExp(λ0 = 0.0, λ1 = 1.0, period = 2, γ = 0.8) # hide
+s = SinExp(l0 = 0.0, l1 = 1.0, period = 2, decay = 0.8) # hide
 lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false) # hide
 ```
 </td></tr>

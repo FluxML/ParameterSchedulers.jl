@@ -13,7 +13,7 @@ data = [(Flux.rand32(4, 10), rand([-1, 1], 1, 10)) for _ in 1:3]
 m = Chain(Dense(4, 4, tanh), Dense(4, 1, tanh))
 opt = Descent()
 opt_st = Flux.setup(opt, m)
-s = Exp(λ = 1e-1, γ = 0.2)
+s = Exp(start = 1e-1, decay = 0.2)
 
 for (eta, (x, y)) in zip(s, data)
     global opt_st, m
@@ -27,7 +27,7 @@ end
 We can also adjust the learning on an epoch basis instead. All that is required is to change what we zip our schedule with.
 ```@example optimizers
 nepochs = 6
-s = Step(λ = 1e-1, γ = 0.2, step_sizes = [3, 2, 1])
+s = Step(start = 1e-1, decay = 0.2, step_sizes = [3, 2, 1])
 for (eta, epoch) in zip(s, 1:nepochs)
     global opt_st
     adjust!(opt_st, eta)
@@ -46,7 +46,7 @@ Sometimes zipping up the schedule with an iterator isn't sufficient. For example
 {cell=optimizers}
 ```@example optimizers
 nepochs = 3
-s = ParameterSchedulers.Stateful(Inv(λ = 1e-1, γ = 0.2, p = 2))
+s = ParameterSchedulers.Stateful(Inv(start = 1e-1, decay = 0.2, degree = 2))
 for epoch in 1:nepochs
     for (i, (x, y)) in enumerate(data)
         global opt_st, m
@@ -65,7 +65,7 @@ While the approaches above can be helpful when dealing with fine-grained trainin
 using ParameterSchedulers: Scheduler
 
 nepochs = 3
-s = Inv(λ = 1e-1, p = 2, γ = 0.2)
+s = Inv(start = 1e-1, degree = 2, decay = 0.2)
 opt = Scheduler(Descent, s)
 opt_st = Flux.setup(opt, m)
 for epoch in 1:nepochs
@@ -80,7 +80,7 @@ end
 ```
 The scheduler, `opt`, can be used anywhere a Flux optimizer can. For example, it can be passed to `Flux.train!`:
 ```@example optimizers
-s = Inv(λ = 1e-1, p = 2, γ = 0.2)
+s = Inv(start = 1e-1, degree = 2, decay = 0.2)
 opt = Scheduler(Descent, s)
 opt_st = Flux.setup(opt, m)
 loss(m, x, y) = Flux.mse(m(x), y)

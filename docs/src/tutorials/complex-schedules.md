@@ -16,7 +16,7 @@ Let's take the notion of arbitrary schedules one step further, and instead defin
 ```@example complex-schedules
 using UnicodePlots
 
-s = Loop(Exp(λ = 0.1, γ = 0.4), 10)
+s = Loop(Exp(start = 0.1, decay = 0.4), 10)
 t = 1:25 |> collect
 lineplot(t, s.(t); border = :none)
 ```
@@ -32,7 +32,7 @@ lineplot(t, s.(t); border = :none)
 Finally, we might concatenate sequences of schedules, applying each one for a given length, then switch to the next schedule in the order. A [`Sequence`](@ref) schedule lets us do this. For example, we can start with a triangular schedule, then switch to a more conservative exponential schedule half way through training.
 ```@example complex-schedules
 nepochs = 50
-s = Sequence([Triangle(λ0 = 0.0, λ1 = 0.5, period = 5), Exp(λ = 0.5, γ = 0.5)],
+s = Sequence([Triangle(l0 = 0.0, l1 = 0.5, period = 5), Exp(start = 0.5, decay = 0.5)],
              [nepochs ÷ 2, nepochs ÷ 2])
 
 t = 1:nepochs |> collect

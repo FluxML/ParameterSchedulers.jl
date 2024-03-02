@@ -1,18 +1,17 @@
 """
     Step{T, S<:Integer}(start, decay, step_sizes)
-    Step(;λ, γ, step_sizes)
+    Step(; start, decay, step_sizes)
 
-A step schedule decays exponentially by `γ` every step
-in `step_sizes`.
+A step schedule decays exponentially by `decay` every step in `step_sizes`.
 The output conforms to
 ```text
-λ * γ^{i - 1}
+start * decay^{i - 1}
 ```
 where `sum(step_sizes[1:(i - 1)]) < t <= sum(step_sizes[1:i])`
 
-# Arguments:
-- `start`/`λ`: the starting value
-- `decay`/`γ`: the decay rate
+# Arguments
+- `start`: the starting value
+- `decay`: the decay rate
 - `step_sizes::Union{<:Integer, <:Vector}`: the step sizes
 """
 struct Step{T, S} <: AbstractSchedule{false}
@@ -20,13 +19,16 @@ struct Step{T, S} <: AbstractSchedule{false}
     decay::T
     step_sizes::S
 
-    function Step(λ::T, γ::T, step_sizes::S) where {T, S}
+    function Step(start::T, decay::T, step_sizes::S) where {T, S}
         _step_sizes = (S <: Integer) ? Iterators.repeated(step_sizes) : step_sizes
-
-        return new{T, typeof(_step_sizes)}(λ, γ, _step_sizes)
+        return new{T, typeof(_step_sizes)}(start, decay, _step_sizes)
     end
 end
-Step(;λ, γ, step_sizes) = Step(λ, γ, step_sizes)
+function Step(; kwargs...)
+    kwargs = depkwargs(:Step, kwargs, :λ => :start, :γ => :decay)
+    return Step(kwargs.start, kwargs.decay, kwargs.step_sizes)
+end
+
 
 Base.eltype(::Type{<:Step{T}}) where T = T
 
@@ -55,23 +57,26 @@ end
 
 """
     Exp{T}(start, decay)
-    Exp(;λ, γ)
+    Exp(; start, decay)
 
-A exponential decay schedule at rate `γ`.
+A exponential decay schedule at rate `decay`.
 The output conforms to
 ```text
-λ * γ^{t - 1}
+start * decay^{t - 1}
 ```
 
 # Arguments:
-- `start`/`λ`: the base value
-- `decay`/`γ`: the decay rate
+- `start`: the base value
+- `decay`: the decay rate
 """
 struct Exp{T} <: AbstractSchedule{false}
     start::T
     decay::T
 end
-Exp(;λ, γ) = Exp(λ, γ)
+function Exp(; kwargs...)
+    kwargs = depkwargs(:Exp, kwargs, :λ => :start, :γ => :decay)
+    return Exp(kwargs.start, kwargs.decay)
+end
 
 Base.eltype(::Type{<:Exp{T}}) where T = T
 
@@ -79,17 +84,17 @@ Base.eltype(::Type{<:Exp{T}}) where T = T
 
 """
     Poly{T, S<:Integer}(start, degree, max_iter)
-    Poly(;λ, p, max_iter)
+    Poly(; start, degree, max_iter)
 
-A polynomial schedule decays with degree `p`.
+A polynomial schedule decays with degree `degree`.
 The output conforms to
 ```text
-λ / (1 - (t - 1) / max_iter)^p
+start / (1 - (t - 1) / max_iter)^degree
 ```
 
 # Arguments
-- `start`/`λ`: the base value
-- `degree`/`p::Integer`: the degree of the polynomial
+- `start`: the base value
+- `degree::Integer`: the degree of the polynomial
 - `max_iter::Integer`: the total number of iterations
 """
 struct Poly{T, S<:Integer} <: AbstractSchedule{true}
@@ -97,7 +102,10 @@ struct Poly{T, S<:Integer} <: AbstractSchedule{true}
     degree::S
     max_iter::S
 end
-Poly(;λ, p, max_iter) = Poly(λ, p, max_iter)
+function Poly(; kwargs...)
+    kwargs = depkwargs(:Poly, kwargs, :λ => :start, :p => :degree)
+    return Poly(kwargs.start, kwargs.degree, kwargs.max_iter)
+end
 
 Base.eltype(::Type{<:Poly{T}}) where T = T
 Base.length(schedule::Poly) = schedule.max_iter
@@ -109,25 +117,28 @@ end
 
 """
     Inv{T, S<:Integer}(start, decay, degree)
-    Inv(;λ, γ, p)
+    Inv(; start, decay, degree)
 
-A decay schedule that inversely decays with rate `γ`.
+A decay schedule that inversely decays with rate `decay`.
 The output conforms to
 ```text
-λ / (1 + (t - 1) * γ)^p
+start / (1 + (t - 1) * decay)^degree
 ```
 
 # Arguments
-- `start`/`λ`: the base value
-- `decay`/`γ`: the decay rate
-- `degree`/`p::Integer`: the degree of decay
+- `start`: the base value
+- `decay`: the decay rate
+- `degree::Integer`: the degree of decay
 """
 struct Inv{T, S<:Integer} <: AbstractSchedule{false}
     start::T
     decay::T
     degree::S
 end
-Inv(;λ, γ, p) = Inv(λ, γ, p)
+function Inv(; kwargs...)
+    kwargs = depkwargs(:Inv, kwargs, :λ => :start, :γ => :decay, :p => :degree)
+    return Inv(kwargs.start, kwargs.decay, kwargs.degree)
+end
 
 Base.eltype(::Type{<:Inv{T}}) where T = T
 
