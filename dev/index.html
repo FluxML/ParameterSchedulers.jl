@@ -43,10 +43,23 @@ opt = Scheduler(Momentum, Exp(start = 1e-2, decay = 0.8))</code></pre><h2 id="Av
 <p><a href="https://arxiv.org/abs/1608.03983v5">Cosine annealing</a></p>
 </td>
 <td> Cyclic </td>
-<td style="text-align:center"><pre><code class="language- hljs">using UnicodePlots, ParameterSchedulers # hide
-t = 1:10 |&gt; collect # hide
-s = CosAnneal(l0 = 0.0, l1 = 1.0, period = 4) # hide
-lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false) # hide</code></pre></td></tr>
+<td style="text-align:center"><pre class="documenter-example-output"><code class="nohighlight hljs ansi">    <span class="sgr90">+---------------+</span> 
+    <span class="sgr90">|</span><span class="sgr32">⠉⠒⡄</span>⠀⠀⠀<span class="sgr32">⡎⠑⠢⡀</span>⠀⠀<span class="sgr32">⢠⠋⠒</span><span class="sgr90">|</span> 
+    <span class="sgr90">|</span>⠀⠀<span class="sgr32">⠈⢆</span>⠀<span class="sgr32">⢰⠁</span>⠀⠀<span class="sgr32">⠑⡄</span>⠀<span class="sgr32">⡜</span>⠀⠀<span class="sgr90">|</span> 
+    <span class="sgr90">|</span>⠀⠀⠀⠀<span class="sgr32">⠣⡇</span>⠀⠀⠀⠀<span class="sgr32">⠈⢶⠁</span>⠀⠀<span class="sgr90">|</span> 
+    <span class="sgr90">+---------------+</span> </code></pre></td></tr>
+<tr><td>
+<p><a href="https://fluxml.ai/ParameterSchedulers.jl/api/complex.html#ParameterSchedulers.OneCycle"><code>OneCycle&#40;nsteps, maxval&#41;</code></a></p>
+</td>
+<td>
+<p><a href="https://arxiv.org/abs/1708.07120">One cycle cosine</a></p>
+</td>
+<td> Complex </td>
+<td style="text-align:center"><pre class="documenter-example-output"><code class="nohighlight hljs ansi">    <span class="sgr90">+---------------+</span> 
+    <span class="sgr90">|</span>⠀⠀⠀<span class="sgr32">⡤⠊⠉⠉⠒⠤⡀</span>⠀⠀⠀⠀⠀<span class="sgr90">|</span> 
+    <span class="sgr90">|</span>⠀<span class="sgr32">⢀⠜</span>⠀⠀⠀⠀⠀⠀<span class="sgr32">⠈⠑⢄</span>⠀⠀⠀<span class="sgr90">|</span> 
+    <span class="sgr90">|</span><span class="sgr32">⡠⠊</span>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀<span class="sgr32">⠉⠢⢄</span><span class="sgr90">|</span> 
+    <span class="sgr90">+---------------+</span> </code></pre></td></tr>
 <tr><td>
 <p><a href="https://fluxml.ai/ParameterSchedulers.jl/api/cyclic.html#ParameterSchedulers.Triangle"><code>Triangle&#40;l0, l1, period&#41;</code></a></p>
 </td>
@@ -144,4 +157,4 @@ lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false) # hi
     <span class="sgr90">|</span><span class="sgr32">⡎</span>⠀<span class="sgr32">⠘⡼</span>⠀<span class="sgr32">⠈⢆⠎⠈⢆⣀⠜⠢⣀⠤</span><span class="sgr90">|</span> 
     <span class="sgr90">+---------------+</span> </code></pre></td></tr>
 </tbody>
-</table></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="cheatsheet/">Schedule cheatsheet »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.3.0 on <span class="colophon-date" title="Saturday 2 March 2024 22:17">Saturday 2 March 2024</span>. Using Julia version 1.10.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+</table></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="cheatsheet/">Schedule cheatsheet »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.3.0 on <span class="colophon-date" title="Tuesday 5 March 2024 20:50">Tuesday 5 March 2024</span>. Using Julia version 1.10.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
