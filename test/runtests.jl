@@ -49,5 +49,25 @@ end
             m = m′
             o = o′
         end
+
+        o = Optimisers.setup(Scheduler(Optimisers.Momentum, rho = srho), m)
+        for t in 1:10
+            g = Zygote.gradient(m -> sum(m.W * x + m.b), m)[1]
+            o′, m′ = Optimisers.update(o, m, g)
+            @test m′.W ≈ m.W - (srho(t) * o.W.state.opt + g.W * 0.01)
+            @test m′.b ≈ m.b - (srho(t) * o.b.state.opt + g.b * 0.01)
+            m = m′
+            o = o′
+        end
+
+        o = Optimisers.setup(Scheduler(Optimisers.Momentum, rho = 0.8), m)
+        for t in 1:10
+            g = Zygote.gradient(m -> sum(m.W * x + m.b), m)[1]
+            o′, m′ = Optimisers.update(o, m, g)
+            @test m′.W ≈ m.W - (0.8 * o.W.state.opt + g.W * 0.01)
+            @test m′.b ≈ m.b - (0.8 * o.b.state.opt + g.b * 0.01)
+            m = m′
+            o = o′
+        end
     end
 end

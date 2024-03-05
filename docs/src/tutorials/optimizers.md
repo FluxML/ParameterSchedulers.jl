@@ -1,6 +1,6 @@
 # Scheduling optimizers
 
-A schedule by itself is not helpful; we need to use the schedules to adjust parameters. In this tutorial, we will examine three ways to do just that---iterating the schedule, using a stateful iterator, and using an scheduled optimizer.
+A schedule by itself is not helpful; we need to use the schedules to adjust parameters. In this tutorial, we will examine three ways to do just that---iterating the schedule, using a stateful iterator, and using an scheduled optimizer. The final option is the preferred method for FluxML.
 
 ## Iterating during training
 
