@@ -56,6 +56,27 @@ Base.eltype(::Type{<:Constant{T}}) where T = T
 (schedule::Constant)(t) = schedule.value
 
 """
+    Shortened{T}
+    Shortened(schedule, nsteps)
+
+A schedule that mimics `schedule` but throws a `BoundsError` if accessed
+beyond `nsteps`.
+"""
+struct Shortened{T} <: AbstractSchedule{true}
+    schedule::T
+    nsteps::Int
+end
+
+Base.eltype(::Type{Shortened{T}}) where T = eltype(T)
+Base.length(schedule::Shortened) = schedule.nsteps
+
+function (schedule::Shortened)(t)
+    (t <= length(schedule)) || throw(BoundsError(schedule, t))
+    return schedule.schedule(t)
+end
+Base.iterate(schedule::Shortened, state...) = iterate(schedule.schedule, state...)
+
+"""
     Sequence{T, S}
     Sequence(schedules, step_sizes)
     Sequence(schedule1 => step1, schedule2 => step2, ...)
@@ -227,4 +248,35 @@ function (composition::ComposedSchedule)(t)
     s = composition.compose_fn(composition.schedule, ps)
 
     return s(t)
+end
+
+"""
+    OneCycle(nsteps, maxval;
+             startval = maxval / 25,
+             endval = maxval / 1f5,
+             percent_start = 0.25)
+
+Creates a one-cycle cosine schedule over `nsteps` steps warming up from `startval`
+up to `maxval` for `ceil(percent_start * nsteps)`, then back to `endval`
+(see [Super-Convergence: Very Fast Training of Neural Networks Using Large Learning Rates](https://arxiv.org/abs/1708.07120)).
+"""
+function OneCycle(nsteps, maxval;
+                  startval = maxval / 25,
+                  endval = maxval / 1f5,
+                  percent_start = 0.25)
+    @assert 0 < percent_start < 1
+
+    warmup = ceil(Int, nsteps * percent_start)
+    warmdown = nsteps - warmup
+
+    return Sequence(
+        Shifted(CosAnneal(l0 = maxval,
+                          l1 = startval,
+                          period = warmup,
+                          restart = false), warmup + 1) => warmup,
+        Shortened(CosAnneal(l0 = maxval,
+                            l1 = endval,
+                            period = warmdown,
+                            restart = false), warmdown) => warmdown
+    )
 end

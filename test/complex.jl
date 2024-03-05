@@ -1,3 +1,21 @@
+@testset "Constant" begin
+    value = rand()
+    schedule = ParameterSchedulers.Constant(value)
+    @test all(value == schedule(t) for t in 1:1000)
+end
+
+@testset "Shortened" begin
+    base_schedule = Exp(0.9, 10.0)
+    nsteps = rand(1:100)
+    schedule = ParameterSchedulers.Shortened(base_schedule, nsteps)
+
+    @test Base.IteratorEltype(typeof(schedule)) == Base.IteratorEltype(typeof(base_schedule))
+    @test Base.IteratorSize(typeof(schedule)) == Base.HasLength()
+    @test length(schedule) == nsteps
+    @test all(schedule(t) == base_schedule(t) for t in 1:nsteps)
+    @test_throws BoundsError schedule(rand((nsteps + 1:100)))
+end
+
 @testset "Sequence" begin
     schedules = (log, sqrt)
     step_sizes = (rand(1:10), rand(1:10))
@@ -82,4 +100,32 @@ end
     @test log(1) == next!(stateful_s)
     @test log(2) == next!(stateful_s)
     @test log(2) == next!(stateful_s)
+end
+
+@testset "OneCycle" begin
+    function onecycle(t, nsteps, startval, maxval, endval, pct)
+        warmup = ceil(Int, pct * nsteps)
+        warmdown = nsteps - warmup
+
+        if t > nsteps
+            return endval
+        elseif  t <= warmup
+            return _cycle(startval, maxval, _cos(t + warmup, warmup))
+        else
+            return _cycle(maxval, endval, _cos(t - warmup, warmdown))
+        end
+    end
+
+    nsteps = 50
+    maxval = 1f-1
+    s = OneCycle(nsteps, maxval)
+    @test all(s(t) == onecycle(t, nsteps, maxval / 25, maxval, maxval / 1f5, 0.25)
+              for t in 1:nsteps)
+    @test_throws BoundsError s(nsteps + 1)
+    startval = 1f-4
+    endval = 1f-2
+    pct = 0.3
+    s = OneCycle(nsteps, maxval; startval, endval, percent_start = pct)
+    @test all(s(t) == onecycle(t, nsteps, startval, maxval, endval, pct)
+              for t in 1:nsteps)
 end

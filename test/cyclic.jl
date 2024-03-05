@@ -1,9 +1,3 @@
-_cycle(l0, l1, x) = abs(l0 - l1) * x + min(l0, l1)
-_tri(t, period) = (2 / π) * abs(asin(sin(π * (t - 1) / period)))
-_sin(t, period) = abs(sin(π * (t - 1) / period))
-_cos(t, period) = (1 + cos(π * (t - 1) / period)) / 2
-_cosrestart(t, period) = (1 + cos(π * mod(t - 1, period) / period)) / 2
-
 @testset "Triangle" begin
     l0 = 0.5 * rand()
     l1 = 0.5 * rand() + 1
