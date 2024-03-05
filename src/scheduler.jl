@@ -29,13 +29,25 @@ julia> opt = Scheduler(Descent, CosAnneal(l0 = 0.1, l1 = 0.8, period = 10));
 # schedule learning rate and momentum of Momentum
 julia> opt = Scheduler(Momentum, CosAnneal(l0 = 0.1, l1 = 0.8, period = 10), Exp(0.999, 0.8));
 
-# schedule the weight decay term of AdamW
-julia> opt = Scheduler(AdamW, decay = Exp(1e-3, 0.7));
+# schedule the weight decay term of AdamW with a custom fixed learning rate
+julia> opt = Scheduler(AdamW, eta = 1e-4, decay = Exp(1e-3, 0.7));
 ```
 """
 struct Scheduler{T<:Union{<:Tuple, <:NamedTuple}, F} <: AbstractRule
     constructor::F
     schedules::T
+
+    function Scheduler(constructor, schedules::Tuple)
+        _schedules = map(s -> s isa Number ? Constant(s) : s, schedules)
+
+        new{typeof(_schedules), typeof(constructor)}(constructor, _schedules)
+    end
+    function Scheduler(constructor, schedules::NamedTuple{K}) where K
+        _schedules = map(s -> s isa Number ? Constant(s) : s, schedules)
+        _schedules = NamedTuple{K}(_schedules)
+
+        new{typeof(_schedules), typeof(constructor)}(constructor, _schedules)
+    end
 end
 Scheduler(constructor, schedules...) = Scheduler(constructor, schedules)
 Scheduler(constructor; schedules...) = Scheduler(constructor, (; schedules...))
