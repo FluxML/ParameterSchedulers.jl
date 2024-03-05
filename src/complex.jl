@@ -270,12 +270,12 @@ function OneCycle(nsteps, maxval;
     warmdown = nsteps - warmup
 
     return Sequence(
-        Shifted(CosAnneal(λ0 = maxval,
-                          λ1 = startval,
+        Shifted(CosAnneal(l0 = maxval,
+                          l1 = startval,
                           period = warmup,
                           restart = false), warmup + 1) => warmup,
-        Shortened(CosAnneal(λ0 = maxval,
-                            λ1 = endval,
+        Shortened(CosAnneal(l0 = maxval,
+                            l1 = endval,
                             period = warmdown,
                             restart = false), warmdown) => warmdown
     )

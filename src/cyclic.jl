@@ -26,6 +26,7 @@ Triangle(range::T, offset::T, period::S) where {T, S} = Triangle{T, S}(range, of
 function Triangle(; kwargs...)
     kwargs = depkwargs(:Triangle, kwargs, :λ0 => :l0, :λ1 => :l1)
     l0, l1 = kwargs.l0, kwargs.l1
+
     return Triangle(abs(l0 - l1), min(l0, l1), kwargs.period)
 end
 
@@ -53,11 +54,13 @@ where `Triangle(t)` is `(2 / π) * abs(asin(sin(π * (t - 1) / schedule.period))
 """
 function TriangleDecay2(range::T, offset, period) where T
     parameters = (Interpolator(Exp(range, T(1/2)), period), offset, period)
+
     return ComposedSchedule(Triangle(range, offset, period), parameters)
 end
 function TriangleDecay2(; kwargs...)
     kwargs = depkwargs(:TriangleDecay2, kwargs, :λ0 => :l0, :λ1 => :l1)
     l0, l1 = kwargs.l0, kwargs.l1
+
     return TriangleDecay2(abs(l0 - l1), min(l0, l1), kwargs.period)
 end
 
@@ -85,6 +88,7 @@ TriangleExp(range, offset, period, decay) =
 function TriangleExp(; kwargs...)
     kwargs = depkwargs(:TriangleExp, kwargs, :λ0 => :l0, :λ1 => :l1)
     l0, l1 = kwargs.l0, kwargs.l1
+
     return TriangleExp(abs(l0 - l1), min(l0, l1), kwargs.period, kwargs.decay)
 end
 
@@ -112,6 +116,7 @@ Sin(range::T, offset::T, period::S) where {T, S} = Sin{T, S}(range, offset, peri
 function Sin(; kwargs...)
     kwargs = depkwargs(:Sin, kwargs, :λ0 => :l0, :λ1 => :l1)
     l0, l1 = kwargs.l0, kwargs.l1
+
     return Sin(abs(l0 - l1), min(l0, l1), kwargs.period)
 end
 
@@ -137,11 +142,13 @@ where `Sin(t)` is `abs(sin(π * (t - 1) / period))` (see [`Sin`](@ref)).
 """
 function SinDecay2(range::T, offset, period) where T
     parameters = (Interpolator(Exp(range, T(1/2)), period), offset, period)
+
     return ComposedSchedule(Sin(range, offset, period), parameters)
 end
 function SinDecay2(; kwargs...)
     kwargs = depkwargs(:SinDecay2, kwargs, :λ0 => :l0, :λ1 => :l1)
     l0, l1 = kwargs.l0, kwargs.l1
+
     return SinDecay2(abs(l0 - l1), min(l0, l1), kwargs.period)
 end
 
@@ -167,6 +174,7 @@ SinExp(range, offset, period, decay) =
 function SinExp(; kwargs...)
     kwargs = depkwargs(:SinExp, kwargs, :λ0 => :l0, :λ1 => :l1)
     l0, l1 = kwargs.l0, kwargs.l1
+
     return SinExp(abs(l0 - l1), min(l0, l1), kwargs.period, kwargs.decay)
 end
 
@@ -200,6 +208,7 @@ CosAnneal(range, offset, period) = CosAnneal(range, offset, period, true)
 function CosAnneal(; kwargs...)
     kwargs = depkwargs(:CosAnneal, kwargs, :λ0 => :l0, :λ1 => :l1)
     l0, l1 = kwargs.l0, kwargs.l1
+
     return CosAnneal(abs(l0 - l1), min(l0, l1), kwargs.period, kwargs.restart)
 end
 
