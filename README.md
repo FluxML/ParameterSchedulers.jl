@@ -93,6 +93,27 @@ lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false) # hi
 
 <tr><td>
 
+[`OneCycle(nsteps, maxval)`](https://fluxml.ai/ParameterSchedulers.jl/api/complex.html#ParameterSchedulers.OneCycle)
+
+</td>
+<td>
+
+[One cycle cosine](https://arxiv.org/abs/1708.07120)
+
+</td>
+<td> Complex </td>
+<td style="text-align:center">
+
+```@example
+using UnicodePlots, ParameterSchedulers # hide
+t = 1:10 |> collect # hide
+s = OneCycle(10, 1.0) # hide
+lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false) # hide
+```
+</td></tr>
+
+<tr><td>
+
 [`Triangle(l0, l1, period)`](https://fluxml.ai/ParameterSchedulers.jl/api/cyclic.html#ParameterSchedulers.Triangle)
 
 </td>

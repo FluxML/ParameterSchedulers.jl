@@ -208,8 +208,9 @@ CosAnneal(range, offset, period) = CosAnneal(range, offset, period, true)
 function CosAnneal(; kwargs...)
     kwargs = depkwargs(:CosAnneal, kwargs, :λ0 => :l0, :λ1 => :l1)
     l0, l1 = kwargs.l0, kwargs.l1
+    restart = get(kwargs, :restart, true)
 
-    return CosAnneal(abs(l0 - l1), min(l0, l1), kwargs.period, kwargs.restart)
+    return CosAnneal(abs(l0 - l1), min(l0, l1), kwargs.period, restart)
 end
 
 Base.eltype(::Type{<:CosAnneal{T}}) where T = T
