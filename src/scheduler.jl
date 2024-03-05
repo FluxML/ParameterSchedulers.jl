@@ -45,7 +45,7 @@ _get_opt(scheduler::Scheduler{<:Tuple}, t) =
 function _get_opt(scheduler::Scheduler{<:NamedTuple}, t)
     kwargs = NamedTuple{keys(scheduler.schedules)}(s(t) for s in scheduler.schedules)
 
-    return scheduler.constructor(kwargs...)
+    return scheduler.constructor(; kwargs...)
 end
 
 Optimisers.init(o::Scheduler, x::AbstractArray) =
