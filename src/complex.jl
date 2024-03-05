@@ -56,6 +56,27 @@ Base.eltype(::Type{<:Constant{T}}) where T = T
 (schedule::Constant)(t) = schedule.value
 
 """
+    Shortened{T}
+    Shortened(schedule, nsteps)
+
+A schedule that mimics `schedule` but throws a `BoundsError` if accessed
+beyond `nsteps`.
+"""
+struct Shortened{T} <: AbstractSchedule{true}
+    schedule::T
+    nsteps::Int
+end
+
+Base.eltype(::Type{Shortened{T}}) where T = eltype(T)
+Base.length(schedule::Shortened) = schedule.nsteps
+
+function (schedule::Shortened)(t)
+    (t <= length(schedule)) || throw(BoundsError(schedule, t))
+    return schedule.schedule(t)
+end
+Base.iterate(schedule::Shortened, state...) = iterate(schedule.schedule, state...)
+
+"""
     Sequence{T, S}
     Sequence(schedules, step_sizes)
     Sequence(schedule1 => step1, schedule2 => step2, ...)
@@ -250,6 +271,8 @@ function OneCycle(nsteps, maxval;
 
     return Sequence(
         Sin(λ0=maxval, λ1=startval, period=2*warmup) => warmup,
-        Shifted(Sin(λ0=maxval, λ1=endval, period=2*warmdown), warmdown + 1) => warmdown
+        Shortened(Shifted(Sin(λ0=maxval, λ1=endval, period=2*warmdown),
+                          warmdown + 1),
+                  warmdown) => warmdown
     )
 end

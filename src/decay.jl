@@ -111,7 +111,7 @@ Base.eltype(::Type{<:Poly{T}}) where T = T
 Base.length(schedule::Poly) = schedule.max_iter
 
 function (schedule::Poly)(t)
-    (t <= length(schedule)) || throw(BoundsError("Cannot index Poly for t > max_iter"))
+    (t <= length(schedule)) || throw(BoundsError(schedule, t))
     return schedule.start * (1 - (t - 1) / schedule.max_iter)^schedule.degree
 end
 
