@@ -30,7 +30,7 @@ You can read [this paper](https://arxiv.org/abs/1908.06477) for more information
 <tbody>
 <tr><td>
 
-[`Step(; start, decay, step_sizes)`](https://fluxml.ai/ParameterSchedulers.jl/api/decay.html#ParameterSchedulers.Step)
+[`Step(; start, decay, step_sizes)`](https://fluxml.ai/ParameterSchedulers.jl/stable/api/decay/#ParameterSchedulers.Step)
 
 </td>
 <td>
@@ -51,7 +51,7 @@ lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false) # hi
 
 <tr><td>
 
-[`Exp(start, decay)`](https://fluxml.ai/ParameterSchedulers.jl/api/decay.html#ParameterSchedulers.Exp)
+[`Exp(start, decay)`](https://fluxml.ai/ParameterSchedulers.jl/stable/api/decay/#ParameterSchedulers.Exp)
 
 </td>
 <td>
@@ -72,7 +72,7 @@ lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false) # hi
 
 <tr><td>
 
-[`CosAnneal(;l0, l1, period)`](https://fluxml.ai/ParameterSchedulers.jl/api/cyclic.html#ParameterSchedulers.CosAnneal)
+[`CosAnneal(;l0, l1, period)`](https://fluxml.ai/ParameterSchedulers.jl/stable/api/cyclic/#ParameterSchedulers.CosAnneal)
 
 </td>
 <td>
@@ -93,7 +93,7 @@ lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false) # hi
 
 <tr><td>
 
-[`OneCycle(nsteps, maxval)`](https://fluxml.ai/ParameterSchedulers.jl/api/complex.html#ParameterSchedulers.OneCycle)
+[`OneCycle(nsteps, maxval)`](https://fluxml.ai/ParameterSchedulers.jl/stable/api/complex/#ParameterSchedulers.OneCycle-Tuple{Any,%20Any})
 
 </td>
 <td>
@@ -114,7 +114,7 @@ lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false) # hi
 
 <tr><td>
 
-[`Triangle(l0, l1, period)`](https://fluxml.ai/ParameterSchedulers.jl/api/cyclic.html#ParameterSchedulers.Triangle)
+[`Triangle(l0, l1, period)`](https://fluxml.ai/ParameterSchedulers.jl/stable/api/cyclic/#ParameterSchedulers.Triangle)
 
 </td>
 <td>
@@ -135,7 +135,7 @@ lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false) # hi
 
 <tr><td>
 
-[`TriangleDecay2(l0, l1, period)`](https://fluxml.ai/ParameterSchedulers.jl/api/cyclic.html#ParameterSchedulers.TriangleDecay2)
+[`TriangleDecay2(l0, l1, period)`](https://fluxml.ai/ParameterSchedulers.jl/stable/api/cyclic/#ParameterSchedulers.TriangleDecay2-Union{Tuple{T},%20Tuple{T,%20Any,%20Any}}%20where%20T)
 
 </td>
 <td>
@@ -156,7 +156,7 @@ lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false) # hi
 
 <tr><td>
 
-[`TriangleExp(l0, l1, period, decay)`](https://fluxml.ai/ParameterSchedulers.jl/api/cyclic.html#ParameterSchedulers.TriangleExp)
+[`TriangleExp(l0, l1, period, decay)`](https://fluxml.ai/ParameterSchedulers.jl/stable/api/cyclic/#ParameterSchedulers.TriangleExp-NTuple{4,%20Any})
 
 </td>
 <td>
@@ -177,7 +177,7 @@ lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false) # hi
 
 <tr><td>
 
-[`Poly(start, degree, max_iter)`](https://fluxml.ai/ParameterSchedulers.jl/api/decay.html#ParameterSchedulers.Poly)
+[`Poly(start, degree, max_iter)`](https://fluxml.ai/ParameterSchedulers.jl/stable/api/decay/#ParameterSchedulers.Poly)
 
 </td>
 <td>
@@ -198,7 +198,7 @@ lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false) # hi
 
 <tr><td>
 
-[`Inv(start, decay, degree)`](https://fluxml.ai/ParameterSchedulers.jl/api/decay.html#ParameterSchedulers.Inv)
+[`Inv(start, decay, degree)`](https://fluxml.ai/ParameterSchedulers.jl/stable/api/decay/#ParameterSchedulers.Inv)
 
 </td>
 <td>
@@ -219,7 +219,7 @@ lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false) # hi
 
 <tr><td>
 
-[`Sin(;l0, l1, period)`](https://fluxml.ai/ParameterSchedulers.jl/api/cyclic.html#ParameterSchedulers.Sin)
+[`Sin(;l0, l1, period)`](https://fluxml.ai/ParameterSchedulers.jl/stable/api/cyclic/#ParameterSchedulers.Sin)
 
 </td>
 <td>
@@ -240,7 +240,7 @@ lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false) # hi
 
 <tr><td>
 
-[`SinDecay2(l0, l1, period)`](https://fluxml.ai/ParameterSchedulers.jl/api/cyclic.html#ParameterSchedulers.SinDecay2)
+[`SinDecay2(l0, l1, period)`](https://fluxml.ai/ParameterSchedulers.jl/stable/api/cyclic/#ParameterSchedulers.SinDecay2-Union{Tuple{T},%20Tuple{T,%20Any,%20Any}}%20where%20T)
 
 </td>
 <td>
@@ -261,7 +261,7 @@ lineplot(t, s.(t); width = 15, height = 3, border = :ascii, labels = false) # hi
 
 <tr><td>
 
-[`SinExp(l0, l1, period)`](https://fluxml.ai/ParameterSchedulers.jl/api/cyclic.html#ParameterSchedulers.SinExp)
+[`SinExp(l0, l1, period)`](https://fluxml.ai/ParameterSchedulers.jl/stable/api/cyclic/#ParameterSchedulers.SinExp-NTuple{4,%20Any})
 
 </td>
 <td>
