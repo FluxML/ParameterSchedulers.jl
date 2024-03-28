@@ -13,7 +13,7 @@ opt = Scheduler(Momentum, Exp(start = 1e-2, decay = 0.8))</code></pre><h2 id="Av
 </thead>
 <tbody>
 <tr><td>
-<p><a href="https://fluxml.ai/ParameterSchedulers.jl/api/decay.html#ParameterSchedulers.Step"><code>Step&#40;; start, decay, step_sizes&#41;</code></a></p>
+<p><a href="https://fluxml.ai/ParameterSchedulers.jl/stable/api/decay/#ParameterSchedulers.Step"><code>Step&#40;; start, decay, step_sizes&#41;</code></a></p>
 </td>
 <td>
 <p>Exponential decay by <code>decay</code> every step in <code>step_sizes</code></p>
@@ -25,7 +25,7 @@ opt = Scheduler(Momentum, Exp(start = 1e-2, decay = 0.8))</code></pre><h2 id="Av
     <span class="sgr90">|</span>⠀⠀⠀⠀⠀⠀⠀⠀<span class="sgr32">⠉⠉⠑⢄⣀⣀⣀</span><span class="sgr90">|</span> 
     <span class="sgr90">+---------------+</span> </code></pre></td></tr>
 <tr><td>
-<p><a href="https://fluxml.ai/ParameterSchedulers.jl/api/decay.html#ParameterSchedulers.Exp"><code>Exp&#40;start, decay&#41;</code></a></p>
+<p><a href="https://fluxml.ai/ParameterSchedulers.jl/stable/api/decay/#ParameterSchedulers.Exp"><code>Exp&#40;start, decay&#41;</code></a></p>
 </td>
 <td>
 <p>Exponential decay by <code>decay</code> every iteration</p>
@@ -37,7 +37,7 @@ opt = Scheduler(Momentum, Exp(start = 1e-2, decay = 0.8))</code></pre><h2 id="Av
     <span class="sgr90">|</span>⠀⠀⠀<span class="sgr32">⠓⠢⠤⢄⣀⣀⣀⣀⣀⣀⣀⣀</span><span class="sgr90">|</span> 
     <span class="sgr90">+---------------+</span> </code></pre></td></tr>
 <tr><td>
-<p><a href="https://fluxml.ai/ParameterSchedulers.jl/api/cyclic.html#ParameterSchedulers.CosAnneal"><code>CosAnneal&#40;;l0, l1, period&#41;</code></a></p>
+<p><a href="https://fluxml.ai/ParameterSchedulers.jl/stable/api/cyclic/#ParameterSchedulers.CosAnneal"><code>CosAnneal&#40;;l0, l1, period&#41;</code></a></p>
 </td>
 <td>
 <p><a href="https://arxiv.org/abs/1608.03983v5">Cosine annealing</a></p>
@@ -49,7 +49,7 @@ opt = Scheduler(Momentum, Exp(start = 1e-2, decay = 0.8))</code></pre><h2 id="Av
     <span class="sgr90">|</span>⠀⠀⠀⠀<span class="sgr32">⠣⡇</span>⠀⠀⠀⠀<span class="sgr32">⠈⢶⠁</span>⠀⠀<span class="sgr90">|</span> 
     <span class="sgr90">+---------------+</span> </code></pre></td></tr>
 <tr><td>
-<p><a href="https://fluxml.ai/ParameterSchedulers.jl/api/complex.html#ParameterSchedulers.OneCycle"><code>OneCycle&#40;nsteps, maxval&#41;</code></a></p>
+<p><a href="https://fluxml.ai/ParameterSchedulers.jl/stable/api/complex/#ParameterSchedulers.OneCycle-Tuple&#123;Any,&#37;20Any&#125;"><code>OneCycle&#40;nsteps, maxval&#41;</code></a></p>
 </td>
 <td>
 <p><a href="https://arxiv.org/abs/1708.07120">One cycle cosine</a></p>
@@ -61,7 +61,7 @@ opt = Scheduler(Momentum, Exp(start = 1e-2, decay = 0.8))</code></pre><h2 id="Av
     <span class="sgr90">|</span><span class="sgr32">⡠⠊</span>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀<span class="sgr32">⠉⠢⢄</span><span class="sgr90">|</span> 
     <span class="sgr90">+---------------+</span> </code></pre></td></tr>
 <tr><td>
-<p><a href="https://fluxml.ai/ParameterSchedulers.jl/api/cyclic.html#ParameterSchedulers.Triangle"><code>Triangle&#40;l0, l1, period&#41;</code></a></p>
+<p><a href="https://fluxml.ai/ParameterSchedulers.jl/stable/api/cyclic/#ParameterSchedulers.Triangle"><code>Triangle&#40;l0, l1, period&#41;</code></a></p>
 </td>
 <td>
 <p><a href="https://en.wikipedia.org/wiki/Triangle_wave">Triangle wave</a> function</p>
@@ -73,7 +73,7 @@ opt = Scheduler(Momentum, Exp(start = 1e-2, decay = 0.8))</code></pre><h2 id="Av
     <span class="sgr90">|</span><span class="sgr32">⡎</span>⠀<span class="sgr32">⠘⡜</span>⠀⠀<span class="sgr32">⢷⠁</span>⠀<span class="sgr32">⢱⡇</span>⠀<span class="sgr32">⠘⡜</span>⠀<span class="sgr90">|</span> 
     <span class="sgr90">+---------------+</span> </code></pre></td></tr>
 <tr><td>
-<p><a href="https://fluxml.ai/ParameterSchedulers.jl/api/cyclic.html#ParameterSchedulers.TriangleDecay2"><code>TriangleDecay2&#40;l0, l1, period&#41;</code></a></p>
+<p><a href="https://fluxml.ai/ParameterSchedulers.jl/stable/api/cyclic/#ParameterSchedulers.TriangleDecay2-Union&#123;Tuple&#123;T&#125;,&#37;20Tuple&#123;T,&#37;20Any,&#37;20Any&#125;&#125;&#37;20where&#37;20T"><code>TriangleDecay2&#40;l0, l1, period&#41;</code></a></p>
 </td>
 <td>
 <p><a href="https://en.wikipedia.org/wiki/Triangle_wave">Triangle wave</a> function with half the amplitude every <code>period</code></p>
@@ -85,7 +85,7 @@ opt = Scheduler(Momentum, Exp(start = 1e-2, decay = 0.8))</code></pre><h2 id="Av
     <span class="sgr90">|</span><span class="sgr32">⡎</span>⠀<span class="sgr32">⠘⣤⠃⠘⣄⡠⠒⢄⣀⡠⢄⣀⣀</span><span class="sgr90">|</span> 
     <span class="sgr90">+---------------+</span> </code></pre></td></tr>
 <tr><td>
-<p><a href="https://fluxml.ai/ParameterSchedulers.jl/api/cyclic.html#ParameterSchedulers.TriangleExp"><code>TriangleExp&#40;l0, l1, period, decay&#41;</code></a></p>
+<p><a href="https://fluxml.ai/ParameterSchedulers.jl/stable/api/cyclic/#ParameterSchedulers.TriangleExp-NTuple&#123;4,&#37;20Any&#125;"><code>TriangleExp&#40;l0, l1, period, decay&#41;</code></a></p>
 </td>
 <td>
 <p><a href="https://en.wikipedia.org/wiki/Triangle_wave">Triangle wave</a> function with exponential amplitude decay at rate <code>decay</code></p>
@@ -97,7 +97,7 @@ opt = Scheduler(Momentum, Exp(start = 1e-2, decay = 0.8))</code></pre><h2 id="Av
     <span class="sgr90">|</span><span class="sgr32">⡎</span>⠀<span class="sgr32">⠘⡼</span>⠀<span class="sgr32">⠈⢆⠎⠈⢆⣀⠜⠢⣀⠤</span><span class="sgr90">|</span> 
     <span class="sgr90">+---------------+</span> </code></pre></td></tr>
 <tr><td>
-<p><a href="https://fluxml.ai/ParameterSchedulers.jl/api/decay.html#ParameterSchedulers.Poly"><code>Poly&#40;start, degree, max_iter&#41;</code></a></p>
+<p><a href="https://fluxml.ai/ParameterSchedulers.jl/stable/api/decay/#ParameterSchedulers.Poly"><code>Poly&#40;start, degree, max_iter&#41;</code></a></p>
 </td>
 <td>
 <p>Polynomial decay at degree <code>degree</code>.</p>
@@ -109,7 +109,7 @@ opt = Scheduler(Momentum, Exp(start = 1e-2, decay = 0.8))</code></pre><h2 id="Av
     <span class="sgr90">|</span>⠀⠀⠀⠀⠀⠀⠀<span class="sgr32">⠉⠓⠒⠤⠤⣀⣀⣀</span><span class="sgr90">|</span> 
     <span class="sgr90">+---------------+</span> </code></pre></td></tr>
 <tr><td>
-<p><a href="https://fluxml.ai/ParameterSchedulers.jl/api/decay.html#ParameterSchedulers.Inv"><code>Inv&#40;start, decay, degree&#41;</code></a></p>
+<p><a href="https://fluxml.ai/ParameterSchedulers.jl/stable/api/decay/#ParameterSchedulers.Inv"><code>Inv&#40;start, decay, degree&#41;</code></a></p>
 </td>
 <td>
 <p>Inverse decay at rate <code>&#40;1 &#43; t * decay&#41;^degree</code></p>
@@ -121,7 +121,7 @@ opt = Scheduler(Momentum, Exp(start = 1e-2, decay = 0.8))</code></pre><h2 id="Av
     <span class="sgr90">|</span>⠀<span class="sgr32">⠈⠑⠤⠤⢄⣀⣀⣀⣀⣀⣀⣀⣀⣀</span><span class="sgr90">|</span> 
     <span class="sgr90">+---------------+</span> </code></pre></td></tr>
 <tr><td>
-<p><a href="https://fluxml.ai/ParameterSchedulers.jl/api/cyclic.html#ParameterSchedulers.Sin"><code>Sin&#40;;l0, l1, period&#41;</code></a></p>
+<p><a href="https://fluxml.ai/ParameterSchedulers.jl/stable/api/cyclic/#ParameterSchedulers.Sin"><code>Sin&#40;;l0, l1, period&#41;</code></a></p>
 </td>
 <td>
 <p>Sine function</p>
@@ -133,7 +133,7 @@ opt = Scheduler(Momentum, Exp(start = 1e-2, decay = 0.8))</code></pre><h2 id="Av
     <span class="sgr90">|</span><span class="sgr32">⡎</span>⠀<span class="sgr32">⠘⡜</span>⠀⠀<span class="sgr32">⢷⠁</span>⠀<span class="sgr32">⢱⡇</span>⠀<span class="sgr32">⠘⡜</span>⠀<span class="sgr90">|</span> 
     <span class="sgr90">+---------------+</span> </code></pre></td></tr>
 <tr><td>
-<p><a href="https://fluxml.ai/ParameterSchedulers.jl/api/cyclic.html#ParameterSchedulers.SinDecay2"><code>SinDecay2&#40;l0, l1, period&#41;</code></a></p>
+<p><a href="https://fluxml.ai/ParameterSchedulers.jl/stable/api/cyclic/#ParameterSchedulers.SinDecay2-Union&#123;Tuple&#123;T&#125;,&#37;20Tuple&#123;T,&#37;20Any,&#37;20Any&#125;&#125;&#37;20where&#37;20T"><code>SinDecay2&#40;l0, l1, period&#41;</code></a></p>
 </td>
 <td>
 <p>Sine function with half the amplitude every <code>period</code></p>
@@ -145,7 +145,7 @@ opt = Scheduler(Momentum, Exp(start = 1e-2, decay = 0.8))</code></pre><h2 id="Av
     <span class="sgr90">|</span><span class="sgr32">⡎</span>⠀<span class="sgr32">⠘⡴⠁⠘⣄⡠⠒⢄⣀⡠⢄⣀⣀</span><span class="sgr90">|</span> 
     <span class="sgr90">+---------------+</span> </code></pre></td></tr>
 <tr><td>
-<p><a href="https://fluxml.ai/ParameterSchedulers.jl/api/cyclic.html#ParameterSchedulers.SinExp"><code>SinExp&#40;l0, l1, period&#41;</code></a></p>
+<p><a href="https://fluxml.ai/ParameterSchedulers.jl/stable/api/cyclic/#ParameterSchedulers.SinExp-NTuple&#123;4,&#37;20Any&#125;"><code>SinExp&#40;l0, l1, period&#41;</code></a></p>
 </td>
 <td>
 <p>Sine function with exponential amplitude decay at rate <code>decay</code></p>
@@ -157,4 +157,4 @@ opt = Scheduler(Momentum, Exp(start = 1e-2, decay = 0.8))</code></pre><h2 id="Av
     <span class="sgr90">|</span><span class="sgr32">⡎</span>⠀<span class="sgr32">⠘⡼</span>⠀<span class="sgr32">⠈⢆⠎⠈⢆⣀⠜⠢⣀⠤</span><span class="sgr90">|</span> 
     <span class="sgr90">+---------------+</span> </code></pre></td></tr>
 </tbody>
-</table></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="cheatsheet/">Schedule cheatsheet »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.3.0 on <span class="colophon-date" title="Tuesday 5 March 2024 21:22">Tuesday 5 March 2024</span>. Using Julia version 1.10.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
+</table></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="cheatsheet/">Schedule cheatsheet »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.3.0 on <span class="colophon-date" title="Thursday 28 March 2024 02:49">Thursday 28 March 2024</span>. Using Julia version 1.10.2.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
