@@ -186,7 +186,7 @@ A cosine annealing schedule
 (see ["SGDR: Stochastic Gradient Descent with Warm Restarts"](https://arxiv.org/abs/1608.03983v5))
 The output conforms to
 ```text
-t̂ = restart ? (t - 1) : mod(t - 1, period)
+t̂ = restart ? mod(t - 1, period) : (t - 1)
 abs(l0 - l1) * (1 + cos(π * t̂ / period)) / 2 + min(l0, l1)
 ```
 This schedule is also referred to as "cosine annealing (with warm restarts)"
