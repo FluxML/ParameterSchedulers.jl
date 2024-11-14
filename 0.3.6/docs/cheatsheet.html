@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="generator" content="Publish.jl" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="keywords" content="" />
+    <title>ParameterSchedulers.jl</title>
+    <link rel="stylesheet" href="..&#x2F;normalize.css" />
+    <link rel="stylesheet" href="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;katex@0.12.0&#x2F;dist&#x2F;katex.min.css" />
+    <link rel="stylesheet" href="..&#x2F;tabulator_simple.min.css" />
+    <link rel="stylesheet" href="..&#x2F;publish.css" />
+    <link rel="stylesheet" href="..&#x2F;default.min.css" />
+    <link rel="stylesheet" href="..&#x2F;custom.css" />
+    <script src="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;katex@0.12.0&#x2F;dist&#x2F;katex.min.js"></script>
+    <script src="https:&#x2F;&#x2F;cdn.jsdelivr.net&#x2F;npm&#x2F;katex@0.12.0&#x2F;dist&#x2F;contrib&#x2F;auto-render.min.js"></script>
+    <script src="..&#x2F;versions.js"></script>
+    <script src="..&#x2F;lunr.js"></script>
+    <script src="..&#x2F;highlight.min.js"></script>
+    <script src="..&#x2F;tabulator.min.js"></script>
+    <script src="..&#x2F;julia.min.js"></script>
+    <script src="..&#x2F;julia-repl.min.js"></script>
+    <script src="..&#x2F;publish.js"></script>
+    
+</head>
+<body>
+    <main id="page">
+        <div class="menu">
+            <div id="projectname">ParameterSchedulers.jl</div>
+            <input id="search-input" placeholder="Search">
+            <select id="version-selector"></select>
+            <svg id="menu-toggler" title="Contents" onclick="toggleIndexPage();" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2 6C2 5.44772 2.44772 5 3 5H21C21.5523 5 22 5.44772 22 6C22 6.55228 21.5523 7 21 7H3C2.44772 7 2 6.55228 2 6Z" fill="currentColor" /><path d="M2 12.0322C2 11.4799 2.44772 11.0322 3 11.0322H21C21.5523 11.0322 22 11.4799 22 12.0322C22 12.5845 21.5523 13.0322 21 13.0322H3C2.44772 13.0322 2 12.5845 2 12.0322Z" fill="currentColor" /><path d="M3 17.0645C2.44772 17.0645 2 17.5122 2 18.0645C2 18.6167 2.44772 19.0645 3 19.0645H21C21.5523 19.0645 22 18.6167 22 18.0645C22 17.5122 21.5523 17.0645 21 17.0645H3Z" fill="currentColor" /></svg>
+        </div>
+        <div id="toc"><p><a href="../README.html">Introduction</a></p>
+<p><a href="../docs/cheatsheet.html">Schedule cheatsheet</a></p>
+<h1 id="tutorials"><a href="../#tutorials" class="anchor"></a>Tutorials</h1>
+<ul>
+<li><a href="../docs/tutorials/getting-started.html">Getting started</a></li>
+<li><a href="../docs/tutorials/basic-schedules.html">Basic schedules</a></li>
+<li><a href="../docs/tutorials/optimizers.html">Optimizers</a></li>
+<li><a href="../docs/tutorials/complex-schedules.html">Complex schedules</a></li>
+<li><a href="../docs/tutorials/warmup-schedules.html">Warmup schedules</a></li>
+</ul>
+<p><a href="../docs/interfaces/generic.html">Interface</a></p>
+<hr />
+<p><a href="../docstrings.html">API Reference</a></p>
+</div>
+        <article id="content"><h1 id="schedule-cheatsheet-for-other-frameworks"><a href="#schedule-cheatsheet-for-other-frameworks" class="anchor"></a>Schedule cheatsheet for other frameworks</h1>
+<p>If you are coming from PyTorch or Tensorflow, the following table should help you find the corresponding schedule policy in ParameterSchedulers.jl.</p>
+<div class="admonition note"><p class="admonition-title">Note</p>
+<p>PyTorch typically wraps an optimizer as the first argument, but we ignore that functionality in the table. To wrap a Flux.jl optimizer with a schedule from the rightmost column, use <a href="../docstrings/ParameterSchedulers.ParameterSchedulers.html"><code>ParameterSchedules.Scheduler</code></a>.
+The variable <code>lr</code> in the middle/rightmost column refers to the initial learning rate of the optimizer.</p>
+</div><table><thead><tr><th align="left">PyTorch</th><th align="left">Tensorflow</th><th align="left">ParameterSchedulers.jl</th></tr></thead><tbody><tr><td align="left"><code>LambdaLR(_, lr_lambda)</code></td><td align="left">N/A</td><td align="left"><code>lr_lambda</code></td></tr><tr><td align="left"><code>MultiplicativeLR(_, lr_lambda)</code></td><td align="left">N/A</td><td align="left">N/A</td></tr><tr><td align="left"><code>StepLR(_, step_size, gamma)</code></td><td align="left"><code>ExponentialDecay(lr, step_size, gamma, True)</code></td><td align="left"><code>Step(lr, gamma, step_size)</code></td></tr><tr><td align="left"><code>MultiStepLR(_, milestones, gamma)</code></td><td align="left">N/A</td><td align="left"><code>Step(lr, gamma, milestones)</code></td></tr><tr><td align="left"><code>ConstantLR(_, factor, total_iters)</code></td><td align="left">N/A</td><td align="left"><code>Sequence(lr * factor =&gt; total_iters, lr =&gt; nepochs)</code></td></tr><tr><td align="left"><code>LinearLR(_, start_factor, end_factor, total_iters)</code></td><td align="left">N/A</td><td align="left"><code>Sequence(Triangle(lr * start_factor, lr * end_factor, 2 * total_iters) =&gt; total_iters, lr =&gt; nepochs)</code></td></tr><tr><td align="left"><code>ExponentialLR(_, gamma)</code></td><td align="left"><code>ExponentialDecay(lr, 1, gamma, False)</code></td><td align="left"><code>Exp(lr, gamma)</code></td></tr><tr><td align="left">N/A</td><td align="left"><code>ExponentialDecay(lr, steps, gamma, False)</code></td><td align="left"><code>Interpolator(Exp(lr, gamma), steps)</code></td></tr><tr><td align="left"><code>CosineAnnealingLR(_, T_max, eta_min)</code></td><td align="left"><code>CosineDecay(lr, T_max, eta_min)</code></td><td align="left"><code>CosAnneal(lr, eta_min, T_0, false)</code></td></tr><tr><td align="left"><code>CosineAnnealingRestarts(_, T_0, 1, eta_min)</code></td><td align="left"><code>CosineDecayRestarts(lr, T_0, 1, 1, eta_min)</code></td><td align="left"><code>CosAnneal(lr, eta_min, T_0)</code></td></tr><tr><td align="left"><code>CosineAnnealingRestarts(_, T_0, T_mult, eta_min)</code></td><td align="left"><code>CosineDecayRestarts(lr, T_0, T_mult, 1, alpha)</code></td><td align="left">See <a href="cheatsheet.html#cosine-annealing-variants">below</a></td></tr><tr><td align="left">N/A</td><td align="left"><code>CosineDecayRestarts(lr, T_0, T_mult, m_mul, alpha)</code></td><td align="left">See <a href="cheatsheet.html#cosine-annealing-variants">below</a></td></tr><tr><td align="left"><code>SequentialLR(_, schedulers, milestones)</code></td><td align="left">N/A</td><td align="left"><code>Sequence(schedulers, milestones)</code></td></tr><tr><td align="left"><code>ReduceLROnPlateau(_, mode, factor, patience, threshold, 'abs', 0)</code></td><td align="left">N/A</td><td align="left">See <a href="cheatsheet.html#reducelronplateau-style-schedules">below</a></td></tr><tr><td align="left"><code>CyclicLR(_, base_lr, max_lr, step_size, step_size, 'triangular', _, None)</code></td><td align="left">N/A</td><td align="left"><code>Triangle(base_lr, max_lr, step_size)</code></td></tr><tr><td align="left"><code>CyclicLR(_, base_lr, max_lr, step_size, step_size, 'triangular2', _, None)</code></td><td align="left">N/A</td><td align="left"><code>TriangleDecay2(base_lr, max_lr, step_size)</code></td></tr><tr><td align="left"><code>CyclicLR(_, base_lr, max_lr, step_size, step_size, 'exp_range', gamma, None)</code></td><td align="left">N/A</td><td align="left"><code>TriangleExp(base_lr, max_lr, step_size, gamma)</code></td></tr><tr><td align="left"><code>CyclicLR(_, base_lr, max_lr, step_size, step_size, _, _, scale_fn)</code></td><td align="left">N/A</td><td align="left">See <a href="tutorials/complex-schedules.html#arbitrary-looping-schedules">Arbitrary looping schedules</a></td></tr><tr><td align="left">N/A</td><td align="left"><code>InverseTimeDecay(lr, 1, decay_rate, False)</code></td><td align="left"><code>Inv(lr, decay_rate, 1)</code></td></tr><tr><td align="left">N/A</td><td align="left"><code>InverseTimeDecay(lr, decay_step, decay_rate, False)</code></td><td align="left"><code>Interpolator(Inv(lr, decay_rate, 1), decay_step)</code></td></tr><tr><td align="left">N/A</td><td align="left"><code>PolynomialDecay(lr, decay_steps, 0, power, False)</code></td><td align="left"><code>Poly(lr, power, decay_steps)</code></td></tr></tbody></table>
+<h2 id="cosine-annealing-variants"><a href="#cosine-annealing-variants" class="anchor"></a>Cosine annealing variants</h2>
+<p>In addition to the plain cosine annealing w/ warm restarts schedule, we may want to decay the peak learning rate or increase the period. Both can be done using <a href="../docstrings/ParameterSchedulers.ComposedSchedule.html"><code>ComposedSchedule</code></a> or <a href="../docstrings/ParameterSchedulers.Sequence.html"><code>Sequence</code></a>.</p>
+<p>Let’s start with the simpler task: decaying the learning rate.</p>
+<pre><code class="language-julia"># decay learning rate by m_mul
+s = ComposedSchedule(CosAnneal(range, offset, period),
+                     (Step(range, m_mul, period), offset, period))
+</code></pre>
+<p>To increase the period by a fixed multiple, we should think of each period of the schedule as an individual schedule concatenated together. This is exactly what <a href="../docstrings/ParameterSchedulers.Sequence.html"><code>Sequence</code></a> is except that there is no limit to the number of periods that we concatenate together. Fortunately, <code>Sequence</code> accepts <a href="https://docs.julialang.org/en/v1.7/manual/arrays/#Generator-Expressions"><code>Base.Generators</code></a>. When combined with <a href="https://github.com/JuliaArrays/InfiniteArrays.jl">InfiniteArrays.jl</a>, we can create an infinite sequence of individual schedules.</p>
+<pre><code class="language-julia">using InfiniteArrays: OneToInf
+
+# increase period by factor t_mul
+e = Exp(period, t_mul)
+s = Sequence(CosAnneal(range, offset, e(t)) for t in OneToInf(),
+             e(t) for t in OneToInf())
+</code></pre>
+<h2 id="reducelronplateau-style-schedules"><a href="#reducelronplateau-style-schedules" class="anchor"></a><code>ReduceLROnPlateau</code> style schedules</h2>
+<p>Unlike PyTorch, ParameterSchedulers.jl doesn’t create a monolithic schedule to control dynamic schedules. Instead, <a href="../docstrings/ParameterSchedulers.Stateful.html"><code>ParameterSchedulers.Stateful</code></a> has an <code>advance</code> keyword argument that can allow for arbitrary advancement of schedules based on a predicate function. When combined with <code>Flux.plateau</code> as the predicate, we get <code>ReduceLROnPlateau</code>.</p>
+<pre><code class="language-julia"># the code below is written to match
+# ReduceLROnPlateau(_, 'max', factor, patience, threshold, 'abs', 0)
+# we also assume accuracy_func() is an accuracy metric that's already given for our model
+
+# this is done to match ReduceLROnPlateau
+# but it could be any schedule
+s = Exp(lr, factor)
+predicate = Flux.plateau(accuracy_func, patience; min_dist = threshold)
+ParameterSchedulers.Stateful(s; advance = predicate)
+</code></pre>
+<p>Using this approach, we can be more flexible than PyTorch. You can use any schedule (not just exponential decay) and arbitrary predicates. Make sure to check out the <a href="https://fluxml.ai/Flux.jl/stable/utilities/#Patience-Helpers">Flux docmentation on “patience helpers”</a> for more ways to customize the predicate (e.g. the <code>'min'</code> mode for <code>ReduceLROnPlateau</code>).</p>
+</article>
+        <div id="page-navigation">
+            <a id="previous-page" title="Previous" href="..&#x2F;README.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M16.2426 6.34317L14.8284 4.92896L7.75739 12L14.8285 19.0711L16.2427 17.6569L10.5858 12L16.2426 6.34317Z" fill="currentColor" /></svg></a>
+            <a id="next-page" title="Next" href="tutorials&#x2F;getting-started.html"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.5858 6.34317L12 4.92896L19.0711 12L12 19.0711L10.5858 17.6569L16.2427 12L10.5858 6.34317Z" fill="currentColor" /></svg></a>
+        </div>
+        <footer>
+            Built with <a target="_blank" href="https://github.com/MichaelHatherly/Publish.jl">Publish.jl</a> and the <a target="_blank" href="https://julialang.org">Julia Language</a>.
+        </footer>
+    </main>
+    <script>hljs.initHighlightingOnLoad();</script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            renderMathInElement(document.body, {
+                delimiters: [
+                    {left: "$$", right: "$$", display: true},
+                    {left: "$", right: "$", display: false},
+                    {left: "\\(", right: "\\)", display: false},
+                    {left: "\\[", right: "\\]", display: true}
+                ]
+            });
+        });
+    </script>
+</body>
+</html>

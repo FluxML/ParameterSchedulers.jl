@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Home · ParameterSchedulers.jl</title><meta name="title" content="Home · ParameterSchedulers.jl"/><meta property="og:title" content="Home · ParameterSchedulers.jl"/><meta property="twitter:title" content="Home · ParameterSchedulers.jl"/><meta name="description" content="Documentation for ParameterSchedulers.jl."/><meta property="og:description" content="Documentation for ParameterSchedulers.jl."/><meta property="twitter:description" content="Documentation for ParameterSchedulers.jl."/><meta property="og:url" content="https://fluxml.ai/ParameterSchedulers.jl/stable/"/><meta property="twitter:url" content="https://fluxml.ai/ParameterSchedulers.jl/stable/"/><link rel="canonical" href="https://fluxml.ai/ParameterSchedulers.jl/stable/"/><script data-outdated-warner src="assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="assets/documenter.js"></script><script src="search_index.js"></script><script src="siteinfo.js"></script><script src="../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="assets/themeswap.js"></script><link href="assets/flux.css" rel="stylesheet" type="text/css"/></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href>ParameterSchedulers.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li class="is-active"><a class="tocitem" href>Home</a><ul class="internal"><li><a class="tocitem" href="#Available-Schedules"><span>Available Schedules</span></a></li></ul></li><li><a class="tocitem" href="cheatsheet/">Schedule cheatsheet</a></li><li><span class="tocitem">Tutorials</span><ul><li><a class="tocitem" href="tutorials/getting-started/">Getting started</a></li><li><a class="tocitem" href="tutorials/basic-schedules/">Basic schedules</a></li><li><a class="tocitem" href="tutorials/optimizers/">Scheduling optimizers</a></li><li><a class="tocitem" href="tutorials/complex-schedules/">Complex schedules</a></li><li><a class="tocitem" href="tutorials/warmup-schedules/">Warm-up Schedules</a></li></ul></li><li><a class="tocitem" href="interface/">Schedule interface</a></li><li><span class="tocitem">API reference</span><ul><li><a class="tocitem" href="api/general/">General API reference</a></li><li><a class="tocitem" href="api/decay/">Decay schedule API reference</a></li><li><a class="tocitem" href="api/cyclic/">Cyclic schedule API reference</a></li><li><a class="tocitem" href="api/complex/">Complex schedule API reference</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li class="is-active"><a href>Home</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Home</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/FluxML/ParameterSchedulers.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/FluxML/ParameterSchedulers.jl/blob/main/docs/src/index.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="ParameterSchedulers"><a class="docs-heading-anchor" href="#ParameterSchedulers">ParameterSchedulers</a><a id="ParameterSchedulers-1"></a><a class="docs-heading-anchor-permalink" href="#ParameterSchedulers" title="Permalink"></a></h1><p><a href="https://fluxml.github.io/ParameterSchedulers.jl/dev"><img src="https://img.shields.io/badge/docs-dev-blue.svg" alt="Dev"/></a> <a href="https://github.com/FluxML/ParameterSchedulers.jl/actions"><img src="https://github.com/FluxML/ParameterSchedulers.jl/workflows/CI/badge.svg" alt="Build Status"/></a></p><p>ParameterSchedulers.jl provides common machine learning (ML) schedulers for hyper-parameters. Though this package is framework agnostic, a convenient interface for pairing schedules with <a href="https://github.com/FluxML/Flux.jl">Flux.jl</a> optimizers is available. Using this package with Flux is as simple as:</p><pre><code class="language-julia hljs">using Flux, ParameterSchedulers
+using ParameterSchedulers: Scheduler
+
+opt = Scheduler(Momentum, Exp(start = 1e-2, decay = 0.8))</code></pre><h2 id="Available-Schedules"><a class="docs-heading-anchor" href="#Available-Schedules">Available Schedules</a><a id="Available-Schedules-1"></a><a class="docs-heading-anchor-permalink" href="#Available-Schedules" title="Permalink"></a></h2><p>This is a table of the common schedules implemented, but ParameterSchedulers provides utilities for creating more exotic schedules as well. The <a href="# &quot;Complex schedules&quot;">higher order schedules</a> should make it so that you will rarely need to write a schedule from scratch.</p><p>You can read <a href="https://arxiv.org/abs/1908.06477">this paper</a> for more information on the schedules below.</p><table>
+<thead>
+<tr>
+    <th>Schedule</th>
+    <th>Description</th>
+    <th>Type</th>
+    <th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>
+<p><a href="https://fluxml.ai/ParameterSchedulers.jl/stable/api/decay/#ParameterSchedulers.Step"><code>Step&#40;; start, decay, step_sizes&#41;</code></a></p>
+</td>
+<td>
+<p>Exponential decay by <code>decay</code> every step in <code>step_sizes</code></p>
+</td>
+<td> Decay </td>
+<td style="text-align:center"><pre class="documenter-example-output"><code class="nohighlight hljs ansi">    <span class="sgr90">+---------------+</span> 
+    <span class="sgr90">|</span><span class="sgr32">⠉⠉⢆</span>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀<span class="sgr90">|</span> 
+    <span class="sgr90">|</span>⠀⠀⠀<span class="sgr32">⠉⠉⠉⠉⢢</span>⠀⠀⠀⠀⠀⠀⠀<span class="sgr90">|</span> 
+    <span class="sgr90">|</span>⠀⠀⠀⠀⠀⠀⠀⠀<span class="sgr32">⠉⠉⠑⢄⣀⣀⣀</span><span class="sgr90">|</span> 
+    <span class="sgr90">+---------------+</span> </code></pre></td></tr>
+<tr><td>
+<p><a href="https://fluxml.ai/ParameterSchedulers.jl/stable/api/decay/#ParameterSchedulers.Exp"><code>Exp&#40;start, decay&#41;</code></a></p>
+</td>
+<td>
+<p>Exponential decay by <code>decay</code> every iteration</p>
+</td>
+<td> Decay </td>
+<td style="text-align:center"><pre class="documenter-example-output"><code class="nohighlight hljs ansi">    <span class="sgr90">+---------------+</span> 
+    <span class="sgr90">|</span><span class="sgr32">⢣</span>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀<span class="sgr90">|</span> 
+    <span class="sgr90">|</span>⠀<span class="sgr32">⠣⢄</span>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀<span class="sgr90">|</span> 
+    <span class="sgr90">|</span>⠀⠀⠀<span class="sgr32">⠓⠢⠤⢄⣀⣀⣀⣀⣀⣀⣀⣀</span><span class="sgr90">|</span> 
+    <span class="sgr90">+---------------+</span> </code></pre></td></tr>
+<tr><td>
+<p><a href="https://fluxml.ai/ParameterSchedulers.jl/stable/api/cyclic/#ParameterSchedulers.CosAnneal"><code>CosAnneal&#40;;l0, l1, period&#41;</code></a></p>
+</td>
+<td>
+<p><a href="https://arxiv.org/abs/1608.03983v5">Cosine annealing</a></p>
+</td>
+<td> Cyclic </td>
+<td style="text-align:center"><pre class="documenter-example-output"><code class="nohighlight hljs ansi">    <span class="sgr90">+---------------+</span> 
+    <span class="sgr90">|</span><span class="sgr32">⠉⠒⡄</span>⠀⠀⠀<span class="sgr32">⡎⠑⠢⡀</span>⠀⠀<span class="sgr32">⢠⠋⠒</span><span class="sgr90">|</span> 
+    <span class="sgr90">|</span>⠀⠀<span class="sgr32">⠈⢆</span>⠀<span class="sgr32">⢰⠁</span>⠀⠀<span class="sgr32">⠑⡄</span>⠀<span class="sgr32">⡜</span>⠀⠀<span class="sgr90">|</span> 
+    <span class="sgr90">|</span>⠀⠀⠀⠀<span class="sgr32">⠣⡇</span>⠀⠀⠀⠀<span class="sgr32">⠈⢶⠁</span>⠀⠀<span class="sgr90">|</span> 
+    <span class="sgr90">+---------------+</span> </code></pre></td></tr>
+<tr><td>
+<p><a href="https://fluxml.ai/ParameterSchedulers.jl/stable/api/complex/#ParameterSchedulers.OneCycle-Tuple&#123;Any,&#37;20Any&#125;"><code>OneCycle&#40;nsteps, maxval&#41;</code></a></p>
+</td>
+<td>
+<p><a href="https://arxiv.org/abs/1708.07120">One cycle cosine</a></p>
+</td>
+<td> Complex </td>
+<td style="text-align:center"><pre class="documenter-example-output"><code class="nohighlight hljs ansi">    <span class="sgr90">+---------------+</span> 
+    <span class="sgr90">|</span>⠀⠀⠀<span class="sgr32">⡤⠊⠉⠉⠒⠤⡀</span>⠀⠀⠀⠀⠀<span class="sgr90">|</span> 
+    <span class="sgr90">|</span>⠀<span class="sgr32">⢀⠜</span>⠀⠀⠀⠀⠀⠀<span class="sgr32">⠈⠑⢄</span>⠀⠀⠀<span class="sgr90">|</span> 
+    <span class="sgr90">|</span><span class="sgr32">⡠⠊</span>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀<span class="sgr32">⠉⠢⢄</span><span class="sgr90">|</span> 
+    <span class="sgr90">+---------------+</span> </code></pre></td></tr>
+<tr><td>
+<p><a href="https://fluxml.ai/ParameterSchedulers.jl/stable/api/cyclic/#ParameterSchedulers.Triangle"><code>Triangle&#40;l0, l1, period&#41;</code></a></p>
+</td>
+<td>
+<p><a href="https://en.wikipedia.org/wiki/Triangle_wave">Triangle wave</a> function</p>
+</td>
+<td> Cyclic </td>
+<td style="text-align:center"><pre class="documenter-example-output"><code class="nohighlight hljs ansi">    <span class="sgr90">+---------------+</span> 
+    <span class="sgr90">|</span>⠀<span class="sgr32">⡼⡀</span>⠀<span class="sgr32">⡸⡇</span>⠀<span class="sgr32">⢠⢣</span>⠀⠀<span class="sgr32">⡾⡀</span>⠀<span class="sgr32">⡸</span><span class="sgr90">|</span> 
+    <span class="sgr90">|</span><span class="sgr32">⢰⠁⢇⢀⠇⢸</span>⠀<span class="sgr32">⡜⠈⡆⢸</span>⠀<span class="sgr32">⢣⢀⠇</span><span class="sgr90">|</span> 
+    <span class="sgr90">|</span><span class="sgr32">⡎</span>⠀<span class="sgr32">⠘⡜</span>⠀⠀<span class="sgr32">⢷⠁</span>⠀<span class="sgr32">⢱⡇</span>⠀<span class="sgr32">⠘⡜</span>⠀<span class="sgr90">|</span> 
+    <span class="sgr90">+---------------+</span> </code></pre></td></tr>
+<tr><td>
+<p><a href="https://fluxml.ai/ParameterSchedulers.jl/stable/api/cyclic/#ParameterSchedulers.TriangleDecay2-Union&#123;Tuple&#123;T&#125;,&#37;20Tuple&#123;T,&#37;20Any,&#37;20Any&#125;&#125;&#37;20where&#37;20T"><code>TriangleDecay2&#40;l0, l1, period&#41;</code></a></p>
+</td>
+<td>
+<p><a href="https://en.wikipedia.org/wiki/Triangle_wave">Triangle wave</a> function with half the amplitude every <code>period</code></p>
+</td>
+<td> Cyclic </td>
+<td style="text-align:center"><pre class="documenter-example-output"><code class="nohighlight hljs ansi">    <span class="sgr90">+---------------+</span> 
+    <span class="sgr90">|</span>⠀<span class="sgr32">⡼⡀</span>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀<span class="sgr90">|</span> 
+    <span class="sgr90">|</span><span class="sgr32">⢰⠁⢇</span>⠀<span class="sgr32">⢠⡄</span>⠀⠀⠀⠀⠀⠀⠀⠀⠀<span class="sgr90">|</span> 
+    <span class="sgr90">|</span><span class="sgr32">⡎</span>⠀<span class="sgr32">⠘⣤⠃⠘⣄⡠⠒⢄⣀⡠⢄⣀⣀</span><span class="sgr90">|</span> 
+    <span class="sgr90">+---------------+</span> </code></pre></td></tr>
+<tr><td>
+<p><a href="https://fluxml.ai/ParameterSchedulers.jl/stable/api/cyclic/#ParameterSchedulers.TriangleExp-NTuple&#123;4,&#37;20Any&#125;"><code>TriangleExp&#40;l0, l1, period, decay&#41;</code></a></p>
+</td>
+<td>
+<p><a href="https://en.wikipedia.org/wiki/Triangle_wave">Triangle wave</a> function with exponential amplitude decay at rate <code>decay</code></p>
+</td>
+<td> Cyclic </td>
+<td style="text-align:center"><pre class="documenter-example-output"><code class="nohighlight hljs ansi">    <span class="sgr90">+---------------+</span> 
+    <span class="sgr90">|</span>⠀<span class="sgr32">⡼⡀</span>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀<span class="sgr90">|</span> 
+    <span class="sgr90">|</span><span class="sgr32">⢰⠁⢇</span>⠀<span class="sgr32">⡜⢇</span>⠀⠀<span class="sgr32">⡀</span>⠀⠀⠀⠀⠀⠀<span class="sgr90">|</span> 
+    <span class="sgr90">|</span><span class="sgr32">⡎</span>⠀<span class="sgr32">⠘⡼</span>⠀<span class="sgr32">⠈⢆⠎⠈⢆⣀⠜⠢⣀⠤</span><span class="sgr90">|</span> 
+    <span class="sgr90">+---------------+</span> </code></pre></td></tr>
+<tr><td>
+<p><a href="https://fluxml.ai/ParameterSchedulers.jl/stable/api/decay/#ParameterSchedulers.Poly"><code>Poly&#40;start, degree, max_iter&#41;</code></a></p>
+</td>
+<td>
+<p>Polynomial decay at degree <code>degree</code>.</p>
+</td>
+<td> Decay </td>
+<td style="text-align:center"><pre class="documenter-example-output"><code class="nohighlight hljs ansi">    <span class="sgr90">+---------------+</span> 
+    <span class="sgr90">|</span><span class="sgr32">⠉⠢⢄</span>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀<span class="sgr90">|</span> 
+    <span class="sgr90">|</span>⠀⠀⠀<span class="sgr32">⠉⠒⠤⣀</span>⠀⠀⠀⠀⠀⠀⠀⠀<span class="sgr90">|</span> 
+    <span class="sgr90">|</span>⠀⠀⠀⠀⠀⠀⠀<span class="sgr32">⠉⠓⠒⠤⠤⣀⣀⣀</span><span class="sgr90">|</span> 
+    <span class="sgr90">+---------------+</span> </code></pre></td></tr>
+<tr><td>
+<p><a href="https://fluxml.ai/ParameterSchedulers.jl/stable/api/decay/#ParameterSchedulers.Inv"><code>Inv&#40;start, decay, degree&#41;</code></a></p>
+</td>
+<td>
+<p>Inverse decay at rate <code>&#40;1 &#43; t * decay&#41;^degree</code></p>
+</td>
+<td> Decay </td>
+<td style="text-align:center"><pre class="documenter-example-output"><code class="nohighlight hljs ansi">    <span class="sgr90">+---------------+</span> 
+    <span class="sgr90">|</span><span class="sgr32">⢇</span>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀<span class="sgr90">|</span> 
+    <span class="sgr90">|</span><span class="sgr32">⠈⡆</span>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀<span class="sgr90">|</span> 
+    <span class="sgr90">|</span>⠀<span class="sgr32">⠈⠑⠤⠤⢄⣀⣀⣀⣀⣀⣀⣀⣀⣀</span><span class="sgr90">|</span> 
+    <span class="sgr90">+---------------+</span> </code></pre></td></tr>
+<tr><td>
+<p><a href="https://fluxml.ai/ParameterSchedulers.jl/stable/api/cyclic/#ParameterSchedulers.Sin"><code>Sin&#40;;l0, l1, period&#41;</code></a></p>
+</td>
+<td>
+<p>Sine function</p>
+</td>
+<td> Cyclic </td>
+<td style="text-align:center"><pre class="documenter-example-output"><code class="nohighlight hljs ansi">    <span class="sgr90">+---------------+</span> 
+    <span class="sgr90">|</span>⠀<span class="sgr32">⡼⡀</span>⠀<span class="sgr32">⡸⡇</span>⠀<span class="sgr32">⢠⢣</span>⠀⠀<span class="sgr32">⡾⡀</span>⠀<span class="sgr32">⡸</span><span class="sgr90">|</span> 
+    <span class="sgr90">|</span><span class="sgr32">⢰⠁⢇⢀⠇⢸</span>⠀<span class="sgr32">⡜⠈⡆⢸</span>⠀<span class="sgr32">⢣⢀⠇</span><span class="sgr90">|</span> 
+    <span class="sgr90">|</span><span class="sgr32">⡎</span>⠀<span class="sgr32">⠘⡜</span>⠀⠀<span class="sgr32">⢷⠁</span>⠀<span class="sgr32">⢱⡇</span>⠀<span class="sgr32">⠘⡜</span>⠀<span class="sgr90">|</span> 
+    <span class="sgr90">+---------------+</span> </code></pre></td></tr>
+<tr><td>
+<p><a href="https://fluxml.ai/ParameterSchedulers.jl/stable/api/cyclic/#ParameterSchedulers.SinDecay2-Union&#123;Tuple&#123;T&#125;,&#37;20Tuple&#123;T,&#37;20Any,&#37;20Any&#125;&#125;&#37;20where&#37;20T"><code>SinDecay2&#40;l0, l1, period&#41;</code></a></p>
+</td>
+<td>
+<p>Sine function with half the amplitude every <code>period</code></p>
+</td>
+<td> Cyclic </td>
+<td style="text-align:center"><pre class="documenter-example-output"><code class="nohighlight hljs ansi">    <span class="sgr90">+---------------+</span> 
+    <span class="sgr90">|</span>⠀<span class="sgr32">⡼⡀</span>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀<span class="sgr90">|</span> 
+    <span class="sgr90">|</span><span class="sgr32">⢰⠁⢇</span>⠀<span class="sgr32">⡠⡄</span>⠀⠀⠀⠀⠀⠀⠀⠀⠀<span class="sgr90">|</span> 
+    <span class="sgr90">|</span><span class="sgr32">⡎</span>⠀<span class="sgr32">⠘⡴⠁⠘⣄⡠⠒⢄⣀⡠⢄⣀⣀</span><span class="sgr90">|</span> 
+    <span class="sgr90">+---------------+</span> </code></pre></td></tr>
+<tr><td>
+<p><a href="https://fluxml.ai/ParameterSchedulers.jl/stable/api/cyclic/#ParameterSchedulers.SinExp-NTuple&#123;4,&#37;20Any&#125;"><code>SinExp&#40;l0, l1, period&#41;</code></a></p>
+</td>
+<td>
+<p>Sine function with exponential amplitude decay at rate <code>decay</code></p>
+</td>
+<td> Cyclic </td>
+<td style="text-align:center"><pre class="documenter-example-output"><code class="nohighlight hljs ansi">    <span class="sgr90">+---------------+</span> 
+    <span class="sgr90">|</span>⠀<span class="sgr32">⡼⡀</span>⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀<span class="sgr90">|</span> 
+    <span class="sgr90">|</span><span class="sgr32">⢰⠁⢇</span>⠀<span class="sgr32">⡜⢇</span>⠀⠀<span class="sgr32">⡀</span>⠀⠀⠀⠀⠀⠀<span class="sgr90">|</span> 
+    <span class="sgr90">|</span><span class="sgr32">⡎</span>⠀<span class="sgr32">⠘⡼</span>⠀<span class="sgr32">⠈⢆⠎⠈⢆⣀⠜⠢⣀⠤</span><span class="sgr90">|</span> 
+    <span class="sgr90">+---------------+</span> </code></pre></td></tr>
+</tbody>
+</table></article><nav class="docs-footer"><a class="docs-footer-nextpage" href="cheatsheet/">Schedule cheatsheet »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.5.0 on <span class="colophon-date" title="Saturday 29 June 2024 14:25">Saturday 29 June 2024</span>. Using Julia version 1.10.4.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
