@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/><title>Scheduling optimizers · ParameterSchedulers.jl</title><meta name="title" content="Scheduling optimizers · ParameterSchedulers.jl"/><meta property="og:title" content="Scheduling optimizers · ParameterSchedulers.jl"/><meta property="twitter:title" content="Scheduling optimizers · ParameterSchedulers.jl"/><meta name="description" content="Documentation for ParameterSchedulers.jl."/><meta property="og:description" content="Documentation for ParameterSchedulers.jl."/><meta property="twitter:description" content="Documentation for ParameterSchedulers.jl."/><meta property="og:url" content="https://fluxml.ai/ParameterSchedulers.jl/stable/tutorials/optimizers/"/><meta property="twitter:url" content="https://fluxml.ai/ParameterSchedulers.jl/stable/tutorials/optimizers/"/><link rel="canonical" href="https://fluxml.ai/ParameterSchedulers.jl/stable/tutorials/optimizers/"/><script data-outdated-warner src="../../assets/warner.js"></script><link href="https://cdnjs.cloudflare.com/ajax/libs/lato-font/3.0.0/css/lato-font.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/juliamono/0.050/juliamono.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/fontawesome.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/solid.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/brands.min.css" rel="stylesheet" type="text/css"/><link href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.8/katex.min.css" rel="stylesheet" type="text/css"/><script>documenterBaseURL="../.."</script><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.6/require.min.js" data-main="../../assets/documenter.js"></script><script src="../../search_index.js"></script><script src="../../siteinfo.js"></script><script src="../../../versions.js"></script><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-mocha.css" data-theme-name="catppuccin-mocha"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-macchiato.css" data-theme-name="catppuccin-macchiato"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-frappe.css" data-theme-name="catppuccin-frappe"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/catppuccin-latte.css" data-theme-name="catppuccin-latte"/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-dark.css" data-theme-name="documenter-dark" data-theme-primary-dark/><link class="docs-theme-link" rel="stylesheet" type="text/css" href="../../assets/themes/documenter-light.css" data-theme-name="documenter-light" data-theme-primary/><script src="../../assets/themeswap.js"></script><link href="../../assets/flux.css" rel="stylesheet" type="text/css"/></head><body><div id="documenter"><nav class="docs-sidebar"><div class="docs-package-name"><span class="docs-autofit"><a href="../../">ParameterSchedulers.jl</a></span></div><button class="docs-search-query input is-rounded is-small is-clickable my-2 mx-auto py-1 px-2" id="documenter-search-query">Search docs (Ctrl + /)</button><ul class="docs-menu"><li><a class="tocitem" href="../../">Home</a></li><li><a class="tocitem" href="../../cheatsheet/">Schedule cheatsheet</a></li><li><span class="tocitem">Tutorials</span><ul><li><a class="tocitem" href="../getting-started/">Getting started</a></li><li><a class="tocitem" href="../basic-schedules/">Basic schedules</a></li><li class="is-active"><a class="tocitem" href>Scheduling optimizers</a><ul class="internal"><li><a class="tocitem" href="#Iterating-during-training"><span>Iterating during training</span></a></li><li><a class="tocitem" href="#Stateful-iteration-with-training"><span>Stateful iteration with training</span></a></li><li><a class="tocitem" href="#Working-with-Flux-optimizers"><span>Working with Flux optimizers</span></a></li></ul></li><li><a class="tocitem" href="../complex-schedules/">Complex schedules</a></li><li><a class="tocitem" href="../warmup-schedules/">Warm-up Schedules</a></li></ul></li><li><a class="tocitem" href="../../interface/">Schedule interface</a></li><li><span class="tocitem">API reference</span><ul><li><a class="tocitem" href="../../api/general/">General API reference</a></li><li><a class="tocitem" href="../../api/decay/">Decay schedule API reference</a></li><li><a class="tocitem" href="../../api/cyclic/">Cyclic schedule API reference</a></li><li><a class="tocitem" href="../../api/complex/">Complex schedule API reference</a></li></ul></li></ul><div class="docs-version-selector field has-addons"><div class="control"><span class="docs-label button is-static is-size-7">Version</span></div><div class="docs-selector control is-expanded"><div class="select is-fullwidth is-size-7"><select id="documenter-version-selector"></select></div></div></div></nav><div class="docs-main"><header class="docs-navbar"><a class="docs-sidebar-button docs-navbar-link fa-solid fa-bars is-hidden-desktop" id="documenter-sidebar-button" href="#"></a><nav class="breadcrumb"><ul class="is-hidden-mobile"><li><a class="is-disabled">Tutorials</a></li><li class="is-active"><a href>Scheduling optimizers</a></li></ul><ul class="is-hidden-tablet"><li class="is-active"><a href>Scheduling optimizers</a></li></ul></nav><div class="docs-right"><a class="docs-navbar-link" href="https://github.com/FluxML/ParameterSchedulers.jl" title="View the repository on GitHub"><span class="docs-icon fa-brands"></span><span class="docs-label is-hidden-touch">GitHub</span></a><a class="docs-navbar-link" href="https://github.com/FluxML/ParameterSchedulers.jl/blob/main/docs/src/tutorials/optimizers.md" title="Edit source on GitHub"><span class="docs-icon fa-solid"></span></a><a class="docs-settings-button docs-navbar-link fa-solid fa-gear" id="documenter-settings-button" href="#" title="Settings"></a><a class="docs-article-toggle-button fa-solid fa-chevron-up" id="documenter-article-toggle-button" href="javascript:;" title="Collapse all docstrings"></a></div></header><article class="content" id="documenter-page"><h1 id="Scheduling-optimizers"><a class="docs-heading-anchor" href="#Scheduling-optimizers">Scheduling optimizers</a><a id="Scheduling-optimizers-1"></a><a class="docs-heading-anchor-permalink" href="#Scheduling-optimizers" title="Permalink"></a></h1><p>A schedule by itself is not helpful; we need to use the schedules to adjust parameters. In this tutorial, we will examine three ways to do just that–-iterating the schedule, using a stateful iterator, and using an scheduled optimizer. The final option is the preferred method for FluxML.</p><h2 id="Iterating-during-training"><a class="docs-heading-anchor" href="#Iterating-during-training">Iterating during training</a><a id="Iterating-during-training-1"></a><a class="docs-heading-anchor-permalink" href="#Iterating-during-training" title="Permalink"></a></h2><p>Since every schedule is a standard iterator, we can insert it into a training loop by simply zipping up with another iterator. For example, the following code adjusts the learning rate of the optimizer before each batch of training.</p><pre><code class="language-julia hljs">using Flux, ParameterSchedulers
+using Optimisers: Descent, adjust!
+
+data = [(Flux.rand32(4, 10), rand([-1, 1], 1, 10)) for _ in 1:3]
+m = Chain(Dense(4, 4, tanh), Dense(4, 1, tanh))
+opt = Descent()
+opt_st = Flux.setup(opt, m)
+s = Exp(start = 1e-1, decay = 0.2)
+
+for (eta, (x, y)) in zip(s, data)
+    global opt_st, m
+    adjust!(opt_st, eta)
+    g = Flux.gradient(m -&gt; Flux.mse(m(x), y), m)[1]
+    opt_st, m = Flux.update!(opt_st, m, g)
+    println(&quot;opt state: &quot;, opt_st.layers[1].weight.rule)
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">opt state: Descent(0.1f0)
+opt state: Descent(0.02f0)
+opt state: Descent(0.004f0)</code></pre><p>We can also adjust the learning on an epoch basis instead. All that is required is to change what we zip our schedule with.</p><pre><code class="language-julia hljs">nepochs = 6
+s = Step(start = 1e-1, decay = 0.2, step_sizes = [3, 2, 1])
+for (eta, epoch) in zip(s, 1:nepochs)
+    global opt_st
+    adjust!(opt_st, eta)
+    for (i, (x, y)) in enumerate(data)
+        global m
+        g = Flux.gradient(m -&gt; Flux.mse(m(x), y), m)[1]
+        opt_st, m = Flux.update!(opt_st, m, g)
+        println(&quot;epoch: $epoch, batch: $i, opt state: $(opt_st.layers[1].weight.rule)&quot;)
+    end
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">epoch: 1, batch: 1, opt state: Descent(0.1f0)
+epoch: 1, batch: 2, opt state: Descent(0.1f0)
+epoch: 1, batch: 3, opt state: Descent(0.1f0)
+epoch: 2, batch: 1, opt state: Descent(0.1f0)
+epoch: 2, batch: 2, opt state: Descent(0.1f0)
+epoch: 2, batch: 3, opt state: Descent(0.1f0)
+epoch: 3, batch: 1, opt state: Descent(0.1f0)
+epoch: 3, batch: 2, opt state: Descent(0.1f0)
+epoch: 3, batch: 3, opt state: Descent(0.1f0)
+epoch: 4, batch: 1, opt state: Descent(0.02f0)
+epoch: 4, batch: 2, opt state: Descent(0.02f0)
+epoch: 4, batch: 3, opt state: Descent(0.02f0)
+epoch: 5, batch: 1, opt state: Descent(0.02f0)
+epoch: 5, batch: 2, opt state: Descent(0.02f0)
+epoch: 5, batch: 3, opt state: Descent(0.02f0)
+epoch: 6, batch: 1, opt state: Descent(0.004f0)
+epoch: 6, batch: 2, opt state: Descent(0.004f0)
+epoch: 6, batch: 3, opt state: Descent(0.004f0)</code></pre><h2 id="Stateful-iteration-with-training"><a class="docs-heading-anchor" href="#Stateful-iteration-with-training">Stateful iteration with training</a><a id="Stateful-iteration-with-training-1"></a><a class="docs-heading-anchor-permalink" href="#Stateful-iteration-with-training" title="Permalink"></a></h2><p>Sometimes zipping up the schedule with an iterator isn&#39;t sufficient. For example, we might want to advance the schedule with every batch but not be forced to restart each epoch. In such a situation with nested loops, it becomes useful to use <a href="../../api/general/#ParameterSchedulers.Stateful"><code>ParameterSchedulers.Stateful</code></a> which maintains its own iteration state. {cell=optimizers}</p><pre><code class="language-julia hljs">nepochs = 3
+s = ParameterSchedulers.Stateful(Inv(start = 1e-1, decay = 0.2, degree = 2))
+for epoch in 1:nepochs
+    for (i, (x, y)) in enumerate(data)
+        global opt_st, m
+        adjust!(opt_st, ParameterSchedulers.next!(s))
+        g = Flux.gradient(m -&gt; Flux.mse(m(x), y), m)[1]
+        opt_st, m = Flux.update!(opt_st, m, g)
+        println(&quot;epoch: $epoch, batch: $i, opt state: $(opt_st.layers[1].weight.rule)&quot;)
+    end
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">epoch: 1, batch: 1, opt state: Descent(0.1f0)
+epoch: 1, batch: 2, opt state: Descent(0.06944445f0)
+epoch: 1, batch: 3, opt state: Descent(0.05102041f0)
+epoch: 2, batch: 1, opt state: Descent(0.0390625f0)
+epoch: 2, batch: 2, opt state: Descent(0.030864198f0)
+epoch: 2, batch: 3, opt state: Descent(0.025f0)
+epoch: 3, batch: 1, opt state: Descent(0.020661157f0)
+epoch: 3, batch: 2, opt state: Descent(0.017361112f0)
+epoch: 3, batch: 3, opt state: Descent(0.0147929f0)</code></pre><h2 id="Working-with-Flux-optimizers"><a class="docs-heading-anchor" href="#Working-with-Flux-optimizers">Working with Flux optimizers</a><a id="Working-with-Flux-optimizers-1"></a><a class="docs-heading-anchor-permalink" href="#Working-with-Flux-optimizers" title="Permalink"></a></h2><p>While the approaches above can be helpful when dealing with fine-grained training loops, it is usually simpler to just use a <a href="../../api/general/#ParameterSchedulers.Scheduler"><code>ParameterSchedulers.Scheduler</code></a>.</p><pre><code class="language-julia hljs">using ParameterSchedulers: Scheduler
+
+nepochs = 3
+s = Inv(start = 1e-1, degree = 2, decay = 0.2)
+opt = Scheduler(Descent, s)
+opt_st = Flux.setup(opt, m)
+for epoch in 1:nepochs
+    for (i, (x, y)) in enumerate(data)
+        global opt_st, m
+        sched_step = opt_st.layers[1].weight.state.t
+        println(&quot;epoch: $epoch, batch: $i, sched state: $sched_step&quot;)
+        g = Flux.gradient(m -&gt; Flux.mse(m(x), y), m)[1]
+        opt_st, m = Flux.update!(opt_st, m, g)
+    end
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">epoch: 1, batch: 1, sched state: 1
+epoch: 1, batch: 2, sched state: 2
+epoch: 1, batch: 3, sched state: 3
+epoch: 2, batch: 1, sched state: 4
+epoch: 2, batch: 2, sched state: 5
+epoch: 2, batch: 3, sched state: 6
+epoch: 3, batch: 1, sched state: 7
+epoch: 3, batch: 2, sched state: 8
+epoch: 3, batch: 3, sched state: 9</code></pre><p>The scheduler, <code>opt</code>, can be used anywhere a Flux optimizer can. For example, it can be passed to <code>Flux.train!</code>:</p><pre><code class="language-julia hljs">s = Inv(start = 1e-1, degree = 2, decay = 0.2)
+opt = Scheduler(Descent, s)
+opt_st = Flux.setup(opt, m)
+loss(m, x, y) = Flux.mse(m(x), y)
+for epoch in 1:nepochs
+    sched_step = opt_st.layers[1].weight.state.t
+    println(&quot;epoch: $epoch, sched state: $sched_step&quot;)
+    Flux.train!(loss, m, data, opt_st)
+end</code></pre><pre class="documenter-example-output"><code class="nohighlight hljs ansi">epoch: 1, sched state: 1
+epoch: 2, sched state: 4
+epoch: 3, sched state: 7</code></pre><p>Finally, you might be interested in reading <a href="../complex-schedules/#Interpolating-schedules">Interpolating schedules</a> to see how to specify a schedule in terms of epochs but iterate it at the granularity of batches.</p></article><nav class="docs-footer"><a class="docs-footer-prevpage" href="../basic-schedules/">« Basic schedules</a><a class="docs-footer-nextpage" href="../complex-schedules/">Complex schedules »</a><div class="flexbox-break"></div><p class="footer-message">Powered by <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> and the <a href="https://julialang.org/">Julia Programming Language</a>.</p></nav></div><div class="modal" id="documenter-settings"><div class="modal-background"></div><div class="modal-card"><header class="modal-card-head"><p class="modal-card-title">Settings</p><button class="delete"></button></header><section class="modal-card-body"><p><label class="label">Theme</label><div class="select"><select id="documenter-themepicker"><option value="auto">Automatic (OS)</option><option value="documenter-light">documenter-light</option><option value="documenter-dark">documenter-dark</option><option value="catppuccin-latte">catppuccin-latte</option><option value="catppuccin-frappe">catppuccin-frappe</option><option value="catppuccin-macchiato">catppuccin-macchiato</option><option value="catppuccin-mocha">catppuccin-mocha</option></select></div></p><hr/><p>This document was generated with <a href="https://github.com/JuliaDocs/Documenter.jl">Documenter.jl</a> version 1.8.0 on <span class="colophon-date" title="Thursday 14 November 2024 22:47">Thursday 14 November 2024</span>. Using Julia version 1.11.1.</p></section><footer class="modal-card-foot"></footer></div></div></div></body></html>
