@@ -128,4 +128,85 @@ end
     s = OneCycle(nsteps, maxval; startval, endval, percent_start = pct)
     @test all(s(t) == onecycle(t, nsteps, startval, maxval, endval, pct)
               for t in 1:nsteps)
+
+    @testset "endpoints with warm-up" begin
+        nsteps = 10000
+        maxval = 1f-1
+        startval = 1f-3
+        endval = 1f-5
+        pct = 0.25
+        warmup = ceil(Int, pct * nsteps)
+        s = OneCycle(nsteps, maxval; startval, endval, percent_start = pct)
+
+        # the ramp up starts exactly at `startval` and peaks at `maxval`
+        @test s(1) == startval
+        @test s(warmup + 1) ≈ maxval atol = eps(maxval)
+        @test argmax(s.(1:nsteps)) == warmup + 1
+        # the ramp down lands on `endval` up to one cosine step
+        @test s(nsteps) ≈ endval atol = 1e-7
+    end
+
+    @testset "percent_start = 0" begin
+        nsteps = 50
+        maxval = 1f-1
+        startval = 1f-4
+        endval = 1f-2
+        s = OneCycle(nsteps, maxval; startval, endval, percent_start = 0)
+
+        # a single annealing phase: no warm-up, so `startval` is unused
+        @test s == OneCycle(nsteps, maxval; startval = 123f0, endval, percent_start = 0)
+        @test all(s(t) == onecycle(t, nsteps, startval, maxval, endval, 0)
+                  for t in 1:nsteps)
+
+        # starts at the peak and decreases monotonically from there
+        @test s(1) ≈ maxval atol = eps(maxval)
+        @test argmax(s.(1:nsteps)) == 1
+        @test all(>(0), -diff(s.(1:nsteps)))
+
+        # still a finite schedule of exactly `nsteps` steps
+        @test Base.IteratorSize(typeof(s)) == Base.HasLength()
+        @test length(s) == nsteps
+        @test [p for (_, p) in zip(1:nsteps, s)] == s.(1:nsteps)
+        @test_throws BoundsError s(nsteps + 1)
+
+        # the tail lands on `endval` up to one cosine step
+        @test s(nsteps) ≈ endval atol = 2 * (maxval - endval) * (1 - cos(π / nsteps)) / 2
+        long = OneCycle(10000, maxval; endval, percent_start = 0)
+        @test long(1) ≈ maxval atol = eps(maxval)
+        @test long(10000) ≈ endval atol = 1e-7
+    end
+
+    @testset "percent_start = eps" begin
+        nsteps = 50
+        maxval = 1f-1
+        startval = 1f-4
+        endval = 1f-2
+
+        # the smallest representable non-zero `percent_start` still rounds up to a
+        # one step warm-up, so it must *not* collapse to the `percent_start = 0` case
+        for pct in (eps(), eps(Float32), nextfloat(0.0))
+            s = OneCycle(nsteps, maxval; startval, endval, percent_start = pct)
+
+            @test ceil(Int, nsteps * pct) == 1
+            @test all(s(t) == onecycle(t, nsteps, startval, maxval, endval, pct)
+                      for t in 1:nsteps)
+
+            # one warm-up step from `startval`, peaking on the second step
+            @test s(1) == startval
+            @test s(2) ≈ maxval atol = eps(maxval)
+            @test argmax(s.(1:nsteps)) == 2
+            @test all(>(0), -diff(s.(2:nsteps)))
+
+            # distinct from the single-phase schedule, which starts at the peak
+            @test s(1) != OneCycle(nsteps, maxval; startval, endval, percent_start = 0)(1)
+
+            @test_throws BoundsError s(nsteps + 1)
+        end
+    end
+
+    @testset "percent_start bounds" begin
+        @test_throws AssertionError OneCycle(50, 1f-1; percent_start = 1)
+        @test_throws AssertionError OneCycle(50, 1f-1; percent_start = 1.5)
+        @test_throws AssertionError OneCycle(50, 1f-1; percent_start = -0.1)
+    end
 end
