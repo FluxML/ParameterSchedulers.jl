@@ -89,7 +89,7 @@ Base.eltype(::Type{<:Exp{T}}) where T = T
 A polynomial schedule decays with degree `degree`.
 The output conforms to
 ```text
-start / (1 - (t - 1) / max_iter)^degree
+start * (1 - (t - 1) / max_iter)^degree
 ```
 
 # Arguments

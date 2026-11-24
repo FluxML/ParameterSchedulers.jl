@@ -27,7 +27,7 @@ As you can see above, [`Exp`](@ref) is a type of decay schedule. Below is a list
 |:---------------|:-----------------------|:---------------|
 | [`Step`](@ref) | `start`, `decay`, `step_sizes` | ``g(t) = \texttt{decay}^{i - 1}`` where ``\sum_{j = 1}^{i - 1} \texttt{step\_sizes}_j < t \leq \sum_{j = 1}^i \texttt{step\_sizes}_j`` |
 | [`Exp`](@ref) | `start`, `decay` | ``g(t) = \texttt{decay}^{t - 1}`` |
-| [`Poly`](@ref) | `start`, `degree`, `max_iter` | ``g(t) = \dfrac{1}{\left(\dfrac{1 - (t - 1)}{\texttt{max\_iter}}\right)^\texttt{degree}}`` |
+| [`Poly`](@ref) | `start`, `degree`, `max_iter` | ``g(t) = \left(\dfrac{1 - (t - 1)}{\texttt{max\_iter}}\right)^\texttt{degree}`` |
 | [`Inv`](@ref) | `start`, `decay`, `degree` | ``g(t) = \dfrac{1}{\left(1 + \texttt{decay} \times (t - 1) \right)^\texttt{degree}}`` |
 
 ## Cyclic schedules
