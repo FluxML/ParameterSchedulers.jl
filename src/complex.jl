@@ -259,24 +259,34 @@ end
 Creates a one-cycle cosine schedule over `nsteps` steps warming up from `startval`
 up to `maxval` for `ceil(percent_start * nsteps)`, then back to `endval`
 (see [Super-Convergence: Very Fast Training of Neural Networks Using Large Learning Rates](https://arxiv.org/abs/1708.07120)).
+
+`percent_start` must satisfy `0 <= percent_start < 1`. When `percent_start == 0`
+there is no warm-up phase: the schedule is a single annealing phase that starts at
+`maxval` and decays towards `endval` over all `nsteps` steps. `startval` is unused
+in that case.
 """
 function OneCycle(nsteps, maxval;
                   startval = maxval / 25,
                   endval = maxval / 1f5,
                   percent_start = 0.25)
-    @assert 0 < percent_start < 1
+    @assert 0 <= percent_start < 1
 
     warmup = ceil(Int, nsteps * percent_start)
     warmdown = nsteps - warmup
+
+    warmdown_schedule = Shortened(CosAnneal(l0 = maxval,
+                                            l1 = endval,
+                                            period = warmdown,
+                                            restart = false), warmdown)
+
+    # no warm-up phase: a single annealing phase starting at `maxval`
+    iszero(warmup) && return warmdown_schedule
 
     return Sequence(
         Shifted(CosAnneal(l0 = maxval,
                           l1 = startval,
                           period = warmup,
                           restart = false), warmup + 1) => warmup,
-        Shortened(CosAnneal(l0 = maxval,
-                            l1 = endval,
-                            period = warmdown,
-                            restart = false), warmdown) => warmdown
+        warmdown_schedule => warmdown
     )
 end
