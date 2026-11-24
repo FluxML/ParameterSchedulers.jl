@@ -1,0 +1,5 @@
+[deps]
+Flux = "587475ba-b771-5e3f-ad9e-33799f191a9c"
+ParameterSchedulers = "d7d3b36b-41b8-4d0d-a2bf-768c6151755e"
+Publish = "f065f642-d108-4f50-8aa5-6749150a895a"
+UnicodePlots = "b8865327-cd53-5732-bb35-84acbb429228"

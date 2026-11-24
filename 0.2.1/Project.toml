@@ -1,0 +1,22 @@
+name = "ParameterSchedulers"
+uuid = "d7d3b36b-41b8-4d0d-a2bf-768c6151755e"
+authors = ["Kyle Daruwalla"]
+version = "0.2.1"
+
+[deps]
+Flux = "587475ba-b771-5e3f-ad9e-33799f191a9c"
+InfiniteArrays = "4858937d-0d70-526a-a4dd-2d5cb5dd786c"
+
+[compat]
+Flux = "0.11.2, 0.12"
+InfiniteArrays = "0.10.4"
+julia = "1.5"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[publish]
+title = "ParameterSchedulers.jl"
+
+[targets]
+test = ["Test"]
